@@ -14,7 +14,7 @@ public class Alimentos extends Item {
     private OffsetDateTime validade;
 
     public Alimentos(Double valorNutricional, TipoAlimento tipoAlimento, OffsetDateTime validade) {
-        this.valorNutricional = valorNutricional;
+        this.valorNutricional = tipoAlimento.getValorNutricional();
         this.tipoAlimento = tipoAlimento;
         this.validade = validade;
     }
@@ -30,12 +30,8 @@ public class Alimentos extends Item {
     public void consumir() {
 
         this.usar();
+        this.personagem.setFome(this.personagem.getFome() - this.valorNutricional);
 
-        switch(tipoAlimento) {
-            case FRUTA -> this.personagem.setFome(personagem.getFome() - 5);
-            case ENLATADO -> this.personagem.setFome(personagem.getFome() - 10);
-            case CARNE -> this.personagem.setFome(personagem.getFome() - 15);
-        }
         if(this.validade.isBefore(OffsetDateTime.now())) {
             this.personagem.setEnergia(this.personagem.getEnergia() - 50);
             this.personagem.setSanidade(this.personagem.getSanidade() - 15);
