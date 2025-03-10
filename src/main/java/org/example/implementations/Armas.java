@@ -13,9 +13,9 @@ public class Armas extends Item {
 
     private Double alcance;
 
-    public Armas(Double alcance, Double dano, TipoArma tipoArma) {
+    public Armas(Double alcance, TipoArma tipoArma) {
         this.alcance = alcance;
-        this.dano = dano;
+        this.dano = tipoArma.getDano();
         this.tipoArma = tipoArma;
     }
 
