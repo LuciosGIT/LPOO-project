@@ -1,5 +1,7 @@
 package org.example.ambientes;
 
+import org.example.domain.Personagem;
+
 abstract class Ambiente {
 
     //atributos
@@ -27,7 +29,7 @@ abstract class Ambiente {
     public abstract  int getDificuldadeExploracao();
     public abstract double getProbabilidadeEventos();
 
-    public abstract void explorar();
+    public abstract void explorar(Personagem jogador);
 
     public abstract void gerarEvento();
 
