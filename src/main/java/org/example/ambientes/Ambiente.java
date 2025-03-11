@@ -3,12 +3,12 @@ package org.example.ambientes;
 abstract class Ambiente {
 
     //atributos
-    private   String nome;
-    private  String descricao;
-    private  int dificuldadeExploracao;
+    protected String nome;
+    protected  String descricao;
+    protected  int dificuldadeExploracao;
     //private List<Item> recursosDisponiveis crie uma classe de probabilidades antes de implementar isso
-    private  double probabilidadeEventos;
-    private  String condicoesClimaticas;
+    protected  double probabilidadeEventos;
+    protected  String condicoesClimaticas;
 
     public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
 
@@ -21,6 +21,12 @@ abstract class Ambiente {
     }
 
     //métodos
+
+    public abstract String getNome();
+    public abstract String getDescricao();
+    public abstract  int getDificuldadeExploracao();
+    public abstract double getProbabilidadeEventos();
+
     public abstract void explorar();
 
     public abstract void gerarEvento();
