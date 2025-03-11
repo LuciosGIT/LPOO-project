@@ -1,5 +1,7 @@
 package org.example.ambientes;
 
+import org.example.domain.Personagem;
+
 public class AmbienteRuinas extends Ambiente{
 
     //construtor
@@ -32,7 +34,7 @@ public class AmbienteRuinas extends Ambiente{
     //métodos que envolvem o ambiente
 
     @Override
-    public void explorar(){
+    public void explorar(Personagem jogador){
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
     }
 
