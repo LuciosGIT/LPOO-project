@@ -1,4 +1,5 @@
 package org.example.ambientes;
+import org.example.probabilidades.ProbabilidadeRecursos;
 
 public class AmbienteCaverna extends Ambiente{
 
