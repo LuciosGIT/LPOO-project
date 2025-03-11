@@ -10,7 +10,7 @@ public class DesktopLauncher {
     public static void main(String[] args) {
         // Configuração do aplicativo (janela)
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        config.setTitle("Meu Jogo LibGDX");
+        config.setTitle("Última Fronteira");
         config.setWindowedMode(800, 600); // Define o tamanho da janela
         new Lwjgl3Application(new MyGame(), config);  // Inicia o jogo
     }
