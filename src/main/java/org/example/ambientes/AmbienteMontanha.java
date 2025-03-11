@@ -1,13 +1,16 @@
 package org.example.ambientes;
 
 import org.example.domain.Ambiente;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
+
+import java.util.List;
 
 public class AmbienteMontanha extends Ambiente {
 
     //construtor
-    public AmbienteMontanha(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
-        super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
+    public AmbienteMontanha(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+        super(nome, descricao, dificuldadeExploracao, probabilidadeEventos, condicoesClimaticas, recursosDisponiveis);
     }
 
     //métodos getters

@@ -12,11 +12,14 @@ public abstract class Item {
 
     protected Double durabilidade;
 
-    public Item(TipoItem tipoItem, Personagem personagem, Double peso, Double durabilidade) {
+    protected  Double probabilidadeDeEncontrar;
+
+    public Item(TipoItem tipoItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar) {
         this.tipoItem = tipoItem;
         this.personagem = personagem;
         this.peso = peso;
         this.durabilidade = durabilidade;
+        this.probabilidadeDeEncontrar = probabilidadeDeEncontrar;
 
     }
     public Item() {
@@ -55,4 +58,15 @@ public abstract class Item {
     public void setDurabilidade(Double durabilidade) {
         this.durabilidade = durabilidade;
     }
+
+    public double getProbabilidadeDeEncontrar(){
+        return this.probabilidadeDeEncontrar;
+    }
+
+    public void setProbabilidadeDeEncontrar(Double probabilidadeDeEncontrar){
+        this.probabilidadeDeEncontrar = probabilidadeDeEncontrar;
+    }
+
+
+
 }

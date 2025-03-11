@@ -8,17 +8,18 @@ public abstract class Ambiente {
     protected String nome;
     protected  String descricao;
     protected  int dificuldadeExploracao;
-    protected List<Item> recursosDisponiveis; //crie uma classe de probabilidades antes de implementar isso
     protected  double probabilidadeEventos;
     protected  String condicoesClimaticas;
+    protected List<Item> recursosDisponiveis; //crie uma classe de probabilidades antes de implementar isso
 
-    public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
+    public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
 
         this.nome = nome;
         this.descricao = descricao;
         this.dificuldadeExploracao = dificuldadeExploracao;
         this.probabilidadeEventos = probabilidadeEventos;
         this.condicoesClimaticas = condicoesClimaticas;
+        this.recursosDisponiveis = recursosDisponiveis;
 
     }
 

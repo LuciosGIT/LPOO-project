@@ -2,13 +2,20 @@ package org.example.ambientes;
 
 
 import org.example.domain.Ambiente;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
+
+
+import java.util.List;
+import java.util.Random;
 
 public class AmbienteCaverna extends Ambiente {
 
+    Random random = new Random();
+
     //construtor
-    public AmbienteCaverna(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
-        super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
+    public AmbienteCaverna(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+        super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas, recursosDisponiveis);
     }
 
     //métodos getters
@@ -33,11 +40,24 @@ public class AmbienteCaverna extends Ambiente {
         return  probabilidadeEventos;
     }
 
+
     //métodos que envolvem o ambiente
 
     @Override
     public void explorar(Personagem jogador){
+
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
+
+        for(Item recursosDisponiveis  : this.recursosDisponiveis)
+            if((random.nextDouble()) > recursosDisponiveis.getProbabilidadeDeEncontrar()){
+               /*
+                   A quantidade de madeira será multiplicada pelo número aleatório e por 10
+                   fazendo que a quantidade de madeira seja aleatória, caso o usuário tenha um machado
+                   a sua porcentagem de conseguir madeira será maior (nùmero aleatoria irá ter um valor mínimo)
+                */
+
+            }
+
     }
 
     @Override
