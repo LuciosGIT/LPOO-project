@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Ambiente {
@@ -8,18 +9,17 @@ public abstract class Ambiente {
     protected String nome;
     protected  String descricao;
     protected  int dificuldadeExploracao;
+    protected List<Item> recursosDisponiveis = new ArrayList<>(); //crie uma classe de probabilidades antes de implementar isso
     protected  double probabilidadeEventos;
     protected  String condicoesClimaticas;
-    protected List<Item> recursosDisponiveis; //crie uma classe de probabilidades antes de implementar isso
 
-    public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+    public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
 
         this.nome = nome;
         this.descricao = descricao;
         this.dificuldadeExploracao = dificuldadeExploracao;
         this.probabilidadeEventos = probabilidadeEventos;
         this.condicoesClimaticas = condicoesClimaticas;
-        this.recursosDisponiveis = recursosDisponiveis;
 
     }
 

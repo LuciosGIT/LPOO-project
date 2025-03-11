@@ -14,6 +14,7 @@ public class Alimentos extends Item {
     private OffsetDateTime validade;
 
     public Alimentos(TipoAlimento tipoAlimento, OffsetDateTime validade) {
+
         this.valorNutricional = tipoAlimento.getValorNutricional();
         this.tipoAlimento = tipoAlimento;
         this.validade = validade;
@@ -21,20 +22,28 @@ public class Alimentos extends Item {
 
     public Alimentos() {}
 
+    public boolean validado() {
+        if (this.validade.isBefore(OffsetDateTime.now())) {
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
     @Override
     public void usar() {
-        System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
+            System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
     }
-
 
     public void consumir() {
 
-        this.usar();
-        this.personagem.setFome(this.personagem.getFome() - this.valorNutricional);
+        if (validado()) {
+            this.usar();
+            this.personagem.setFome(this.personagem.getFome() - this.valorNutricional);
 
-        if(this.validade.isBefore(OffsetDateTime.now())) {
-            this.personagem.setEnergia(this.personagem.getEnergia() - 50);
-            this.personagem.setSanidade(this.personagem.getSanidade() - 15);
+        } else {
+                this.personagem.setEnergia(this.personagem.getEnergia() - 50);
+                this.personagem.setSanidade(this.personagem.getSanidade() - 15);
         }
     }
 

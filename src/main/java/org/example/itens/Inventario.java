@@ -21,8 +21,14 @@ public class Inventario {
 
     public Inventario() {}
 
+    public  boolean temEspaco() {
+        if (this.listaDeItems.size() == this.capacidadeMaxima) {
+            return true;
+        }
+        else return false;
+    }
     public void adicionarItem(Item item) {
-        if (this.listaDeItems.size() + 1 <= capacidadeMaxima) {
+        if (this.temEspaco()) {
             this.listaDeItems.add(item);
             this.pesoTotal += item.getPeso();
         }
