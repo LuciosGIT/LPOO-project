@@ -22,14 +22,9 @@ public class Inventario {
     public Inventario() {}
 
     public void adicionarItem(Item item) {
-        /*if (this.listaDeItems.size() + 1 <= capacidadeMaxima) {
+        if (this.listaDeItems.size() + 1 <= capacidadeMaxima) {
             this.listaDeItems.add(item);
-            this.pesoTotal += item.getPeso(); (Caso a capacidade máxima esteja relacionada com a quantidade de itens)
-        }*/
-
-        if (pesoTotal + item.getPeso() <= capacidadeMaxima) {
-            this.listaDeItems.add(item);
-            this.pesoTotal += item.getPeso(); // (Caso a capacidade máxima esteja relacionada ao peso dos itens)
+            this.pesoTotal += item.getPeso();
         }
     }
 
