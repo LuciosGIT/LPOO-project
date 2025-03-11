@@ -1,7 +1,6 @@
-package org.example.implementations;
+package org.example.itens;
 
 import org.example.domain.Item;
-import org.example.domain.Personagem;
 import org.example.enums.TipoFerramenta;
 
 public class Ferramentas extends Item {

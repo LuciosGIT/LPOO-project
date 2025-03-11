@@ -1,14 +1,14 @@
-package org.example.ambientes;
+package org.example.domain;
 
-import org.example.domain.Personagem;
+import java.util.List;
 
-abstract class Ambiente {
+public abstract class Ambiente {
 
     //atributos
     protected String nome;
     protected  String descricao;
     protected  int dificuldadeExploracao;
-    //private List<Item> recursosDisponiveis crie uma classe de probabilidades antes de implementar isso
+    protected List<Item> recursosDisponiveis; //crie uma classe de probabilidades antes de implementar isso
     protected  double probabilidadeEventos;
     protected  String condicoesClimaticas;
 

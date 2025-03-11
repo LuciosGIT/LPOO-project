@@ -1,8 +1,7 @@
 package org.example.domain;
 
-import org.example.implementations.Inventario;
+import org.example.itens.Inventario;
 
-import java.util.Collection;
 import java.util.Collections;
 
 
@@ -33,7 +32,7 @@ public abstract class Personagem {
         this.vida = 100.0;
         this.sede = 50.0;
         this.sanidade = 100.0;
-        this.inventario = new Inventario(20, Collections.emptyList(), 0.0);
+        this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
         this.localizacao = new double[]{0.0, 0.0};
     }
 

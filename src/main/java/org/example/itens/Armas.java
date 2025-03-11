@@ -1,9 +1,8 @@
-package org.example.implementations;
+package org.example.itens;
 
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoArma;
-import org.example.enums.TipoItem;
 
 public class Armas extends Item {
 

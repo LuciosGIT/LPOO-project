@@ -1,8 +1,9 @@
 package org.example.ambientes;
 
+import org.example.domain.Ambiente;
 import org.example.domain.Personagem;
 
-public class AmbienteFloresta extends Ambiente{
+public class AmbienteFloresta extends Ambiente {
 
     //construtor
     public AmbienteFloresta(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){

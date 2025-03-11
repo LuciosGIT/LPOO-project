@@ -1,7 +1,6 @@
-package org.example.implementations;
+package org.example.itens;
 
 import org.example.domain.Item;
-import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
 
 public class Materiais extends Item {
