@@ -6,7 +6,7 @@ abstract class Ambiente {
     private   String nome;
     private  String descricao;
     private  int dificuldadeExploracao;
-    //private List<Item> recursosDisponiveis;
+    //private List<Item> recursosDisponiveis crie uma classe de probabilidades antes de implementar isso
     private  double probabilidadeEventos;
     private  String condicoesClimaticas;
 
