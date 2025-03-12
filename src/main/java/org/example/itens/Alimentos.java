@@ -14,8 +14,6 @@ public class Alimentos extends Item {
     private OffsetDateTime validade;
 
     public Alimentos(TipoAlimento tipoAlimento, OffsetDateTime validade) {
-
-        this.valorNutricional = tipoAlimento.getValorNutricional();
         this.tipoAlimento = tipoAlimento;
         this.validade = validade;
     }
