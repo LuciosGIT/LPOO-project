@@ -10,7 +10,7 @@ public class AmbienteRuinas extends Ambiente {
 
     //construtor
     public AmbienteRuinas(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
-        super(nome, descricao, dificuldadeExploracao, probabilidadeEventos, condicoesClimaticas, recursosDisponiveis);
+        super(nome, descricao, dificuldadeExploracao, probabilidadeEventos, condicoesClimaticas);
     }
 
     //métodos getters
