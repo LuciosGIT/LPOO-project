@@ -58,9 +58,9 @@ public class AmbienteFloresta extends Ambiente {
     }
 
     //métodos que envolvem o ambiente
-
     @Override
     public void explorar(Personagem jogador){
+        this.setProbabilidades();
         if (this.densidadeVegetacao > 5) {
 
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");

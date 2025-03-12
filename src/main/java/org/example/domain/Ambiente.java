@@ -2,6 +2,7 @@ package org.example.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Ambiente {
 
@@ -24,6 +25,13 @@ public abstract class Ambiente {
     }
 
     //métodos
+
+    public void setProbabilidades(){
+        Random random = new Random();
+        for(Item item : recursosDisponiveis) {
+            item.setProbabilidadeDeEncontrar(random.nextDouble(0.6,1.0));
+        }
+    }
 
     public abstract String getNome();
     public abstract String getDescricao();
