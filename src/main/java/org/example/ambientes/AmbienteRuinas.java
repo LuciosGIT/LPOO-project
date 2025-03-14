@@ -9,31 +9,11 @@ import java.util.List;
 public class AmbienteRuinas extends Ambiente {
 
     //construtor
-    public AmbienteRuinas(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+    public AmbienteRuinas(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
         super(nome, descricao, dificuldadeExploracao, probabilidadeEventos, condicoesClimaticas);
     }
 
     //métodos getters
-
-    @Override
-    public String getNome() {
-        return nome;
-    }
-
-    @Override
-    public String getDescricao(){
-        return descricao;
-    }
-
-    @Override
-    public int getDificuldadeExploracao(){
-        return dificuldadeExploracao;
-    }
-
-    @Override
-    public double getProbabilidadeEventos(){
-        return  probabilidadeEventos;
-    }
 
     //métodos que envolvem o ambiente
 

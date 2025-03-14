@@ -23,39 +23,19 @@ public class AmbienteFloresta extends Ambiente {
     private boolean climaUmido;
 
     //construtor
-    public AmbienteFloresta(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, int densidadeVegetacao, boolean faunaAbundante){
+    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, int densidadeVegetacao, boolean faunaAbundante){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
         this.densidadeVegetacao = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
-        this.recursosDisponiveis.add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.recursosDisponiveis.add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
-        this.recursosDisponiveis.add(new Alimentos(TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.recursosDisponiveis.add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
-        this.recursosDisponiveis.add(new Materiais(5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Materiais(5.0, TipoMaterial.MADEIRA));
 
     }
 
     //métodos getters
-
-    @Override
-    public String getNome() {
-        return nome;
-    }
-
-    @Override
-    public String getDescricao(){
-        return descricao;
-    }
-
-    @Override
-    public int getDificuldadeExploracao(){
-        return dificuldadeExploracao;
-    }
-
-    @Override
-    public double getProbabilidadeEventos(){
-        return  probabilidadeEventos;
-    }
 
     //métodos que envolvem o ambiente
     @Override
@@ -64,16 +44,16 @@ public class AmbienteFloresta extends Ambiente {
         if (this.densidadeVegetacao > 5) {
 
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
-            jogador.setEnergia(jogador.getEnergia() - dificuldadeExploracao * 1.5);
+            jogador.diminuirEnergia(getDificuldadeExploracao() * 1.5);
         }
         else {
 
             System.out.println("A exploração é relativamente tranquila.");
-            jogador.setEnergia(jogador.getEnergia() - dificuldadeExploracao);
+            jogador.diminuirEnergia(getDificuldadeExploracao());
 
         }
 
-        if (dificuldadeExploracao < 5 && jogador.getInventario().temEspaco()) {
+        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco()) {
             Random envenenado = new Random();
             boolean estaEnvenenado = envenenado.nextBoolean();
             TipoAlimento tipoSorteado = TipoAlimento.sortearItem();
@@ -81,17 +61,17 @@ public class AmbienteFloresta extends Ambiente {
             switch(tipoSorteado) {
                 case FRUTA -> {
                     System.out.println("Você coletou uma fruta!");
-                    jogador.getInventario().adicionarItem(recursosDisponiveis.get(0));
+                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(0));
 
                 }
                 case CARNE -> {
                     System.out.println("Você encontrou uma carne de animal!");
-                    jogador.getInventario().adicionarItem(recursosDisponiveis.get(1));
+                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(1));
 
                 }
                 case RAIZES -> {
                     System.out.println("Você encontrou uma raíz!");
-                    jogador.getInventario().adicionarItem(recursosDisponiveis.get(2));
+                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(2));
 
                 }
                 case COGUMELO -> {
@@ -100,7 +80,7 @@ public class AmbienteFloresta extends Ambiente {
                     }
                     else {
                         System.out.println("Você encontrou um cogumelo!");
-                        jogador.getInventario().adicionarItem(recursosDisponiveis.get(3));
+                        jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(3));
                     }
                 }
             }

@@ -14,13 +14,13 @@ public class AmbienteCaverna extends Ambiente {
     Random random = new Random();
 
     //construtor
-    public AmbienteCaverna(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
     }
 
     //métodos getters
 
-    @Override
+    /* @Override
     public String getNome() {
         return nome;
     }
@@ -31,7 +31,7 @@ public class AmbienteCaverna extends Ambiente {
     }
 
     @Override
-    public int getDificuldadeExploracao(){
+    public Double getDificuldadeExploracao(){
         return dificuldadeExploracao;
     }
 
@@ -39,6 +39,8 @@ public class AmbienteCaverna extends Ambiente {
     public double getProbabilidadeEventos(){
         return  probabilidadeEventos;
     }
+
+     */
 
 
     //métodos que envolvem o ambiente
@@ -48,7 +50,7 @@ public class AmbienteCaverna extends Ambiente {
 
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
-        for(Item recursosDisponiveis  : this.recursosDisponiveis)
+        for(Item recursosDisponiveis  : this.getRecursosDisponiveis())
             if((random.nextDouble()) > recursosDisponiveis.getProbabilidadeDeEncontrar()){
                /*
                    A quantidade de madeira será multiplicada pelo número aleatório e por 10
