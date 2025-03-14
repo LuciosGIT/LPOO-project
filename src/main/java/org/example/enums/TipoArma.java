@@ -25,8 +25,13 @@ public enum TipoArma {
         return municao;
     }
 
-    public void setMunicao(Integer novaMunicao) {
-        this.municao = novaMunicao;
+    public void diminuirMunicao(Integer municao) {
+
+        this.municao -= municao;
+    }
+
+    public void recarregarArma(Integer municao) {
+        this.municao += municao;
     }
 
     public Double getDano() {
