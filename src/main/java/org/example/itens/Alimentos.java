@@ -38,11 +38,11 @@ public class Alimentos extends Item {
 
         if (validado()) {
             this.usar();
-            this.personagem.setFome(this.personagem.getFome() - this.valorNutricional);
+            this.getPersonagem().diminuirFome(valorNutricional);
 
         } else {
-                this.personagem.setEnergia(this.personagem.getEnergia() - 50);
-                this.personagem.setSanidade(this.personagem.getSanidade() - 15);
+                this.getPersonagem().diminuirEnergia(50.0);
+                this.getPersonagem().diminuirSanidade(15.0);
         }
     }
 
@@ -50,7 +50,7 @@ public class Alimentos extends Item {
         return tipoAlimento;
     }
 
-    public void setTipoAlimento(TipoAlimento tipoAlimento) {
+    public void alterarTipoAlimento(TipoAlimento tipoAlimento) {
         this.tipoAlimento = tipoAlimento;
     }
 
@@ -58,7 +58,10 @@ public class Alimentos extends Item {
         return validade;
     }
 
-    public void setValidade(OffsetDateTime validade) {
+    public void alterarDataValidade(OffsetDateTime validade) {
+        if (validade.isBefore(OffsetDateTime.now())) {
+            throw new IllegalArgumentException("A data de validade precisa ser após a data atual!");
+        }
         this.validade = validade;
     }
 
@@ -66,7 +69,10 @@ public class Alimentos extends Item {
         return valorNutricional;
     }
 
-    public void setValorNutricional(Double valorNutricional) {
+    public void alterarValorNutricional(Double valorNutricional) {
+        if (valorNutricional <=0) {
+            throw new IllegalArgumentException("O valor nutricional só pode assumir valores maiores que 0!");
+        }
         this.valorNutricional = valorNutricional;
     }
 }

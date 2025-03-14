@@ -20,10 +20,10 @@ public class Ferramentas extends Item {
     @Override
     public void usar() {
         switch(this.tipoFerramenta) {
-            case FACA -> this.durabilidade -= 10;
-            case MACHADO -> this.durabilidade -= 5;
-            case ISQUEIRO -> this.durabilidade -= 10;
-            case LANTERNA -> this.durabilidade -= 15;
+            case FACA -> this.diminuirDurabilidade(8.0);
+            case MACHADO -> this.diminuirDurabilidade(5.0);
+            case ISQUEIRO -> this.diminuirDurabilidade(11.0);
+            case LANTERNA -> this.diminuirDurabilidade(15.0);
         }
 
         // to do

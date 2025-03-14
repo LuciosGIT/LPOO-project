@@ -24,12 +24,14 @@ public class Agua extends Item {
     public void beber() {
 
         this.usar();
-        this.personagem.setSede(this.personagem.getSede() - 15);
+        this.getPersonagem().diminuirSede(15.0);
 
         if(this.pureza == Pureza.CONTAMINADA) {
-            this.personagem.setVida(this.personagem.getVida() - 10);
-            this.personagem.setSanidade(this.personagem.getSanidade() - 15);
-            this.personagem.setEnergia(this.personagem.getEnergia() - 10);
+
+            this.getPersonagem().diminuirVida(10.0);
+            this.getPersonagem().diminuirSanidade(15.0);
+            this.getPersonagem().diminuirEnergia(10.0);
+
         }
     }
 
@@ -37,7 +39,8 @@ public class Agua extends Item {
         return pureza;
     }
 
-    public void setPureza(Pureza pureza) {
+    public void alteraraPureza(Pureza pureza) {
+
         this.pureza = pureza;
     }
 
@@ -45,7 +48,7 @@ public class Agua extends Item {
         return volume;
     }
 
-    public void setVolume(Double volume) {
+    public void alterarVolume(Double volume) {
         this.volume = volume;
     }
 }

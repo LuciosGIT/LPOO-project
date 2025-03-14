@@ -26,11 +26,11 @@ public class Armas extends Item {
 
     public void atacar(Personagem inimigo) {
         switch (this.tipoArma) {
-            case CORPO -> inimigo.setVida(inimigo.getVida() - this.dano);
+            case CORPO -> inimigo.diminuirVida(dano);
             case DISTANCIA -> {
                 if (this.tipoArma.getMunicao() > 0) {
-                    inimigo.setVida(inimigo.getVida() - this.dano);
-                    this.tipoArma.setMunicao(this.tipoArma.getMunicao() - 1);
+                    inimigo.diminuirVida(dano);
+                    this.tipoArma.diminuirMunicao(1);
                 }
             }
         }

@@ -13,9 +13,9 @@ public class Remedios extends Item {
     @Override
     public void usar() {
         switch (tipoEfeito) {
-            case CURAR -> this.personagem.setVida(this.personagem.getVida() + 15);
-            case ALIVIAR -> this.personagem.setVida(this.personagem.getVida() + 10);
-            case TRATAR -> this.personagem.setVida(this.personagem.getVida() + 5);
+            case CURAR -> this.getPersonagem().aumentarVida(15.0);
+            case ALIVIAR -> this.getPersonagem().aumentarVida(5.0);
+            case TRATAR -> this.getPersonagem().aumentarVida(10.0);
         }
     }
 }
