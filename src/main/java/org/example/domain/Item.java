@@ -1,20 +1,21 @@
 package org.example.domain;
 
 import org.example.enums.TipoItem;
+import org.example.interfaces.ItemInterface;
 
-public abstract class Item {
+public abstract class Item implements ItemInterface {
 
-    protected Personagem personagem;
+    private Personagem personagem;
 
-    protected TipoItem tipoItem;
+    private TipoItem tipoItem;
 
-    protected Double peso;
+    private Double peso;
 
-    protected Double durabilidade;
+    private Double durabilidade;
 
-    protected  Double probabilidadeDeEncontrar;
+    private  Double probabilidadeDeEncontrar;
 
-    public Item(TipoItem tipoItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar) {
+    protected Item(TipoItem tipoItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar) {
         this.tipoItem = tipoItem;
         this.personagem = personagem;
         this.peso = peso;
@@ -39,24 +40,48 @@ public abstract class Item {
         return peso;
     }
 
-    public void setPeso(Double peso) {
-        this.peso = peso;
+    public void aumentarPeso(Double peso) {
+        if (peso <= 0) {
+            throw new IllegalArgumentException("O peso deve ser aumentado, portanto só pode admitir valores maiores que 0!");
+        }
+            this.peso += peso;
+    }
+
+    public void diminuirPeso(Double peso) {
+        if (peso <= 0) {
+            throw new IllegalArgumentException("O peso a ser diminuído só pode admitir valores maiores que 0!");
+        }
+        this.peso -= peso;
     }
 
     public Personagem getPersonagem() {
         return personagem;
     }
 
-    public void setPersonagem(Personagem personagem) {
+    public void alterarPersonagem(Personagem personagem) {
+
         this.personagem = personagem;
+
     }
 
     public Double getDurabilidade() {
         return durabilidade;
     }
 
-    public void setDurabilidade(Double durabilidade) {
-        this.durabilidade = durabilidade;
+    public void aumentarDurabilidade(Double durabilidade) {
+
+        if (durabilidade <= 0) {
+            throw new IllegalArgumentException("A durabilidade só admite valores maiores que 0!");
+        }
+        this.durabilidade += durabilidade;
+    }
+
+    public void diminuirDurabilidade(Double durabilidade) {
+
+        if (durabilidade <= 0) {
+            throw new IllegalArgumentException("A durabilidade só admite valores maiores que 0!");
+        }
+        this.durabilidade -= durabilidade;
     }
 
     public double getProbabilidadeDeEncontrar(){
@@ -64,6 +89,9 @@ public abstract class Item {
     }
 
     public void setProbabilidadeDeEncontrar(Double probabilidadeDeEncontrar){
+        if (probabilidadeDeEncontrar <= 0) {
+            throw new IllegalArgumentException("A probabilidade de se encontrar um item só admite valores maiores que 0!");
+        }
         this.probabilidadeDeEncontrar = probabilidadeDeEncontrar;
     }
 
