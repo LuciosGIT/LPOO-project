@@ -25,7 +25,7 @@ public abstract class Personagem {
 
     public abstract void habilidade();
 
-    public Personagem(String nome) {
+    protected Personagem(String nome) {
         this.nome = nome;
         this.energia = 100.0;
         this.fome = 50.0;
@@ -40,16 +40,43 @@ public abstract class Personagem {
         return energia;
     }
 
-    public void setEnergia(Double energia) {
-        this.energia = energia;
+    public void aumentarEnergia(Double energia) {
+
+        if (energia <=0) {
+            throw new IllegalArgumentException("A energia deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+
+        this.energia += energia;
+    }
+
+    public void diminuirEnergia(Double energia) {
+        if (energia <=0) {
+            throw new IllegalArgumentException("Você precisa passar um valor de energia maior que 0!");
+        }
+
+        this.energia -= energia;
     }
 
     public Double getFome() {
         return fome;
     }
 
-    public void setFome(Double fome) {
-        this.fome = fome;
+    public void aumentarFome(Double fome) {
+
+        if (fome <=0) {
+            throw new IllegalArgumentException("A fome deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+
+        this.fome += fome;
+    }
+
+    public void diminuirFome(Double fome) {
+
+        if (fome <=0) {
+            throw new IllegalArgumentException("Você precisa passar um valor de fome maior que 0!");
+        }
+
+        this.fome -= fome;
     }
 
     public Inventario getInventario() {
@@ -64,7 +91,7 @@ public abstract class Personagem {
         return localizacao;
     }
 
-    public void setLocalizacao(double[] localizacao) {
+    public void alterarLocalizacao(double[] localizacao) {
         this.localizacao = localizacao;
     }
 
@@ -72,7 +99,7 @@ public abstract class Personagem {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void alterarNomePersonagem(String nome) {
         this.nome = nome;
     }
 
@@ -80,23 +107,66 @@ public abstract class Personagem {
         return sede;
     }
 
-    public void setSede(Double sede) {
-        this.sede = sede;
+    public void aumentarSede(Double sede) {
+
+        if (sede <=0) {
+            throw new IllegalArgumentException("A sede deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+
+        this.sede += sede;
+    }
+
+    public void diminuirSede(Double sede) {
+
+        if (sede <=0) {
+            throw new IllegalArgumentException("Você precisa passar um valor de sede maior que 0!");
+        }
+
+        this.sede -= sede;
     }
 
     public Double getSanidade() {
         return sanidade;
     }
 
-    public void setSanidade(Double sanidade) {
-        this.sanidade = sanidade;
+    public void aumentarSanidade(Double sanidade) {
+
+        if (sanidade <=0) {
+            throw new IllegalArgumentException("A sanidade deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+
+        this.sanidade += sanidade;
+    }
+
+    public void diminuirSanidade(Double sanidade) {
+
+        if (sanidade <=0) {
+            throw new IllegalArgumentException("Você precisa passar um valor de sanidade maior que 0!");
+        }
+
+        this.sanidade -= sanidade;
     }
 
     public Double getVida() {
-        return vida;
+        return this.vida;
     }
 
-    public void setVida(Double vida) {
-        this.vida = vida;
+    public void aumentarVida(Double vida) {
+
+        if (vida <=0) {
+            throw new IllegalArgumentException("A sanidade deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+
+        this.vida += vida;
     }
+
+    public void diminuirVida(Double vida) {
+
+        if (sanidade <=0) {
+            throw new IllegalArgumentException("Você precisa passar um valor de vida maior que 0!");
+        }
+
+        this.vida -= vida;
+    }
+
 }
