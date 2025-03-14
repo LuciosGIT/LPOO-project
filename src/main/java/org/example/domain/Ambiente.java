@@ -1,20 +1,22 @@
 package org.example.domain;
 
+import org.example.interfaces.AmbienteInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Ambiente {
+public abstract class Ambiente implements AmbienteInterface {
 
     //atributos
-    protected String nome;
-    protected  String descricao;
-    protected  int dificuldadeExploracao;
-    protected List<Item> recursosDisponiveis = new ArrayList<>(); //crie uma classe de probabilidades antes de implementar isso
-    protected  double probabilidadeEventos;
-    protected  String condicoesClimaticas;
+    private String nome;
+    private  String descricao;
+    private  Double dificuldadeExploracao;
+    private List<Item> recursosDisponiveis = new ArrayList<>(); //crie uma classe de probabilidades antes de implementar isso
+    private  double probabilidadeEventos;
+    private  String condicoesClimaticas;
 
-    public Ambiente(String nome, String descricao, int dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
+    public Ambiente(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
 
         this.nome = nome;
         this.descricao = descricao;
@@ -33,15 +35,24 @@ public abstract class Ambiente {
         }
     }
 
-    public abstract String getNome();
-    public abstract String getDescricao();
-    public abstract  int getDificuldadeExploracao();
-    public abstract double getProbabilidadeEventos();
+    public String getNome() {
+        return this.nome;
+    }
 
-    public abstract void explorar(Personagem jogador);
+    public  String getDescricao() {
+        return this.descricao;
+    }
 
-    public abstract void gerarEvento();
+    public Double getDificuldadeExploracao() {
+        return this.dificuldadeExploracao;
+    }
 
-    public abstract void modificarClima();
+    public  double getProbabilidadeEventos() {
+        return this.probabilidadeEventos;
+    }
+
+    public List<Item> getRecursosDisponiveis() {
+        return this.recursosDisponiveis;
+    }
 
 }
