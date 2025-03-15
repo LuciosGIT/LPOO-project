@@ -27,13 +27,11 @@ public class AmbienteFloresta extends Ambiente {
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(15), TipoAlimento.FRUTA));
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(10), TipoAlimento.CARNE));
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().minusDays(15), TipoAlimento.FRUTA));
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().minusDays(15), TipoAlimento.CARNE));
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(12), TipoAlimento.RAIZES));
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(5), TipoAlimento.COGUMELO));
-        this.getRecursosDisponiveis().add(new Materiais(5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Alimentos("Fruta", null, 0.5, 10.0, 0.8, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.6, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.7, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
 
     }
 
@@ -58,36 +56,21 @@ public class AmbienteFloresta extends Ambiente {
         }
 
         if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco()) {
-            Random envenenado = new Random();
-            boolean estaEnvenenado = envenenado.nextBoolean();
-            TipoAlimento tipoSorteado = TipoAlimento.sortearItem();
+            Random random = new Random();
+            boolean estaEnvenenado = random.nextBoolean();
+            Item itemSorteado = getRecursosDisponiveis().get(random.nextInt(getRecursosDisponiveis().size()));
 
-            switch(tipoSorteado) {
-                case FRUTA -> {
-                    System.out.println("Você coletou uma fruta!");
-                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(0));
+            itemSorteado.alterarPersonagem(jogador);
+            if (itemSorteado.getNomeItem().equals("Cogumelo") && estaEnvenenado) {
+                    System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
+                    jogador.diminuirVida(15.0);
+                    jogador.diminuirSanidade(5.0);
+                    jogador.diminuirEnergia(15.0);
 
-                }
-                case CARNE -> {
-                    System.out.println("Você encontrou uma carne de animal!");
-                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(1));
-
-                }
-                case RAIZES -> {
-                    System.out.println("Você encontrou uma raíz!");
-                    jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(2));
-
-                }
-                case COGUMELO -> {
-                    if (estaEnvenenado) {
-                        System.out.println("Você encontrou uma cogumelo, porém ele está envenenado!");
-                    }
-                    else {
-                        System.out.println("Você encontrou um cogumelo!");
-                        jogador.getInventario().adicionarItem(getRecursosDisponiveis().get(3));
-                    }
-                }
             }
+
+            System.out.println("Você encontrou um(a): " + itemSorteado.getNomeItem() + "!");
+            jogador.getInventario().adicionarItem(itemSorteado);
 
         }
     }
