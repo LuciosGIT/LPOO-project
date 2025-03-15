@@ -12,7 +12,7 @@ public abstract class Ambiente implements AmbienteInterface {
     private String nome;
     private  String descricao;
     private  Double dificuldadeExploracao;
-    private List<Item> recursosDisponiveis = new ArrayList<>(); //crie uma classe de probabilidades antes de implementar isso
+    private  List<Item> recursosDisponiveis = new ArrayList<>();
     private  double probabilidadeEventos;
     private  String condicoesClimaticas;
 

@@ -32,6 +32,9 @@ public class Inventario {
             this.listaDeItems.add(item);
             this.pesoTotal += item.getPeso();
         }
+        else{
+            System.out.printf("Seu inventário está cheio");
+        }
     }
 
     public void removerItem(String nomeItem) throws NameNotFoundException {

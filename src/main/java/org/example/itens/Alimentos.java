@@ -5,7 +5,7 @@ import org.example.enums.TipoAlimento;
 
 import java.time.OffsetDateTime;
 
-public class Alimentos extends Item {
+public class  Alimentos extends Item {
 
     private Double valorNutricional;
 
