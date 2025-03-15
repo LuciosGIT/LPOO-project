@@ -25,7 +25,7 @@ public class AmbienteCaverna extends Ambiente {
     //construtor
     public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis, int poucaLuminosidade){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(5), TipoAlimento.COGUMELO));
         this.getRecursosDisponiveis().add(new Materiais(5.0,TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais(10.0,TipoMaterial.METAL));
         this.poucaLuminosidade = poucaLuminosidade;
@@ -54,7 +54,7 @@ public class AmbienteCaverna extends Ambiente {
                     //adiciona o item recursoDisponivel ao inventário
                     //adicionar item já valida se o inventário está cheio
                     jogador.getInventario().adicionarItem(recursoDisponivel);
-                    System.out.printf("Você coletou um(a) %s", recursoDisponivel.getTipoItem().name());
+                    System.out.printf("Você coletou um(a) %s", recursoDisponivel.getNomeItem());
                 }
                 else{
                     System.out.print("Nenhum item encontrado");

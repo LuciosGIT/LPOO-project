@@ -12,7 +12,8 @@ public class Armas extends Item {
 
     private Double alcance;
 
-    public Armas(Double alcance, TipoArma tipoArma) {
+    public Armas(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, Double alcance, TipoArma tipoArma) {
+        super(nomeItem, personagem,  peso,  durabilidade,  probabilidadeDeEncontrar);
         this.alcance = alcance;
         this.dano = tipoArma.getDano();
         this.tipoArma = tipoArma;

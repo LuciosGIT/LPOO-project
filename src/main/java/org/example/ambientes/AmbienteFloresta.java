@@ -27,12 +27,12 @@ public class AmbienteFloresta extends Ambiente {
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().minusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().minusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(15), TipoAlimento.FRUTA));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(10), TipoAlimento.CARNE));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().minusDays(15), TipoAlimento.FRUTA));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().minusDays(15), TipoAlimento.CARNE));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(12), TipoAlimento.RAIZES));
+        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(5), TipoAlimento.COGUMELO));
         this.getRecursosDisponiveis().add(new Materiais(5.0, TipoMaterial.MADEIRA));
 
     }

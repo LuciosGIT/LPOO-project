@@ -37,7 +37,7 @@ public class Inventario {
     public void removerItem(String nomeItem) throws NameNotFoundException {
         boolean itemEncontrado = false;
         for (Item item : this.listaDeItems) {
-            if (item.getTipoItem().getValue().equals(nomeItem)) {
+            if (item.getNomeItem().equals(nomeItem)) {
                 listaDeItems.remove(item);
                 this.pesoTotal -= item.getPeso();
                 itemEncontrado = true;
@@ -52,7 +52,7 @@ public class Inventario {
     public void usarItem(String nomeItem) throws NameNotFoundException {
         boolean itemEncontrado = false;
         for (Item item : this.listaDeItems) {
-            if (item.getTipoItem().getValue().equals(nomeItem)) {
+            if (item.getNomeItem().equals(nomeItem)) {
                 item.usar();
                 itemEncontrado = true;
                 break;  // Saia do loop após usar o item

@@ -7,7 +7,7 @@ public abstract class Item implements ItemInterface {
 
     private Personagem personagem;
 
-    private TipoItem tipoItem;
+    private String nomeItem;
 
     private Double peso;
 
@@ -15,8 +15,8 @@ public abstract class Item implements ItemInterface {
 
     private  Double probabilidadeDeEncontrar;
 
-    protected Item(TipoItem tipoItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar) {
-        this.tipoItem = tipoItem;
+    protected Item(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar) {
+        this.nomeItem = nomeItem;
         this.personagem = personagem;
         this.peso = peso;
         this.durabilidade = durabilidade;
@@ -26,14 +26,13 @@ public abstract class Item implements ItemInterface {
     public Item() {
 
     }
-    public abstract void usar();
 
-    public TipoItem getTipoItem() {
-        return tipoItem;
+    public String getNomeItem() {
+        return nomeItem;
     }
 
-    public void setTipoItem(TipoItem tipoItem) {
-        this.tipoItem = tipoItem;
+    public void setNomeItem(String nomeItem) {
+        this.nomeItem = nomeItem;
     }
 
     public Double getPeso() {

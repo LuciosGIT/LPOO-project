@@ -1,6 +1,7 @@
 package org.example.itens;
 
 import org.example.domain.Item;
+import org.example.domain.Personagem;
 import org.example.enums.Pureza;
 
 public class Agua extends Item {
@@ -9,7 +10,8 @@ public class Agua extends Item {
 
     private Double volume;
 
-    public Agua(Pureza pureza, Double volume) {
+    public Agua(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, Pureza pureza, Double volume) {
+        super(nomeItem, personagem,  peso,  durabilidade,  probabilidadeDeEncontrar);
         this.pureza = pureza;
         this.volume = volume;
     }
