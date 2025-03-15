@@ -76,6 +76,7 @@ public class AmbienteCaverna extends Ambiente {
                     //adiciona o item recursoDisponivel ao inventário
                     //adicionar item já valida se o inventário está cheio
                     jogador.getInventario().adicionarItem(recursoDisponivel);
+                    System.out.printf("Você coletou um(a) %s", recursoDisponivel.getTipoItem().name());
                 }
                 else{
                     System.out.print("Nenhum item encontrado");
