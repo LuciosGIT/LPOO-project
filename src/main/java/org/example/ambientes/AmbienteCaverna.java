@@ -20,38 +20,16 @@ public class AmbienteCaverna extends Ambiente {
 
     Random random = new Random();
 
+    int poucaLuminosidade;
+
     //construtor
-    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis){
+    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis, int poucaLuminosidade){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
         this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais(5.0,TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais(10.0,TipoMaterial.METAL));
+        this.poucaLuminosidade = poucaLuminosidade;
     }
-
-    //métodos getters
-
-    /* @Override
-    public String getNome() {
-        return nome;
-    }
-
-    @Override
-    public String getDescricao(){
-        return descricao;
-    }
-
-    @Override
-    public Double getDificuldadeExploracao(){
-        return dificuldadeExploracao;
-    }
-
-    @Override
-    public double getProbabilidadeEventos(){
-        return  probabilidadeEventos;
-    }
-
-     */
-
 
     //métodos que envolvem o ambiente
 

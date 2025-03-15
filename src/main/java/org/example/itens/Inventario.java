@@ -21,11 +21,8 @@ public class Inventario {
 
     public Inventario() {}
 
-    public  boolean temEspaco() {
-        if (this.listaDeItems.size() == this.capacidadeMaxima) {
-            return true;
-        }
-        else return false;
+    public boolean temEspaco() {
+        return this.listaDeItems.size() < this.capacidadeMaxima;
     }
     public void adicionarItem(Item item) {
         if (this.temEspaco()) {

@@ -16,19 +16,21 @@ import java.util.Random;
 
 public class AmbienteFloresta extends Ambiente {
 
-    private int densidadeVegetacao;
+    private boolean vegetacaoDensa;
 
     private boolean faunaAbundante;
 
     private boolean climaUmido;
 
     //construtor
-    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, int densidadeVegetacao, boolean faunaAbundante){
+    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
-        this.densidadeVegetacao = densidadeVegetacao;
+        this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
         this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.FRUTA, OffsetDateTime.now().minusDays(15)));
+        this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.CARNE, OffsetDateTime.now().minusDays(15)));
         this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Alimentos(TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais(5.0, TipoMaterial.MADEIRA));
@@ -43,7 +45,7 @@ public class AmbienteFloresta extends Ambiente {
         this.setProbabilidades();
 
 
-        if (this.densidadeVegetacao > 5) {
+        if (this.vegetacaoDensa) {
 
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(getDificuldadeExploracao() * 1.5);
