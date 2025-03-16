@@ -24,6 +24,7 @@ public class Inventario {
     public boolean temEspaco() {
         return this.listaDeItems.size() < this.capacidadeMaxima;
     }
+
     public void adicionarItem(Item item) {
         if (this.temEspaco()) {
             this.listaDeItems.add(item);

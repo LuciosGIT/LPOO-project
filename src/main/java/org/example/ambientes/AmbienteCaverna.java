@@ -43,7 +43,7 @@ public class AmbienteCaverna extends Ambiente {
 
         //encontrou monstro? se não o personagem passa a procurar itens
         if((numeroAleatorio = random.nextDouble()) < getDificuldadeExploracao()){
-           //evento de luta??
+            //evento de luta??
         }
         else
         {
