@@ -64,7 +64,7 @@ public class AmbienteCaverna extends Ambiente {
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
-
+        //melhorar isso
         jogador.diminuirEnergia(4.0*getDificuldadeExploracao());
         jogador.diminuirSede(1.0*getDificuldadeExploracao());
         jogador.diminuirFome(1.0*getDificuldadeExploracao());
