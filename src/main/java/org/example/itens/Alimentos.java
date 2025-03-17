@@ -1,6 +1,7 @@
 package org.example.itens;
 
 import org.example.domain.Item;
+import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
 
 import java.time.OffsetDateTime;
@@ -13,10 +14,17 @@ public class  Alimentos extends Item {
 
     private OffsetDateTime validade;
 
-    public Alimentos(TipoAlimento tipoAlimento, OffsetDateTime validade) {
+    public Alimentos(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, TipoAlimento tipoAlimento, OffsetDateTime validade) {
+        super(nomeItem, personagem, peso, durabilidade, probabilidadeDeEncontrar);
         this.valorNutricional = tipoAlimento.getValorNutricional();
         this.tipoAlimento = tipoAlimento;
         this.validade = validade;
+    }
+
+    public Alimentos(OffsetDateTime validade, TipoAlimento tipoAlimento) {
+        this.validade = validade;
+        this.tipoAlimento = tipoAlimento;
+        this.valorNutricional = tipoAlimento.getValorNutricional();
     }
 
     public Alimentos() {}

@@ -1,6 +1,7 @@
 package org.example.itens;
 
 import org.example.domain.Item;
+import org.example.domain.Personagem;
 import org.example.enums.TipoFerramenta;
 
 public class Ferramentas extends Item {
@@ -10,7 +11,8 @@ public class Ferramentas extends Item {
     private Double eficiencia;
 
 
-    public Ferramentas(Double eficiencia, TipoFerramenta tipoFerramenta) {
+    public Ferramentas(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, Double eficiencia, TipoFerramenta tipoFerramenta) {
+        super(nomeItem, personagem, peso, durabilidade, probabilidadeDeEncontrar);
         this.eficiencia = eficiencia;
         this.tipoFerramenta = tipoFerramenta;
     }
