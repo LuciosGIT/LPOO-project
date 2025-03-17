@@ -39,39 +39,47 @@ public class AmbienteFloresta extends Ambiente {
 
     //métodos que envolvem o ambiente
     @Override
-    public void explorar(Personagem jogador){
+    public void explorar(Personagem jogador)
+    {
         this.setProbabilidades();
 
 
-        if (this.vegetacaoDensa) {
+        if (this.vegetacaoDensa)
+        {
 
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(getDificuldadeExploracao() * 1.5);
         }
-        else {
+        else
+        {
 
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(getDificuldadeExploracao());
 
         }
 
-        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco()) {
+        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
+        {
             Random random = new Random();
 
-
             //encontrou monstro? se não o personagem passa a procurar itens
-            if(random.nextDouble() < getDificuldadeExploracao()){
+            if(random.nextDouble() < getDificuldadeExploracao())
+            {
                 //evento de luta??
             }
-                if (jogador.getVida() > 0) {
+                if (jogador.getVida() > 0)
+                {
                 boolean encontrouItem = false; // Flag para verificar se coletou algum item
 
                 for(Item recursoDisponivel  : this.getRecursosDisponiveis()){
+
                     double numeroAleatorio = random.nextDouble();
                     if((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar())){
 
-                        if (recursoDisponivel.getNomeItem().equals("Cogumelo")) {
-                            if (numeroAleatorio < 0.2) {
+                        if (recursoDisponivel.getNomeItem().equals("Cogumelo"))
+                        {
+                            if (numeroAleatorio < 0.2)
+                            {
                             System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
                             jogador.diminuirVida(15.0);
                             jogador.diminuirSanidade(5.0);
@@ -79,12 +87,15 @@ public class AmbienteFloresta extends Ambiente {
                             encontrouItem = true;
                             break;
                             }
+
                             recursoDisponivel.alterarPersonagem(jogador);
                             jogador.getInventario().adicionarItem(recursoDisponivel);
                             System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
                             encontrouItem = true;
+
                         }
-                        else {
+                        else
+                        {
                             recursoDisponivel.alterarPersonagem(jogador);
                             jogador.getInventario().adicionarItem(recursoDisponivel);
                             System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
@@ -93,13 +104,15 @@ public class AmbienteFloresta extends Ambiente {
                     }
 
                 }
-                if (!encontrouItem){
+
+                if (!encontrouItem)
+                {
                     System.out.print("Nenhum item encontrado");
                 }
 
 
 
-        }
+            }
         }
     }
 

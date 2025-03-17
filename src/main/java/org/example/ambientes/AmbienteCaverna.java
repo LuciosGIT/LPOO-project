@@ -37,28 +37,66 @@ public class AmbienteCaverna extends Ambiente {
     public void explorar(Personagem jogador){
 
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
-        double numeroAleatorio;
+
 
         setProbabilidades();
 
-        //encontrou monstro? se não o personagem passa a procurar itens
-        if((numeroAleatorio = random.nextDouble()) < getDificuldadeExploracao()){
-            //evento de luta??
-        }
-        else
+        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
         {
+            Random random = new Random();
 
-            for(Item recursoDisponivel  : this.getRecursosDisponiveis()){
+            //encontrou monstro? se não o personagem passa a procurar itens
+            if(random.nextDouble() < getDificuldadeExploracao())
+            {
+                //evento de luta??
+            }
+            if (jogador.getVida() > 0)
+            {
+                boolean encontrouItem = false; // Flag para verificar se coletou algum item
 
-                if((numeroAleatorio = random.nextDouble()) < recursoDisponivel.getProbabilidadeDeEncontrar()){
-                    //adiciona o item recursoDisponivel ao inventário
-                    //adicionar item já valida se o inventário está cheio
-                    jogador.getInventario().adicionarItem(recursoDisponivel);
-                    System.out.printf("Você coletou um(a) %s", recursoDisponivel.getNomeItem());
+                for(Item recursoDisponivel  : this.getRecursosDisponiveis())
+                {
+
+                    double numeroAleatorio = random.nextDouble();
+                    if((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar()))
+                    {
+
+                        if (recursoDisponivel.getNomeItem().equals("Cogumelo"))
+                        {
+                            if (numeroAleatorio < 0.2)
+                            {
+                                System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
+                                jogador.diminuirVida(15.0);
+                                jogador.diminuirSanidade(5.0);
+                                jogador.diminuirEnergia(15.0);
+                                encontrouItem = true;
+                                break;
+                            }
+
+                            recursoDisponivel.alterarPersonagem(jogador);
+                            jogador.getInventario().adicionarItem(recursoDisponivel);
+                            System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
+                            encontrouItem = true;
+
+                        }
+                        else
+                        {
+                            recursoDisponivel.alterarPersonagem(jogador);
+                            jogador.getInventario().adicionarItem(recursoDisponivel);
+                            System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
+                            encontrouItem = true;
+                        }
+                    }
+
                 }
-                else{
+
+                if (!encontrouItem)
+                {
                     System.out.print("Nenhum item encontrado");
                 }
+
+
+
             }
         }
 
