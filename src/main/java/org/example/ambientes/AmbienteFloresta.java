@@ -43,21 +43,6 @@ public class AmbienteFloresta extends Ambiente {
     {
         this.setProbabilidades();
 
-
-        if (this.vegetacaoDensa)
-        {
-
-            System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(getDificuldadeExploracao() * 1.5);
-        }
-        else
-        {
-
-            System.out.println("A exploração é relativamente tranquila.");
-            jogador.diminuirEnergia(getDificuldadeExploracao());
-
-        }
-
         if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
         {
             Random random = new Random();
@@ -114,6 +99,22 @@ public class AmbienteFloresta extends Ambiente {
 
             }
         }
+
+        if (this.vegetacaoDensa)
+        {
+            System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
+            jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+        }
+        else
+        {
+            System.out.println("A exploração é relativamente tranquila.");
+            jogador.diminuirEnergia(4.0*getDificuldadeExploracao());
+            jogador.diminuirSede(1.0*getDificuldadeExploracao());
+            jogador.diminuirFome(1.0*getDificuldadeExploracao());
+        }
+
     }
 
 

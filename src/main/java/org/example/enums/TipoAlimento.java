@@ -7,8 +7,10 @@ public enum TipoAlimento {
     FRUTA("fruta", 5.0),
     CARNE("carne", 15.0),
     ENLATADO("enlatado", 10.0),
+    PEIXE("peixe",15.0),
     RAIZES("raizes", 10.0),
     COGUMELO("cogumelo", 5.0);
+
 
     private static final Random random = new Random();
     private String value;

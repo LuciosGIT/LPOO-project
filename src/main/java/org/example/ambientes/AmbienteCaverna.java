@@ -20,14 +20,14 @@ public class AmbienteCaverna extends Ambiente {
 
     Random random = new Random();
 
-    int poucaLuminosidade;
+    Boolean poucaLuminosidade;
 
     //construtor
-    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, List<Item> recursosDisponiveis, int poucaLuminosidade){
+    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, boolean poucaLuminosidade){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
-        this.getRecursosDisponiveis().add(new Alimentos(OffsetDateTime.now().plusDays(5), TipoAlimento.COGUMELO));
-        this.getRecursosDisponiveis().add(new Materiais(5.0,TipoMaterial.PEDRA));
-        this.getRecursosDisponiveis().add(new Materiais(10.0,TipoMaterial.METAL));
+        this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
+        this.getRecursosDisponiveis().add(new Materiais("Metal", null, 8.0, 40.0, 0.2, 20.0, TipoMaterial.METAL));
         this.poucaLuminosidade = poucaLuminosidade;
     }
 
@@ -58,6 +58,7 @@ public class AmbienteCaverna extends Ambiente {
                 {
 
                     double numeroAleatorio = random.nextDouble();
+
                     if((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar()))
                     {
 
@@ -95,17 +96,29 @@ public class AmbienteCaverna extends Ambiente {
                     System.out.print("Nenhum item encontrado");
                 }
 
-
-
             }
         }
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
         //melhorar isso
-        jogador.diminuirEnergia(4.0*getDificuldadeExploracao());
-        jogador.diminuirSede(1.0*getDificuldadeExploracao());
-        jogador.diminuirFome(1.0*getDificuldadeExploracao());
+
+
+        if (this.poucaLuminosidade)
+        {
+            System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
+            jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+        }
+        else
+        {
+            System.out.println("A exploração é relativamente tranquila.");
+            jogador.diminuirEnergia(4.0*getDificuldadeExploracao());
+            jogador.diminuirSede(1.0*getDificuldadeExploracao());
+            jogador.diminuirFome(1.0*getDificuldadeExploracao());
+        }
+
 
     }
 
