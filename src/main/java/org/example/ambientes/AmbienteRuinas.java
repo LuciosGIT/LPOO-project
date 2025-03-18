@@ -36,8 +36,6 @@ public class AmbienteRuinas extends Ambiente {
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
 
-        setProbabilidades();
-
         if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
         {
             Random random = new Random();
