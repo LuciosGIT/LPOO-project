@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
 
 import java.util.Collections;
@@ -23,7 +24,6 @@ public abstract class Personagem {
 
     private double[] localizacao;
 
-    public abstract void habilidade();
 
     protected Personagem(String nome) {
         this.nome = nome;
@@ -35,6 +35,8 @@ public abstract class Personagem {
         this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
         this.localizacao = new double[]{0.0, 0.0};
     }
+
+    public Personagem() { }
 
     public Double getEnergia() {
         return energia;

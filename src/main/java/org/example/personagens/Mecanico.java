@@ -1,2 +1,4 @@
-package org.example.personagens;public class Mecanico {
+package org.example.personagens;
+
+public class Mecanico {
 }
