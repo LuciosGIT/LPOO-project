@@ -7,6 +7,8 @@ import org.example.enums.TipoAlimento;
 import org.example.enums.TipoMaterial;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
+import org.example.personagens.Rastreador;
+import org.example.personagens.Sobrevivente;
 
 import java.time.OffsetDateTime;
 
@@ -23,15 +25,16 @@ public class AmbienteFloresta extends Ambiente {
     private boolean climaUmido;
 
     //construtor
-    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante){
+    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
-        this.getRecursosDisponiveis().add(new Alimentos("Fruta", null, 0.5, 10.0, 0.8, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.6, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.7, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.climaUmido = climaUmido;
+        this.getRecursosDisponiveis().add(new Alimentos("Fruta", null, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
 
     }
 
@@ -39,38 +42,40 @@ public class AmbienteFloresta extends Ambiente {
 
     //métodos que envolvem o ambiente
     @Override
-    public void explorar(Personagem jogador)
-    {
-        this.setProbabilidades();
+    public void explorar(Personagem jogador) {
 
-        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
-        {
+        // to do : se o jogador for instancia de Rastreador : as chances de se encontrar recursos são maiores!!!
+        if (jogador instanceof Rastreador) {
+            Random random = new Random();
+            for (Item recurso : this.getRecursosDisponiveis()) {
+                recurso.setProbabilidadeDeEncontrar(random.nextDouble(recurso.getProbabilidadeDeEncontrar() + 0.1, 0.99));
+            }
+        }
+
+
+        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco()) {
             Random random = new Random();
 
             //encontrou monstro? se não o personagem passa a procurar itens
-            if(random.nextDouble() < getDificuldadeExploracao())
-            {
+            if (random.nextDouble() < getDificuldadeExploracao()) {
                 //evento de luta??
             }
-                if (jogador.getVida() > 0)
-                {
+            if (jogador.getVida() > 0) {
                 boolean encontrouItem = false; // Flag para verificar se coletou algum item
 
-                for(Item recursoDisponivel  : this.getRecursosDisponiveis()){
+                for (Item recursoDisponivel : this.getRecursosDisponiveis()) {
 
                     double numeroAleatorio = random.nextDouble();
-                    if((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar())){
+                    if ((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar())) {
 
-                        if (recursoDisponivel.getNomeItem().equals("Cogumelo"))
-                        {
-                            if (numeroAleatorio < 0.2)
-                            {
-                            System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
-                            jogador.diminuirVida(15.0);
-                            jogador.diminuirSanidade(5.0);
-                            jogador.diminuirEnergia(15.0);
-                            encontrouItem = true;
-                            break;
+                        if (recursoDisponivel.getNomeItem().equals("Cogumelo")) {
+                            if (numeroAleatorio < 0.2) {
+                                System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
+                                jogador.diminuirVida(15.0);
+                                jogador.diminuirSanidade(5.0);
+                                jogador.diminuirEnergia(15.0);
+                                encontrouItem = true;
+                                break;
                             }
 
                             recursoDisponivel.alterarPersonagem(jogador);
@@ -78,9 +83,7 @@ public class AmbienteFloresta extends Ambiente {
                             System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
                             encontrouItem = true;
 
-                        }
-                        else
-                        {
+                        } else {
                             recursoDisponivel.alterarPersonagem(jogador);
                             jogador.getInventario().adicionarItem(recursoDisponivel);
                             System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
@@ -90,29 +93,33 @@ public class AmbienteFloresta extends Ambiente {
 
                 }
 
-                if (!encontrouItem)
-                {
+                if (!encontrouItem) {
                     System.out.print("Nenhum item encontrado");
                 }
-
 
 
             }
         }
 
-        if (this.vegetacaoDensa)
-        {
+        if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
         }
-        else
+
+        if (this.vegetacaoDensa && jogador instanceof Sobrevivente)
         {
+            System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
+            jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*0.25);
+            jogador.diminuirSede(1.0*getDificuldadeExploracao()*0.25);
+            jogador.diminuirFome(1.0*getDificuldadeExploracao()*0.25);
+        }
+        else {
             System.out.println("A exploração é relativamente tranquila.");
-            jogador.diminuirEnergia(4.0*getDificuldadeExploracao());
-            jogador.diminuirSede(1.0*getDificuldadeExploracao());
-            jogador.diminuirFome(1.0*getDificuldadeExploracao());
+            jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
+            jogador.diminuirSede(1.0 * getDificuldadeExploracao());
+            jogador.diminuirFome(1.0 * getDificuldadeExploracao());
         }
 
     }
