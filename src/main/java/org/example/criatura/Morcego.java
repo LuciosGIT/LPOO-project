@@ -1,4 +1,4 @@
 package org.example.criatura;
 
-public class morcego {
+public class Morcego {
 }

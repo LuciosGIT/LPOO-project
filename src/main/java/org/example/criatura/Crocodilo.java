@@ -1,4 +1,4 @@
 package org.example.criatura;
 
-public class crocodilo {
+public class Crocodilo {
 }
