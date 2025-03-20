@@ -65,11 +65,4 @@ public class EventoCriatura extends Evento {
         this.nivelDePerigo = nivelDePerigo;
     }
 
-    public Random getRandom() {
-        return random;
-    }
-
-    public void setRandom(Random random) {
-        this.random = random;
-    }
 }
