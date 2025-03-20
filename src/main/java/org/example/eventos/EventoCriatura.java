@@ -21,7 +21,7 @@ public class EventoCriatura extends Evento {
 
 
     public EventoCriatura(boolean ativavel, List<String> impacto, String nome, Double probabilidadeOcorrencia, Criatura criatura, boolean evitavel, int nivelDePerigo, Random random) {
-        super(ativavel, "Uma criatura surgiu", impacto, nome, probabilidadeOcorrencia);
+        super(ativavel, "Evento de criatura acionado!", impacto, nome, probabilidadeOcorrencia);
         this.criatura = criatura;
         this.evitavel = random.nextBoolean();
         this.nivelDePerigo = nivelDePerigo;
