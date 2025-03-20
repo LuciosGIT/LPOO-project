@@ -1,2 +1,66 @@
-package org.example.domain;public class Evento {
+package org.example.domain;
+
+import org.example.interfaces.EventoInterface;
+
+import java.util.List;
+
+public abstract class Evento implements EventoInterface {
+
+    private String nome;
+
+    private String descricao;
+
+    private Double probabilidadeOcorrencia;
+
+    private List<String> impacto;
+
+    private boolean ativavel;
+
+    public Evento(boolean ativavel, String descricao, List<String> impacto, String nome, Double probabilidadeOcorrencia) {
+        this.ativavel = ativavel;
+        this.descricao = descricao;
+        this.impacto = impacto;
+        this.nome = nome;
+        this.probabilidadeOcorrencia = probabilidadeOcorrencia;
+    }
+
+    public boolean isAtivavel() {
+        return ativavel;
+    }
+
+    public void setAtivavel(boolean ativavel) {
+        this.ativavel = ativavel;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public List<String> getImpacto() {
+        return impacto;
+    }
+
+    public void setImpacto(List<String> impacto) {
+        this.impacto = impacto;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Double getProbabilidadeOcorrencia() {
+        return probabilidadeOcorrencia;
+    }
+
+    public void setProbabilidadeOcorrencia(Double probabilidadeOcorrencia) {
+        this.probabilidadeOcorrencia = probabilidadeOcorrencia;
+    }
 }
