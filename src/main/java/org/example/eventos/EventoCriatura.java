@@ -24,7 +24,7 @@ public class EventoCriatura extends Evento {
         super(ativavel, "Evento de criatura acionado!", impacto, nome, probabilidadeOcorrencia);
         this.criatura = criatura;
         this.evitavel = random.nextBoolean();
-        this.nivelDePerigo = nivelDePerigo;
+        this.nivelDePerigo = criatura.getNivelDePerigo();
         this.random = random;
     }
 

@@ -21,8 +21,7 @@ public class Lobo extends Criatura {
         jogador.diminuirVida(this.getDanoDeAtaque());
 
         if (random.nextBoolean()) {
-            List<Item> itens = jogador.getInventario().getListaDeItems();
-
+            List<Item> itens = jogador.getInventario().getListaDeItems();// ['Laranja', 'Madeira', 'Cogumelo']
             Optional<Item> alimentoParaRemover = itens.stream()
                     .filter(item -> item instanceof Alimentos)
                     .findFirst();
