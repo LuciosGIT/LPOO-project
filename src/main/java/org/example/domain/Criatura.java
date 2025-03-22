@@ -2,14 +2,15 @@ package org.example.domain;
 
 import org.example.interfaces.CriaturaInterface;
 
+
 public abstract class Criatura implements CriaturaInterface {
 
     private String nome;
-    private int vida;
+    private Double vida;
     private int nivelDePerigo;
     private Double danoDeAtaque;
 
-    public Criatura(String nome, int vida, int nivelDePerigo, Double danoDeAtaque){
+    public Criatura(String nome, Double vida, int nivelDePerigo, Double danoDeAtaque){
 
         this.nome = nome;
         this.vida = vida;
@@ -22,8 +23,15 @@ public abstract class Criatura implements CriaturaInterface {
         return this.nome;
     }
 
-    public int getVida(){
+    public Double getVida(){
         return this.vida;
+    }
+
+    public Double getDiminuirVida(Double danoSofrido){
+        if(danoSofrido == null || danoSofrido < 0){
+            throw new IllegalArgumentException("O dano sofrido é inválido");
+        }
+        return this.vida -= danoSofrido;
     }
 
     public int getNivelDePerigo(){
@@ -34,7 +42,4 @@ public abstract class Criatura implements CriaturaInterface {
         return danoDeAtaque;
     }
 
-    public void setDanoDeAtaque(Double danoDeAtaque) {
-        this.danoDeAtaque = danoDeAtaque;
-    }
 }

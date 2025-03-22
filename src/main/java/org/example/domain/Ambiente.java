@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import org.example.criatura.*;
 import org.example.interfaces.AmbienteInterface;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public abstract class Ambiente implements AmbienteInterface {
     private double probabilidadeEventos;
     private String condicoesClimaticas;
     private Double valorAleatorio;
+    private final List<Criatura> criaturasAmbientes;
 
     public Ambiente(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
 
@@ -24,6 +26,14 @@ public abstract class Ambiente implements AmbienteInterface {
         this.dificuldadeExploracao = dificuldadeExploracao;
         this.probabilidadeEventos = probabilidadeEventos;
         this.condicoesClimaticas = condicoesClimaticas;
+        //colocar crocodilo, morcego, sobrevivente
+
+        this.criaturasAmbientes = List.of(
+                new Cobra("Cobra",7.0,3,5.0),
+                new Lobo("Lobo",7.0,3,5.0),
+                new Corvo("Corvo",7.0,3,5.0),
+                new Urso("Urso",7.0,3,5.0)
+        );
 
     }
 
@@ -62,6 +72,10 @@ public abstract class Ambiente implements AmbienteInterface {
 
     public List<Item> getRecursosDisponiveis() {
         return this.recursosDisponiveis;
+    }
+
+    public List<Criatura> getCriaturasAmbientes(){
+        return this.criaturasAmbientes;
     }
 
 }

@@ -2,7 +2,9 @@ package org.example.ambientes;
 
 
 import com.badlogic.gdx.graphics.g3d.Material;
+import org.example.criatura.Cobra;
 import org.example.domain.Ambiente;
+import org.example.domain.Criatura;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
@@ -14,7 +16,9 @@ import org.example.itens.Materiais;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class AmbienteCaverna extends Ambiente {
 
@@ -27,6 +31,7 @@ public class AmbienteCaverna extends Ambiente {
         this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais("Metal", null, 8.0, 40.0, 0.2, 20.0, TipoMaterial.METAL));
         this.poucaLuminosidade = poucaLuminosidade;
+
     }
 
     //métodos que envolvem o ambiente
@@ -39,7 +44,6 @@ public class AmbienteCaverna extends Ambiente {
 
         if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
         {
-            Random random = new Random();
 
             //encontrou monstro? se não o personagem passa a procurar itens
             if(getValorAleatorio() < getDificuldadeExploracao())
@@ -50,7 +54,7 @@ public class AmbienteCaverna extends Ambiente {
             {
                 boolean encontrouItem = false; // Flag para verificar se coletou algum item
 
-                for(Item recursoDisponivel  : this.getRecursosDisponiveis())
+                for(Item recursoDisponivel : this.getRecursosDisponiveis())
                 {
 
                     if((getValorAleatorio() < recursoDisponivel.getProbabilidadeDeEncontrar()))
@@ -104,6 +108,12 @@ public class AmbienteCaverna extends Ambiente {
             jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+
+            //implementar dano da cobra
+            if(jogador.getEstaEnvenedo()){
+                jogador.danoPorEnvenenamento(getCriaturasAmbientes(),getDificuldadeExploracao());
+            }
+
         }
         else
         {
@@ -112,7 +122,6 @@ public class AmbienteCaverna extends Ambiente {
             jogador.diminuirSede(1.0*getDificuldadeExploracao());
             jogador.diminuirFome(1.0*getDificuldadeExploracao());
         }
-
 
     }
 

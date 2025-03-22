@@ -1,9 +1,12 @@
 package org.example.domain;
 
+import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 
 public abstract class Personagem {
@@ -24,6 +27,7 @@ public abstract class Personagem {
 
     private double[] localizacao;
 
+    private boolean estaEnvenenado;
 
     protected Personagem(String nome) {
         this.nome = nome;
@@ -34,6 +38,8 @@ public abstract class Personagem {
         this.sanidade = 100.0;
         this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
         this.localizacao = new double[]{0.0, 0.0};
+        this.estaEnvenenado = false;
+
     }
 
     public Personagem() { }
@@ -170,5 +176,35 @@ public abstract class Personagem {
 
         this.vida -= vida;
     }
+
+    public boolean getEstaEnvenedo(){
+        return this.estaEnvenenado;
+    }
+
+    public void envenenar() {
+        this.estaEnvenenado = true;
+    }
+
+    public void CuradoDoVeneno(){
+         this.estaEnvenenado = false;
+    }
+
+    public void danoPorEnvenenamento(List<Criatura> listaDeCriaturas, Double getDificuldadeAmbiente){
+
+        //recebe uma lista de criaturas que existem no jogo, filtra essa lista para apenas cobras;
+        Optional<Cobra> cobra = listaDeCriaturas.stream()
+                .filter(a -> a instanceof Cobra)
+                .map(c -> ((Cobra) c))
+                .findAny();
+        //verifica se tem cobra, acho q n precisa disso
+        cobra.ifPresent(c-> {
+
+            diminuirVida(c.getDanoDeAtaque()*getDificuldadeAmbiente);
+            System.out.printf("Você sofreu %f de dano", c.getDanoDeAtaque() * 0.5);
+
+        });
+    }
+
+
 
 }
