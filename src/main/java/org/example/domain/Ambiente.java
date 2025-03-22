@@ -10,11 +10,12 @@ public abstract class Ambiente implements AmbienteInterface {
 
     //atributos
     private String nome;
-    private  String descricao;
-    private  Double dificuldadeExploracao;
-    private  List<Item> recursosDisponiveis = new ArrayList<>();
-    private  double probabilidadeEventos;
-    private  String condicoesClimaticas;
+    private String descricao;
+    private Double dificuldadeExploracao;
+    private List<Item> recursosDisponiveis = new ArrayList<>();
+    private double probabilidadeEventos;
+    private String condicoesClimaticas;
+    private Double valorAleatorio;
 
     public Ambiente(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){
 
@@ -51,6 +52,12 @@ public abstract class Ambiente implements AmbienteInterface {
 
     public  double getProbabilidadeEventos() {
         return this.probabilidadeEventos;
+    }
+
+    public double getValorAleatorio(){
+        //Usado para gerar probabilidades nas subclasses de `Ambiente`
+        Random random = new Random();
+        return this.valorAleatorio = random.nextDouble();
     }
 
     public List<Item> getRecursosDisponiveis() {

@@ -38,10 +38,10 @@ public class AmbienteRuinas extends Ambiente {
 
         if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
         {
-            Random random = new Random();
+
 
             //encontrou monstro? se não o personagem passa a procurar itens
-            if(random.nextDouble() < getDificuldadeExploracao())
+            if(getValorAleatorio() < getDificuldadeExploracao())
             {
                 //evento de luta??
             }
@@ -52,13 +52,12 @@ public class AmbienteRuinas extends Ambiente {
                 for(Item recursoDisponivel  : this.getRecursosDisponiveis())
                 {
 
-                    double numeroAleatorio = random.nextDouble();
-                    if((numeroAleatorio < recursoDisponivel.getProbabilidadeDeEncontrar()))
+                    if((getValorAleatorio() < recursoDisponivel.getProbabilidadeDeEncontrar()))
                     {
 
                         if (recursoDisponivel.getNomeItem().equals("Cogumelo"))
                         {
-                            if (numeroAleatorio < 0.2)
+                            if (getValorAleatorio() < 0.2)
                             {
                                 System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
                                 jogador.diminuirVida(15.0);
