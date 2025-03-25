@@ -64,12 +64,6 @@ public abstract class Ambiente implements AmbienteInterface {
         return this.probabilidadeEventos;
     }
 
-    public double getValorAleatorio(){
-        //Usado para gerar probabilidades nas subclasses de `Ambiente`
-        Random random = new Random();
-        return this.valorAleatorio = random.nextDouble();
-    }
-
     public List<Item> getRecursosDisponiveis() {
         return this.recursosDisponiveis;
     }
