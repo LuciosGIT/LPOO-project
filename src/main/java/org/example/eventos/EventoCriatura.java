@@ -1,31 +1,26 @@
 package org.example.eventos;
 
-import org.example.criatura.Lobo;
 import org.example.domain.Ambiente;
 import org.example.domain.Criatura;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
+import org.example.utilitarios.Utilitario;
 
-import java.util.List;
-import java.util.Random;
 
 public class EventoCriatura extends Evento {
 
     private Criatura criatura;
 
-    private int nivelDePerigo;
+    private Double nivelDePerigo;
 
     private boolean evitavel;
 
-    private Random random;// ??
 
-
-    public EventoCriatura(boolean ativavel, List<String> impacto, String nome, Double probabilidadeOcorrencia, Criatura criatura, boolean evitavel, int nivelDePerigo, Random random) {
+    public EventoCriatura(boolean ativavel, String impacto, String nome, Double probabilidadeOcorrencia, Criatura criatura, Double nivelDePerigo) {
         super(ativavel, "Evento de criatura acionado!", impacto, nome, probabilidadeOcorrencia);
         this.criatura = criatura;
-        this.evitavel = random.nextBoolean();
+        this.evitavel = Utilitario.getBooleanAleatorio();
         this.nivelDePerigo = criatura.getNivelDePerigo();
-        this.random = random;
     }
 
     @Override
@@ -57,11 +52,11 @@ public class EventoCriatura extends Evento {
         this.evitavel = evitavel;
     }
 
-    public int getNivelDePerigo() {
+    public Double getNivelDePerigo() {
         return nivelDePerigo;
     }
 
-    public void setNivelDePerigo(int nivelDePerigo) {
+    public void setNivelDePerigo(Double nivelDePerigo) {
         this.nivelDePerigo = nivelDePerigo;
     }
 
