@@ -12,11 +12,11 @@ public abstract class Evento implements EventoInterface {
 
     private Double probabilidadeOcorrencia;
 
-    private List<String> impacto;
+    private String impacto;
 
     private boolean ativavel;
 
-    public Evento(boolean ativavel, String descricao, List<String> impacto, String nome, Double probabilidadeOcorrencia) {
+    public Evento(boolean ativavel, String descricao, String impacto, String nome, Double probabilidadeOcorrencia) {
         this.ativavel = ativavel;
         this.descricao = descricao;
         this.impacto = impacto;
@@ -40,11 +40,11 @@ public abstract class Evento implements EventoInterface {
         this.descricao = descricao;
     }
 
-    public List<String> getImpacto() {
+    public String getImpacto() {
         return impacto;
     }
 
-    public void setImpacto(List<String> impacto) {
+    public void setImpacto(String impacto) {
         this.impacto = impacto;
     }
 
