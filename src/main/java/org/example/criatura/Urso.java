@@ -5,7 +5,7 @@ import org.example.domain.Personagem;
 
 public class Urso extends Criatura {
 
-    public Urso(String nome, Double vida, int nivelDePerigo, Double danoDeAtaque) {
+    public Urso(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque) {
         super(nome, vida, nivelDePerigo, danoDeAtaque);
     }
 

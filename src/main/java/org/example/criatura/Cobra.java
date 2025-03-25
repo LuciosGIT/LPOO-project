@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public class Cobra extends Criatura {
 
-    public Cobra(String nome, Double vida, int nivelDePerigo, Double danoDeAtaque) {
+    public Cobra(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque) {
         super(nome, vida, nivelDePerigo, danoDeAtaque);
     }
 

@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Lobo extends Criatura {
 
-    public Lobo(String nome, Double vida, int nivelDePerigo, Double danoDeAtaque) {
+    public Lobo(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque) {
         super(nome, vida, nivelDePerigo, danoDeAtaque);
     }
 
