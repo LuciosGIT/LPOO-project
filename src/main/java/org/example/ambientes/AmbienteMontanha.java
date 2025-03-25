@@ -38,7 +38,7 @@ public class AmbienteMontanha extends Ambiente {
 
 
 
-        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getDificuldadeExploracao());
+        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getEventos(),  getDificuldadeExploracao());
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
