@@ -7,10 +7,10 @@ public abstract class Criatura implements CriaturaInterface {
 
     private String nome;
     private Double vida;
-    private int nivelDePerigo;
+    private Double nivelDePerigo;
     private Double danoDeAtaque;
 
-    public Criatura(String nome, Double vida, int nivelDePerigo, Double danoDeAtaque){
+    public Criatura(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque){
 
         this.nome = nome;
         this.vida = vida;
@@ -34,7 +34,7 @@ public abstract class Criatura implements CriaturaInterface {
         return this.vida -= danoSofrido;
     }
 
-    public int getNivelDePerigo(){
+    public Double getNivelDePerigo(){
         return this.nivelDePerigo;
     }
 
