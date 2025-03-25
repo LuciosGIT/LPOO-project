@@ -16,7 +16,6 @@ public abstract class Ambiente implements AmbienteInterface {
     private List<Item> recursosDisponiveis = new ArrayList<>();
     private double probabilidadeEventos;
     private String condicoesClimaticas;
-    private Double valorAleatorio;
     private final List<Criatura> criaturasAmbientes;
 
     public Ambiente(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas){

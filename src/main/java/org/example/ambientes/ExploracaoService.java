@@ -4,6 +4,7 @@ import org.example.domain.Item;
 import org.example.domain.Personagem;
 
 import java.util.List;
+import java.util.Random;
 
 public class ExploracaoService {
 
@@ -44,7 +45,8 @@ public class ExploracaoService {
         }
 
         private static double getValorAleatorio() {
-            return Math.random(); // Gera um valor entre 0 e 1
+            Random random = new Random();
+            return random.nextDouble();
         }
     }
 
