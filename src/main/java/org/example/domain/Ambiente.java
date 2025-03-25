@@ -5,7 +5,6 @@ import org.example.interfaces.AmbienteInterface;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public abstract class Ambiente implements AmbienteInterface {
 
@@ -15,6 +14,7 @@ public abstract class Ambiente implements AmbienteInterface {
     private Double dificuldadeExploracao;
     private List<Item> recursosDisponiveis = new ArrayList<>();
     private double probabilidadeEventos;
+    private List<Evento> eventosPossiveis;
     private String condicoesClimaticas;
     private final List<Criatura> criaturasAmbientes;
 
@@ -28,10 +28,10 @@ public abstract class Ambiente implements AmbienteInterface {
         //colocar crocodilo, morcego, sobrevivente
 
         this.criaturasAmbientes = List.of(
-                new Cobra("Cobra",7.0,3,5.0),
-                new Lobo("Lobo",7.0,3,5.0),
-                new Corvo("Corvo",7.0,3,5.0),
-                new Urso("Urso",7.0,3,5.0)
+                new Cobra("Cobra",7.0,3.0,5.0),
+                new Lobo("Lobo",7.0,3.0,5.0),
+                new Corvo("Corvo",7.0,3.0,5.0),
+                new Urso("Urso",7.0,3.0,5.0)
         );
 
     }
@@ -71,4 +71,7 @@ public abstract class Ambiente implements AmbienteInterface {
         return this.criaturasAmbientes;
     }
 
+    public List<Evento> getEventos() {
+        return eventosPossiveis;
+    }
 }
