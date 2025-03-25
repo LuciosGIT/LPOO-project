@@ -1,14 +1,18 @@
 package org.example.ambientes;
 
+import org.example.criatura.Cobra;
+import org.example.criatura.Urso;
 import org.example.domain.Ambiente;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoMaterial;
+import org.example.eventos.EventoCriatura;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
 import org.example.personagens.Rastreador;
 import org.example.personagens.Sobrevivente;
+import org.example.utilitarios.Utilitario;
 
 import java.time.OffsetDateTime;
 
@@ -27,6 +31,7 @@ public class AmbienteFloresta extends Ambiente {
     //construtor
     public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, String condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido){
         super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
+        Random random = new Random();
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
@@ -35,7 +40,10 @@ public class AmbienteFloresta extends Ambiente {
         this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
-
+        this.getEventos().add(new EventoCriatura(true, "Impacto", "Evento de Criatura", 0.7,
+                getCriaturasAmbientes().get(3) , Utilitario.getValorAleatorio()));
+        this.getEventos().add(new EventoCriatura(true, "Impacto", "Evento de Criatura", 0.5,
+                getCriaturasAmbientes().get(0), Utilitario.getValorAleatorio()));
     }
 
     //métodos getters
@@ -53,7 +61,7 @@ public class AmbienteFloresta extends Ambiente {
         }
 
 
-        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getDificuldadeExploracao());
+        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getEventos(), getDificuldadeExploracao());
 
         if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
