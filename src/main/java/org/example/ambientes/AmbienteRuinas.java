@@ -36,63 +36,7 @@ public class AmbienteRuinas extends Ambiente {
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
 
-        if (getDificuldadeExploracao() < 5 && jogador.getInventario().temEspaco())
-        {
-
-
-            //encontrou monstro? se não o personagem passa a procurar itens
-            if(getValorAleatorio() < getDificuldadeExploracao())
-            {
-                //evento de luta??
-            }
-            if (jogador.getVida() > 0)
-            {
-                boolean encontrouItem = false; // Flag para verificar se coletou algum item
-
-                for(Item recursoDisponivel  : this.getRecursosDisponiveis())
-                {
-
-                    if((getValorAleatorio() < recursoDisponivel.getProbabilidadeDeEncontrar()))
-                    {
-
-                        if (recursoDisponivel.getNomeItem().equals("Cogumelo"))
-                        {
-                            if (getValorAleatorio() < 0.2)
-                            {
-                                System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
-                                jogador.diminuirVida(15.0);
-                                jogador.diminuirSanidade(5.0);
-                                jogador.diminuirEnergia(15.0);
-                                encontrouItem = true;
-                                break;
-                            }
-
-                            recursoDisponivel.alterarPersonagem(jogador);
-                            jogador.getInventario().adicionarItem(recursoDisponivel);
-                            System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
-                            encontrouItem = true;
-
-                        }
-                        else
-                        {
-                            recursoDisponivel.alterarPersonagem(jogador);
-                            jogador.getInventario().adicionarItem(recursoDisponivel);
-                            System.out.printf("Você coletou um(a) %s%n", recursoDisponivel.getNomeItem());
-                            encontrouItem = true;
-                        }
-                    }
-
-                }
-
-                if (!encontrouItem)
-                {
-                    System.out.print("Nenhum item encontrado");
-                }
-
-
-
-            }
-        }
+        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getDificuldadeExploracao());
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
