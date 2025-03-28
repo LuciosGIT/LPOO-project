@@ -159,7 +159,7 @@ public abstract class Personagem {
         return this.vida;
     }
 
-    public void aumentarVida(Double vida) {
+    public synchronized void aumentarVida(Double vida) {
 
         if (vida <=0) {
             throw new IllegalArgumentException("A sanidade deve ser aumentada, e por isso só aceita valores maiores que 0!");
@@ -168,7 +168,7 @@ public abstract class Personagem {
         this.vida += vida;
     }
 
-    public void diminuirVida(Double vida) {
+    public synchronized void diminuirVida(Double vida) {
 
         if (sanidade <=0) {
             throw new IllegalArgumentException("Você precisa passar um valor de vida maior que 0!");
