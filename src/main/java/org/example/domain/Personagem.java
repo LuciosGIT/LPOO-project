@@ -1,5 +1,6 @@
 package org.example.domain;
 
+import org.example.ambientes.AmbienteSpawn;
 import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
@@ -25,7 +26,7 @@ public abstract class Personagem {
 
     private Inventario inventario;
 
-    private double[] localizacao;
+    private Ambiente localizacao;
 
     private boolean estaEnvenenado;
 
@@ -37,7 +38,7 @@ public abstract class Personagem {
         this.sede = 50.0;
         this.sanidade = 100.0;
         this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
-        this.localizacao = new double[]{0.0, 0.0};
+        this.localizacao = new AmbienteSpawn();
         this.estaEnvenenado = false;
 
     }
@@ -95,11 +96,11 @@ public abstract class Personagem {
         this.inventario = inventario;
     }
 
-    public double[] getLocalizacao() {
+    public Ambiente getLocalizacao() {
         return localizacao;
     }
 
-    public void alterarLocalizacao(double[] localizacao) {
+    public void alterarLocalizacao(Ambiente localizacao) {
         this.localizacao = localizacao;
     }
 
