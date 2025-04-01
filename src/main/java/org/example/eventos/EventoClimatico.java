@@ -20,6 +20,9 @@ public class EventoClimatico extends Evento {
 
     }
 
+    public EventoClimatico() {
+    }
+
     public TipoClimatico getTipoDeClima(){
         return this.tipoDeClima;
     }

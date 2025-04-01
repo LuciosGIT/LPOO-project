@@ -24,6 +24,10 @@ public abstract class Evento implements EventoInterface {
         this.probabilidadeOcorrencia = probabilidadeOcorrencia;
     }
 
+    public Evento() {
+
+    }
+
     public boolean isAtivavel() {
         return ativavel;
     }

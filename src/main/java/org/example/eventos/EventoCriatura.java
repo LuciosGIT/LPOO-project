@@ -23,6 +23,8 @@ public class EventoCriatura extends Evento {
         this.nivelDePerigo = criatura.getNivelDePerigo();
     }
 
+    public EventoCriatura() { }
+
     @Override
     public void executar(Personagem jogador, Ambiente local) {
         if (isAtivavel()) {
