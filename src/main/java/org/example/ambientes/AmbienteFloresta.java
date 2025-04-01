@@ -9,6 +9,7 @@ import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoMaterial;
 import org.example.eventos.EventoCriatura;
+import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
 import org.example.personagens.Rastreador;
@@ -30,8 +31,8 @@ public class AmbienteFloresta extends Ambiente {
     private boolean climaUmido;
 
     //construtor
-    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido){
-        super(nome,descricao,dificuldadeExploracao,probabilidadeEventos,condicoesClimaticas);
+    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido){
+        super(nome,descricao,dificuldadeExploracao,condicoesClimaticas);
         Random random = new Random();
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
@@ -67,18 +68,18 @@ public class AmbienteFloresta extends Ambiente {
 
         if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
-            jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
-            jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+            if (jogador instanceof Sobrevivente) {
+                jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*0.25);
+                jogador.diminuirSede(1.0*getDificuldadeExploracao()*0.25);
+                jogador.diminuirFome(1.0*getDificuldadeExploracao()*0.25);
+            }
+            else {
+                jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
+                jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
+                jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+            }
         }
 
-        if (this.vegetacaoDensa && jogador instanceof Sobrevivente)
-        {
-            System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*0.25);
-            jogador.diminuirSede(1.0*getDificuldadeExploracao()*0.25);
-            jogador.diminuirFome(1.0*getDificuldadeExploracao()*0.25);
-        }
         else {
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
@@ -90,14 +91,8 @@ public class AmbienteFloresta extends Ambiente {
 
 
     @Override
-    public void gerarEvento(){
-        if (faunaAbundante) {
-            //aumentar probabilidade de acontecer ataque animal
-        }
-        if (climaUmido) {
-            // aumentar probabilidade de acontecer evento climático
-        }
-
+    public void gerarEvento(Personagem jogador){
+        GerenciadorDeEventos.aplicarEvento(jogador);
     }
 
     @Override

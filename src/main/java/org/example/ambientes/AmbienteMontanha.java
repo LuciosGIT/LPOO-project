@@ -6,6 +6,7 @@ import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoMaterial;
+import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
 
@@ -18,8 +19,8 @@ public class AmbienteMontanha extends Ambiente {
     Boolean terrenoAcidentado;
 
     //construtor
-    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, List<TipoClimatico> condicoesClimaticas, Boolean terrenoAcidentado){
-        super(nome, descricao, dificuldadeExploracao, probabilidadeEventos, condicoesClimaticas);
+    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean terrenoAcidentado){
+        super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
         this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.3, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
         this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.5, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.7, 10.0, TipoMaterial.PEDRA));
@@ -62,8 +63,8 @@ public class AmbienteMontanha extends Ambiente {
     }
 
     @Override
-    public void gerarEvento(){
-        //metodo para gerar eventos aleatorias
+    public void gerarEvento(Personagem jogador){
+        GerenciadorDeEventos.aplicarEvento(jogador);
     }
 
     @Override
