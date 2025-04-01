@@ -5,7 +5,9 @@ import org.example.interfaces.AmbienteInterface;
 import org.example.utilitarios.ConfiguracaoDoMundo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Ambiente implements AmbienteInterface {
 
@@ -14,19 +16,19 @@ public abstract class Ambiente implements AmbienteInterface {
     private String descricao;
     private volatile Double dificuldadeExploracao;
     private List<Item> recursosDisponiveis = new ArrayList<>();
-    private double probabilidadeEventos;
+    private Map<Evento, Double> probabilidadeEventos;
     private List<Evento> eventosPossiveis;
-    private final List<TipoClimatico> tiposDeClimasDoAmbiente;
-    private final List<Evento> listaDeclimasDoJogo;
-    private final List<Criatura> criaturasAmbientes;
+    private  List<TipoClimatico> tiposDeClimasDoAmbiente;
+    private  List<Evento> listaDeclimasDoJogo;
+    private  List<Criatura> criaturasAmbientes;
 
 
-    public Ambiente(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, List<TipoClimatico> condicoesClimaticas){
+    public Ambiente(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas){
 
         this.nome = nome;
         this.descricao = descricao;
         this.dificuldadeExploracao = dificuldadeExploracao;
-        this.probabilidadeEventos = probabilidadeEventos;
+        this.probabilidadeEventos = new HashMap<>();
         this.tiposDeClimasDoAmbiente = condicoesClimaticas;
 
         //colocar crocodilo, morcego, sobrevivente
@@ -34,6 +36,10 @@ public abstract class Ambiente implements AmbienteInterface {
 
         //criando uma lista de climas que irão ter no jogo
         this.listaDeclimasDoJogo = ConfiguracaoDoMundo.getEventosClimaticosPadrao();
+
+    }
+
+    public Ambiente() {
 
     }
 
@@ -67,8 +73,8 @@ public abstract class Ambiente implements AmbienteInterface {
         this.dificuldadeExploracao = dificuldadeExploracao;
     }
 
-    public  double getProbabilidadeEventos() {
-        return this.probabilidadeEventos;
+    public Map<Evento, Double> getProbabilidadeEventos() {
+        return probabilidadeEventos;
     }
 
     public List<Item> getRecursosDisponiveis() {
