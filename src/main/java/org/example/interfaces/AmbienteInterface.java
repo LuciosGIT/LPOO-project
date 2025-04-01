@@ -6,7 +6,7 @@ public interface AmbienteInterface {
 
     public void explorar(Personagem jogador);
 
-    public void gerarEvento();
+    public void gerarEvento(Personagem jogador);
 
     public void modificarClima();
 
