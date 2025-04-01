@@ -7,6 +7,7 @@ import org.example.criatura.Urso;
 import org.example.domain.Criatura;
 import org.example.domain.Evento;
 import org.example.eventos.EventoClimatico;
+import org.example.eventos.EventoCriatura;
 
 import java.util.List;
 
@@ -59,6 +60,10 @@ public class ConfiguracaoDoMundo {
                         "Redução de visibilidade, gasto extra de energia"
                 )
         );
+    }
+
+    public static List<Evento> getEventosDoJogo() {
+        return List.of(new EventoCriatura(), new EventoClimatico());
     }
 
 }
