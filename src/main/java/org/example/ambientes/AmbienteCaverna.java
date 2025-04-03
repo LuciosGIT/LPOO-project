@@ -3,10 +3,7 @@ package org.example.ambientes;
 
 import com.badlogic.gdx.graphics.g3d.Material;
 import org.example.criatura.Cobra;
-import org.example.domain.Ambiente;
-import org.example.domain.Criatura;
-import org.example.domain.Item;
-import org.example.domain.Personagem;
+import org.example.domain.*;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoMaterial;
@@ -37,6 +34,8 @@ public class AmbienteCaverna extends Ambiente {
         this.poucaLuminosidade = poucaLuminosidade;
 
     }
+
+    public AmbienteCaverna() { }
 
     //métodos que envolvem o ambiente
 
@@ -78,7 +77,8 @@ public class AmbienteCaverna extends Ambiente {
 
     @Override
     public void gerarEvento(Personagem jogador){
-        GerenciadorDeEventos.aplicarEvento(jogador);
+        Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
+        GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.example.ambientes;
 
 import org.example.domain.Ambiente;
+import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
@@ -27,6 +28,8 @@ public class AmbienteMontanha extends Ambiente {
         this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.5, 5.0, TipoMaterial.MADEIRA));
         this.terrenoAcidentado = terrenoAcidentado;
     }
+
+    public AmbienteMontanha() { }
 
     //métodos getters
 
@@ -64,7 +67,8 @@ public class AmbienteMontanha extends Ambiente {
 
     @Override
     public void gerarEvento(Personagem jogador){
-        GerenciadorDeEventos.aplicarEvento(jogador);
+        Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
+        GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
     }
 
     @Override

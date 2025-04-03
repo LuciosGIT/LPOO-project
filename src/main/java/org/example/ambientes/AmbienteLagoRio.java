@@ -1,6 +1,7 @@
 package org.example.ambientes;
 
 import org.example.domain.Ambiente;
+import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
@@ -27,6 +28,8 @@ public class AmbienteLagoRio extends Ambiente {
         this.getRecursosDisponiveis().add(new Alimentos("Peixe", null, 0.5, 5.0, 0.4, TipoAlimento.PEIXE, OffsetDateTime.now().plusDays(5)));
         this.terrenoLamacento = terrenoLamacento;
     }
+
+    public AmbienteLagoRio() { }
 
     //métodos getters
 
@@ -61,7 +64,8 @@ public class AmbienteLagoRio extends Ambiente {
 
     @Override
     public void gerarEvento(Personagem jogador){
-        GerenciadorDeEventos.aplicarEvento(jogador);
+        Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
+        GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
     }
 
     @Override

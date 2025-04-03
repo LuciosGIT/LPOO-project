@@ -3,6 +3,7 @@ package org.example.ambientes;
 import org.example.criatura.Cobra;
 import org.example.criatura.Urso;
 import org.example.domain.Ambiente;
+import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
@@ -49,6 +50,8 @@ public class AmbienteFloresta extends Ambiente {
 
     }
 
+    public AmbienteFloresta() { }
+
     //métodos getters
 
     //métodos que envolvem o ambiente
@@ -92,7 +95,8 @@ public class AmbienteFloresta extends Ambiente {
 
     @Override
     public void gerarEvento(Personagem jogador){
-        GerenciadorDeEventos.aplicarEvento(jogador);
+        Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
+        GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
     }
 
     @Override
