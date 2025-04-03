@@ -1,13 +1,17 @@
 package org.example.utilitarios;
 
+import org.example.ambientes.*;
 import org.example.criatura.Cobra;
 import org.example.criatura.Corvo;
 import org.example.criatura.Lobo;
 import org.example.criatura.Urso;
+import org.example.domain.Ambiente;
 import org.example.domain.Criatura;
 import org.example.domain.Evento;
 import org.example.eventos.EventoClimatico;
 import org.example.eventos.EventoCriatura;
+import org.example.eventos.EventoDescoberta;
+import org.example.eventos.EventoDoencaFerimento;
 
 import java.util.List;
 
@@ -63,7 +67,12 @@ public class ConfiguracaoDoMundo {
     }
 
     public static List<Evento> getEventosDoJogo() {
-        return List.of(new EventoCriatura(), new EventoClimatico());
+        return List.of(new EventoCriatura(), new EventoClimatico(), new EventoDescoberta(), new EventoDoencaFerimento());
+    }
+
+    public static List<Ambiente> getAmbientesDoJogo() {
+        return List.of(new AmbienteFloresta(), new AmbienteCaverna(), new AmbienteRuinas()
+        , new AmbienteLagoRio(), new AmbienteMontanha());
     }
 
 }
