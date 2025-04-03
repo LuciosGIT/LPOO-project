@@ -3,17 +3,14 @@ package org.example.ambientes;
 
 import com.badlogic.gdx.graphics.g3d.Material;
 import org.example.criatura.Cobra;
-import org.example.domain.Ambiente;
-import org.example.domain.Criatura;
-import org.example.domain.Item;
-import org.example.domain.Personagem;
+import org.example.domain.*;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoMaterial;
 import org.example.itens.Alimentos;
 import org.example.itens.Inventario;
 import org.example.itens.Materiais;
-
+import org.example.gerenciadores.GerenciadorDeEventos;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -28,14 +25,16 @@ public class AmbienteCaverna extends Ambiente {
     Boolean poucaLuminosidade;
 
     //construtor
-    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, double probabilidadeEventos, List<TipoClimatico> condicoesClimaticas, boolean poucaLuminosidade){
-        super(nome,descricao,dificuldadeExploracao,probabilidadeEventos, condicoesClimaticas);
+    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean poucaLuminosidade){
+        super(nome,descricao,dificuldadeExploracao, condicoesClimaticas);
         this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais("Metal", null, 8.0, 40.0, 0.2, 20.0, TipoMaterial.METAL));
         this.poucaLuminosidade = poucaLuminosidade;
 
     }
+
+    public AmbienteCaverna() { }
 
     //métodos que envolvem o ambiente
 
@@ -76,8 +75,9 @@ public class AmbienteCaverna extends Ambiente {
     }
 
     @Override
-    public void gerarEvento(){
-        //metodo para gerar eventos aleatorias
+    public void gerarEvento(Personagem jogador){
+        Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
+        GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
     }
 
     @Override

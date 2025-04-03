@@ -31,12 +31,9 @@ public class GerenciadorDeEventos {
         return eventoAleatorio;
     }
 
-    public static void aplicarEvento(Personagem jogador) {
-        Evento eventoSorteado = sortearEvento(jogador.getLocalizacao());
-
-        eventoSorteado.executar(jogador, jogador.getLocalizacao());
-
-        historicoDeEventos.add(eventoSorteado);
+    public static void aplicarEvento(Personagem jogador, Evento evento) {
+        evento.executar(jogador, jogador.getLocalizacao());
+        historicoDeEventos.add(evento);
     }
 
     public static void removerEvento(Evento evento) {
