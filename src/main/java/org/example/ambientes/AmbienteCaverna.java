@@ -11,7 +11,7 @@ import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Inventario;
 import org.example.itens.Materiais;
-
+import org.example.gerenciadores.GerenciadorDeEventos;
 
 import java.time.OffsetDateTime;
 import java.util.List;

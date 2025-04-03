@@ -187,7 +187,7 @@ public abstract class Personagem {
     }
 
     public void CuradoDoVeneno(){
-         this.estaEnvenenado = false;
+        this.estaEnvenenado = false;
     }
 
     public void danoPorEnvenenamento(List<Criatura> listaDeCriaturas, Double getDificuldadeAmbiente){

@@ -11,13 +11,13 @@ public class GerenciadorDeAmbientes {
 
     private List<Ambiente> ambientesDisponiveis;
 
-   // private ?? climaGlobal;
+    // private ?? climaGlobal;
 
     private List<Ambiente> historicoDeAmbientes;
 
     public GerenciadorDeAmbientes(List<Ambiente> ambientesDisponiveis/*ClimaGlobal climaGlobal*/, List<Ambiente> historicoDeAmbientes) {
         this.ambientesDisponiveis = ConfiguracaoDoMundo.getAmbientesDoJogo();
-       // this.climaGlobal = climaGlobal;
+        // this.climaGlobal = climaGlobal;
         this.historicoDeAmbientes = historicoDeAmbientes;
     }
 

@@ -32,7 +32,7 @@ public class ConfiguracaoDoMundo {
     // Lista de eventos climáticos padrão
     public static List<Evento> getEventosClimaticosPadrao() {
 
-         return List.of(
+        return List.of(
                 new EventoClimatico(
                         true,
                         "Clima nevasca: o jogador terá mais dificuldade na exploração",
@@ -72,7 +72,7 @@ public class ConfiguracaoDoMundo {
 
     public static List<Ambiente> getAmbientesDoJogo() {
         return List.of(new AmbienteFloresta(), new AmbienteCaverna(), new AmbienteRuinas()
-        , new AmbienteLagoRio(), new AmbienteMontanha());
+                , new AmbienteLagoRio(), new AmbienteMontanha());
     }
 
 }
