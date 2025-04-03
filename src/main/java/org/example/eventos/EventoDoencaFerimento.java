@@ -23,6 +23,10 @@ public class EventoDoencaFerimento extends Evento {
         this.tipoCondicao = tipoCondicao;
     }
 
+    public EventoDoencaFerimento() {
+
+    }
+
     @Override
     public void executar(Personagem jogador, Ambiente local) {
         System.out.println("Você está sendo afetado por uma" + tipoCondicao.getDescricao());
