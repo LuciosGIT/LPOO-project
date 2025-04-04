@@ -1,21 +1,41 @@
 package org.example.telasDoJogo;
+import com.badlogic.gdx.Screen;
 
-import org.example.interfaces.ScreenInterface;
-
-public class TelaDeGameOver implements ScreenInterface {
+public class TelaDeGameOver implements Screen {
 
     @Override
-    public void mostrar() {
-        System.out.println("Tela de Game Over exibida");
+    public void show() {
+        // Implement show logic here
     }
 
     @Override
-    public void esconder() {
-        System.out.println("Tela de Game Over escondida");
+    public void resize(int width, int height) {
+        // Implement resize logic here
     }
 
     @Override
-    public boolean estaVisivel() {
-        return false; // Retorna false por padrão
+    public void render(float delta) {
+        // Implement render logic here
     }
+
+    @Override
+    public void pause() {
+        // Implement pause logic here
+    }
+
+    @Override
+    public void resume() {
+        // Implement resume logic here
+    }
+
+    @Override
+    public void hide() {
+        // Implement hide logic here
+    }
+
+    @Override
+    public void dispose() {
+        // Implement dispose logic here
+    }
+
 }
