@@ -11,7 +11,8 @@ public class DesktopLauncher {
         // Configuração do aplicativo (janela)
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
         config.setTitle("Última Fronteira");
-        config.setWindowedMode(800, 600); // Define o tamanho da janela
+        config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+
         new Lwjgl3Application(new MyGame(), config);  // Inicia o jogo
     }
 }
