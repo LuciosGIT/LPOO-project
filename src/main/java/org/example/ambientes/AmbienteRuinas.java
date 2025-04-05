@@ -41,7 +41,7 @@ public class AmbienteRuinas extends Ambiente {
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
 
-        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getEventos(),  getDificuldadeExploracao());
+        ExploracaoService.explorar(jogador,this);
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
