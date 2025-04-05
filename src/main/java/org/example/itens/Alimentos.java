@@ -49,6 +49,7 @@ public class  Alimentos extends Item {
             this.getPersonagem().diminuirFome(valorNutricional);
 
         } else {
+                System.out.println("Alimento fora da validade, você perdeu 50 de energia e 15 de sanidade!");
                 this.getPersonagem().diminuirEnergia(50.0);
                 this.getPersonagem().diminuirSanidade(15.0);
         }
