@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class TelaDeInicio implements Screen {
@@ -15,7 +19,7 @@ public class TelaDeInicio implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private Texture backgroundTexture;
-
+    private Texture buttonTexture;
 
     @Override
     public void show() {
@@ -25,7 +29,25 @@ public class TelaDeInicio implements Screen {
 
         // Inicializar o SpriteBatch e a textura como campos da classe
         batch = new SpriteBatch();
-        backgroundTexture = new Texture("backgroundTelaDeInicio2.jpg");
+        backgroundTexture = new Texture("backgroundTelaDeInicio.png");
+
+        //centralizar
+
+
+
+        //criar botões
+        buttonTexture = new Texture("imagemBotaoJogar.png");
+        ImageButton buttonJogar = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTexture)));
+
+        buttonJogar.setSize(buttonJogar.getWidth()*0.2f, buttonJogar.getHeight()*0.2f);
+        buttonJogar.setPosition(Gdx.graphics.getWidth()/2-buttonJogar.getWidth()/2, Gdx.graphics.getHeight()/2-buttonJogar.getHeight()/2);
+
+        buttonJogar.addListener(new ClickListener(){
+
+
+        });
+
+        stage.addActor(buttonJogar);
 
     }
 
@@ -55,6 +77,7 @@ public class TelaDeInicio implements Screen {
     @Override
     public void dispose() {
         // Liberar recursos
+        buttonTexture.dispose();
         stage.dispose();
         batch.dispose();
         backgroundTexture.dispose();
@@ -69,6 +92,7 @@ public class TelaDeInicio implements Screen {
 
         // Desenhar o fundo
         batch.begin();
+
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
