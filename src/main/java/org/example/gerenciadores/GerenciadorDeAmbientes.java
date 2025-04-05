@@ -23,11 +23,11 @@ public class GerenciadorDeAmbientes {
 
     public GerenciadorDeAmbientes ()  {}
 
-    public void mudarAmbiente(Personagem jogador, Ambiente novoAmbiente) {
+    public static void mudarAmbiente(Personagem jogador, Ambiente novoAmbiente) {
         jogador.alterarLocalizacao(novoAmbiente);
     }
 
-    public void modificarRecursos(Ambiente local, Item recurso) {
+    public static void modificarRecursos(Ambiente local, Item recurso) {
         local.getRecursosDisponiveis().remove(recurso);
     }
 

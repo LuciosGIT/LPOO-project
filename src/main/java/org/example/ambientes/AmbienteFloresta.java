@@ -1,7 +1,6 @@
 package org.example.ambientes;
 
-import org.example.criatura.Cobra;
-import org.example.criatura.Urso;
+
 import org.example.domain.Ambiente;
 import org.example.domain.Evento;
 import org.example.domain.Item;
@@ -19,7 +18,7 @@ import org.example.utilitarios.Utilitario;
 
 import java.time.OffsetDateTime;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Random;
 
@@ -39,7 +38,7 @@ public class AmbienteFloresta extends Ambiente {
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
         this.getRecursosDisponiveis().add(new Alimentos("Fruta", null, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
         this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
@@ -66,8 +65,7 @@ public class AmbienteFloresta extends Ambiente {
             }
         }
 
-
-        ExploracaoService.explorar(jogador, jogador.getInventario().getListaDeItems(), getEventos(), getDificuldadeExploracao());
+        ExploracaoService.explorar(jogador, this);
 
         if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
