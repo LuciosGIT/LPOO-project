@@ -39,7 +39,7 @@ public class TelaDeInicio implements Screen {
         buttonTexture = new Texture("imagemBotaoJogar.png");
         ImageButton buttonJogar = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTexture)));
 
-        buttonJogar.setSize(buttonJogar.getWidth()*0.2f, buttonJogar.getHeight()*0.2f);
+        buttonJogar.setSize(buttonJogar.getWidth()*0.5f, buttonJogar.getHeight()*0.2f);
         buttonJogar.setPosition(Gdx.graphics.getWidth()/2-buttonJogar.getWidth()/2, Gdx.graphics.getHeight()/2-buttonJogar.getHeight()/2);
 
         buttonJogar.addListener(new ClickListener(){
