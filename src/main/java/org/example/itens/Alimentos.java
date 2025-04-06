@@ -3,6 +3,7 @@ package org.example.itens;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
+import org.example.personagens.Sobrevivente;
 
 import java.time.OffsetDateTime;
 
@@ -46,7 +47,12 @@ public class  Alimentos extends Item {
 
         if (validado()) {
             this.usar();
+            if(this.getPersonagem() instanceof Sobrevivente) {
+                this.getPersonagem().habilidade();
+            }
             this.getPersonagem().diminuirFome(valorNutricional);
+
+
 
         } else {
                 System.out.println("Alimento fora da validade, você perdeu 50 de energia e 15 de sanidade!");

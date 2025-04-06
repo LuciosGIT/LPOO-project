@@ -3,6 +3,7 @@ package org.example.itens;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.Pureza;
+import org.example.personagens.Sobrevivente;
 
 public class Agua extends Item {
 
@@ -26,7 +27,14 @@ public class Agua extends Item {
     public void beber() {
 
         this.usar();
+
+        if (this.getPersonagem() instanceof Sobrevivente) {
+            this.getPersonagem().habilidade();
+        }
+
         this.getPersonagem().diminuirSede(15.0);
+
+
 
         if(this.pureza == Pureza.CONTAMINADA) {
 
@@ -41,7 +49,7 @@ public class Agua extends Item {
         return pureza;
     }
 
-    public void alteraraPureza(Pureza pureza) {
+    public void alterarPureza(Pureza pureza) {
 
         this.pureza = pureza;
     }
