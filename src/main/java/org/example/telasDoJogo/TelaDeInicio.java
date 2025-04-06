@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 
 public class TelaDeInicio implements Screen {
@@ -23,6 +22,8 @@ public class TelaDeInicio implements Screen {
     private Texture backgroundTexture;
     private Texture buttonTextureJogar;
     private Texture buttonTextureSair;
+    private Texture buttonTextureJogarPressionado;
+    private Texture buttonTextureSairPressionado;
 
 
 
@@ -65,9 +66,13 @@ public class TelaDeInicio implements Screen {
         // Liberar recursos
         buttonTextureJogar.dispose();
         buttonTextureJogar.dispose();
+        buttonTextureSair.dispose();
+        buttonTextureSairPressionado.dispose();
+        buttonTextureJogarPressionado.dispose();
         stage.dispose();
         batch.dispose();
         backgroundTexture.dispose();
+
     }
 
     @Override
@@ -100,18 +105,38 @@ public class TelaDeInicio implements Screen {
     }
 
     private void criarBotao(){
-
+        //botãos normais
         buttonTextureJogar = new Texture("imagemBotaoJogar.png");
         buttonTextureSair = new Texture("imagemBotaoSair.png");
+        //botãos pressionados
+        buttonTextureJogarPressionado = new Texture("imagemBotaoJogarPressionado.png");
+        buttonTextureSairPressionado = new Texture("imagemBotaoSairPressionado.png");
 
-        ImageButton buttonJogar = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTextureJogar)));
-        ImageButton buttonSair = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTextureSair)));
+        //drawables dos botões
+        TextureRegionDrawable buttonDrawableJogar = new TextureRegionDrawable(new TextureRegion(buttonTextureJogar));
+        TextureRegionDrawable buttonDrawableJogarPressionado = new TextureRegionDrawable(new TextureRegion(buttonTextureJogarPressionado));
+        TextureRegionDrawable buttonDrawableSair = new TextureRegionDrawable(new TextureRegion(buttonTextureSair));
+        TextureRegionDrawable buttonDrawableSairPressionado = new TextureRegionDrawable(new TextureRegion(buttonTextureSairPressionado));
 
+        //construtores dos botões
+        ImageButton buttonJogar = new ImageButton(buttonDrawableJogar,buttonDrawableJogarPressionado);
+        ImageButton buttonSair = new ImageButton(buttonDrawableSair,buttonDrawableSairPressionado);
+
+
+        // Centralização do botão Jogar
         buttonJogar.setSize(buttonJogar.getWidth()*0.5f, buttonJogar.getHeight()*0.2f);
-        buttonJogar.setPosition((float) Gdx.graphics.getWidth() /2-buttonJogar.getWidth()/2, (float) Gdx.graphics.getHeight() /2-buttonJogar.getHeight()/2);
+        buttonJogar.setPosition(
+                (float) Gdx.graphics.getWidth()/2 - buttonJogar.getWidth()/2,
+                (float) Gdx.graphics.getHeight()/2 - 100    // Um pouco acima do centro
+        );
 
+// Centralização do botão Sair
         buttonSair.setSize(buttonSair.getWidth()*0.3f, buttonSair.getHeight()*0.15f);
-        buttonSair.setPosition((float) Gdx.graphics.getWidth() /2-buttonSair.getWidth()/2, (float) Gdx.graphics.getHeight() /2.8f-buttonSair.getHeight()/2);
+        buttonSair.setPosition(
+                (float) Gdx.graphics.getWidth()/2 - buttonSair.getWidth()/2,
+                (float) Gdx.graphics.getHeight()/2 - 200   // Um pouco abaixo do centro
+        );
+
 
         buttonJogar.addListener(new ClickListener() {
             @Override
