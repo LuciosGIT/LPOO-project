@@ -5,9 +5,11 @@ import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.gerenciadores.GerenciadorDeAmbientes;
+import org.example.personagens.Rastreador;
 import org.example.utilitarios.Utilitario;
 
 import java.util.List;
+import java.util.Random;
 
 public class ExploracaoService {
 
@@ -29,6 +31,10 @@ public class ExploracaoService {
 
 
     private static void encontrarItens(Personagem jogador, List<Item> recursosDisponiveis) {
+
+        if (jogador instanceof Rastreador) {
+            jogador.habilidade();
+        }
         boolean encontrouItem = false;
 
         // Percorrer pelos recursos disponíveis
