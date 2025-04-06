@@ -94,6 +94,15 @@ public abstract class Item implements ItemInterface {
         this.probabilidadeDeEncontrar = probabilidadeDeEncontrar;
     }
 
+    public void setPeso(Double peso) {
+        this.peso = peso;
+    }
 
+    public void setPersonagem(Personagem personagem) {
+        this.personagem = personagem;
+    }
 
+    public void setDurabilidade(Double durabilidade) {
+        this.durabilidade = durabilidade;
+    }
 }
