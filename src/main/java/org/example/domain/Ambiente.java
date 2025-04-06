@@ -1,6 +1,7 @@
 package org.example.domain;
 
 import org.example.enums.TipoClimatico;
+import org.example.eventos.EventoClimatico;
 import org.example.interfaces.AmbienteInterface;
 import org.example.utilitarios.ConfiguracaoDoMundo;
 
@@ -19,7 +20,7 @@ public abstract class Ambiente implements AmbienteInterface {
     private Map<Evento, Double> probabilidadeEventos;
     private List<Evento> eventosPossiveis;
     private  List<TipoClimatico> tiposDeClimasDoAmbiente;
-    private  List<Evento> listaDeclimasDoJogo;
+    private  List<EventoClimatico> listaDeclimasDoJogo;
     private  List<Criatura> criaturasAmbientes;
 
 
@@ -93,7 +94,7 @@ public abstract class Ambiente implements AmbienteInterface {
         return this.tiposDeClimasDoAmbiente;
     }
 
-    public List<Evento> getListaDeclimasDoJogo(){
+    public List<EventoClimatico> getListaDeclimasDoJogo(){
         return this.listaDeclimasDoJogo;
     }
 

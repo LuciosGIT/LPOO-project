@@ -44,44 +44,38 @@ public class EventoClimatico extends Evento {
 
         for(TipoClimatico tipoDeClimaDoAmbiente : local.getTiposDeClimasDoAmbiente()) { //lista de enum's com os climas do ambiente do ambiente
 
-            for (Evento c : local.getListaDeclimasDoJogo()) {//lista com todos os climas do jogo
-
-                EventoClimatico climaDoJogoObj = (EventoClimatico) c;
+            for (EventoClimatico climaDoJogoObj : local.getListaDeclimasDoJogo()) {//lista com todos os climas do jogo
 
                 if (tipoDeClimaDoAmbiente == climaDoJogoObj.tipoDeClima && Utilitario.getValorAleatorio() < climaDoJogoObj.getProbabilidadeOcorrencia()) {
                     //o jogador irá sofrer os efeitos do ambiente
                     efeitosDoClima(jogador, climaDoJogoObj, local);
 
-                }else{
-                    //clima ensolarado
-                    System.out.printf("O clima está ensolarado");
                 }
-
             }
 
         }
 
     }
 
-    private void efeitosDoClima(Personagem jogador, EventoClimatico ClimaDoJogoObj, Ambiente local){
+    private void efeitosDoClima(Personagem jogador, EventoClimatico climaDoJogoObj, Ambiente local){
 
-        switch (ClimaDoJogoObj.tipoDeClima){
+        switch (climaDoJogoObj.tipoDeClima){
             case NEVASCA:
-                System.out.printf(ClimaDoJogoObj.efeitoDoAmbiente);
+                System.out.printf(climaDoJogoObj.efeitoDoAmbiente);
                 jogador.diminuirFome(5.0);
                 jogador.diminuirEnergia(5.0);
                 local.setDificuldadeExploracao(0.9);
                 break;
 
             case CALOR:
-                System.out.printf(ClimaDoJogoObj.efeitoDoAmbiente);
+                System.out.printf(climaDoJogoObj.efeitoDoAmbiente);
                 jogador.diminuirSede(5.0);
                 jogador.diminuirEnergia(5.0);
                 local.setDificuldadeExploracao(0.5);
                 break;
 
             case TEMPESTADE:
-                System.out.printf(ClimaDoJogoObj.efeitoDoAmbiente);
+                System.out.printf(climaDoJogoObj.efeitoDoAmbiente);
                 jogador.diminuirEnergia(5.0);
                 local.setDificuldadeExploracao(0.9);
                 break;

@@ -30,7 +30,7 @@ public class ConfiguracaoDoMundo {
     }
 
     // Lista de eventos climáticos padrão
-    public static List<Evento> getEventosClimaticosPadrao() {
+    public static List<EventoClimatico> getEventosClimaticosPadrao() {
 
         return List.of(
                 new EventoClimatico(
