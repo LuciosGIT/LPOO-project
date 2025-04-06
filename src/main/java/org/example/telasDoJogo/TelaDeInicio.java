@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.audio.Sound;
 
 
 public class TelaDeInicio implements Screen {
@@ -24,8 +25,8 @@ public class TelaDeInicio implements Screen {
     private Texture buttonTextureSair;
     private Texture buttonTextureJogarPressionado;
     private Texture buttonTextureSairPressionado;
-
-
+    private Sound somAmbiente;
+    private Sound buttonClikedSound;
 
     @Override
     public void show() {
@@ -34,14 +35,16 @@ public class TelaDeInicio implements Screen {
 
         criarBotao();
 
+        criarSom();
 
 
     }
 
-
     @Override
     public void hide() {
         System.out.println("TelaDeInicio - Hide method called");
+        somAmbiente.pause();
+        buttonClikedSound.pause();
     }
 
     @Override
@@ -49,7 +52,6 @@ public class TelaDeInicio implements Screen {
         // Atualizar o viewport quando o tamanho da tela mudar
         stage.getViewport().update(width, height, true);
     }
-
 
     @Override
     public void pause() {
@@ -72,6 +74,9 @@ public class TelaDeInicio implements Screen {
         stage.dispose();
         batch.dispose();
         backgroundTexture.dispose();
+        somAmbiente.dispose();
+        buttonClikedSound.dispose();
+
 
     }
 
@@ -101,6 +106,8 @@ public class TelaDeInicio implements Screen {
         // Inicializar o SpriteBatch e a textura como campos da classe
         batch = new SpriteBatch();
         backgroundTexture = new Texture("backgroundTelaDeInicio.png");
+        somAmbiente = Gdx.audio.newSound(Gdx.files.internal("somAmbiente.mp3"));
+        buttonClikedSound = Gdx.audio.newSound(Gdx.files.internal("buttonCliked.wav"));
 
     }
 
@@ -130,7 +137,7 @@ public class TelaDeInicio implements Screen {
                 (float) Gdx.graphics.getHeight()/2 - 100    // Um pouco acima do centro
         );
 
-// Centralização do botão Sair
+        // Centralização do botão Sair
         buttonSair.setSize(buttonSair.getWidth()*0.3f, buttonSair.getHeight()*0.15f);
         buttonSair.setPosition(
                 (float) Gdx.graphics.getWidth()/2 - buttonSair.getWidth()/2,
@@ -141,21 +148,49 @@ public class TelaDeInicio implements Screen {
         buttonJogar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("oi");
+
+                buttonClikedSound.play(1f);
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        System.out.println("oi");
+                    }
+                },0.1f);
+
                 super.clicked(event, x, y);
+
             }
         });
 
         buttonSair.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+
+                buttonClikedSound.play(1f);
+
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        Gdx.app.exit();
+                    }
+                },0.1f);
+
+                super.clicked(event, x, y);
             }
         });
 
 
         stage.addActor(buttonSair);
         stage.addActor(buttonJogar);
+
+    }
+
+    private void criarSom(){
+
+        somAmbiente.setLooping(0,true);
+        somAmbiente.setVolume(0,1f);
+        somAmbiente.play();
 
     }
 
