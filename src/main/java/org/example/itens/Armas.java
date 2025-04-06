@@ -12,10 +12,10 @@ public class Armas extends Item {
 
     private Double alcance;
 
-    public Armas(String nomeItem, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, Double alcance, TipoArma tipoArma) {
+    public Armas(String nomeItem, Double dano, Personagem personagem, Double peso, Double durabilidade, Double probabilidadeDeEncontrar, Double alcance, TipoArma tipoArma) {
         super(nomeItem, personagem,  peso,  durabilidade,  probabilidadeDeEncontrar);
         this.alcance = alcance;
-        this.dano = tipoArma.getDano();
+        this.dano = dano;
         this.tipoArma = tipoArma;
     }
 
@@ -32,6 +32,9 @@ public class Armas extends Item {
                 if (this.tipoArma.getMunicao() > 0) {
                     inimigo.diminuirVida(dano);
                     this.tipoArma.diminuirMunicao(1);
+                }
+                else {
+                    System.out.println("Arma sem munição suficiente!");
                 }
             }
         }
