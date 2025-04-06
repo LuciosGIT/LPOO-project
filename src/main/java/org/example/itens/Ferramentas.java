@@ -3,6 +3,7 @@ package org.example.itens;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoFerramenta;
+import org.example.personagens.Mecanico;
 
 public class Ferramentas extends Item {
 
@@ -21,18 +22,62 @@ public class Ferramentas extends Item {
 
     @Override
     public void usar() {
-        switch(this.tipoFerramenta) {
-            case FACA -> this.diminuirDurabilidade(8.0);
-            case MACHADO -> this.diminuirDurabilidade(5.0);
-            case ISQUEIRO -> this.diminuirDurabilidade(11.0);
-            case LANTERNA -> this.diminuirDurabilidade(15.0);
+
+        // Verifica se a ferramenta está danificada
+        if (this.getDurabilidade() < 20.0) {
+            System.out.println("A ferramenta " + getNomeItem() + " está danificada!");
+
+            // Verifica se o personagem é um mecânico e tenta consertar
+            if (this.getPersonagem() instanceof Mecanico mecanico) {
+                System.out.println(mecanico.getNome() + " é um mecânico! Primeiro aguarde o conserto da ferramenta...");
+                mecanico.consertarFerramenta(this);
+                try {
+                    Thread.sleep(2000);
+                }
+                catch (InterruptedException e) {
+                    System.out.println("Erro durante o tempo de espera!");
+                    Thread.currentThread().interrupt();
+                }
+
+                aplicarEfeitoFerramenta(this.tipoFerramenta);
+            }
+
         }
 
-        // to do
+        else {
+            aplicarEfeitoFerramenta(this.tipoFerramenta);
+        }
+
     }
 
     public TipoFerramenta getTipoFerramenta() {
         return tipoFerramenta;
+    }
+
+    public void aplicarEfeitoFerramenta(TipoFerramenta tipoFerramenta) {
+
+        switch (this.tipoFerramenta) {
+            case FACA -> {
+                System.out.println("Cortando com a ferramenta " + this.getNomeItem());
+                // aplicar efeito no ambiente (remover o item cortado da lista de recursos disponíveis do ambiente!
+                this.diminuirDurabilidade(8.0);
+            }
+            case MACHADO -> {
+                System.out.println("Cortando com a ferramenta " + this.getNomeItem());
+                // aplicar efeito no ambiente (remover o item cortado da lista de recursos disponíveis do ambiente!
+                this.diminuirDurabilidade(5.0);
+            }
+            case ISQUEIRO -> {
+                System.out.println("Acendendo fogueira com: " + this.getNomeItem());
+                // aplicar efeito no ambiente
+                this.diminuirDurabilidade(11.0);
+            }
+            case LANTERNA -> {
+                System.out.println("Iluminando o ambiente com: " + this.getNomeItem());
+                // aplicar efeito no ambiente
+                this.diminuirDurabilidade(15.0);
+            }
+        }
     }
 
     public void setTipoFerramenta(TipoFerramenta tipoFerramenta) {
