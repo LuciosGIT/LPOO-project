@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public abstract class Personagem {
+public abstract class Personagem implements PersonagemInterface{
 
     private String nome;
 
@@ -30,7 +30,11 @@ public abstract class Personagem {
 
     private boolean estaEnvenenado;
 
-    protected Personagem(String nome) {
+    protected double modificadorFome = 1.0;
+
+    protected double modificadorSede = 1.0;
+
+    public Personagem(String nome) {
         this.nome = nome;
         this.energia = 100.0;
         this.fome = 50.0;
@@ -85,7 +89,7 @@ public abstract class Personagem {
             throw new IllegalArgumentException("Você precisa passar um valor de fome maior que 0!");
         }
 
-        this.fome -= fome;
+        this.fome -= fome * modificadorFome;
     }
 
     public Inventario getInventario() {
@@ -131,7 +135,7 @@ public abstract class Personagem {
             throw new IllegalArgumentException("Você precisa passar um valor de sede maior que 0!");
         }
 
-        this.sede -= sede;
+        this.sede -= sede * modificadorSede;
     }
 
     public Double getSanidade() {
