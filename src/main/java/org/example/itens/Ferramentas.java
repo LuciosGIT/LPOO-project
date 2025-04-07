@@ -59,12 +59,12 @@ public class Ferramentas extends Item {
         switch (this.tipoFerramenta) {
             case FACA -> {
                 System.out.println("Cortando com a ferramenta " + this.getNomeItem());
-                // aplicar efeito no ambiente (remover o item cortado da lista de recursos disponíveis do ambiente!
+                // aplicar efeito no ambiente
                 this.diminuirDurabilidade(8.0);
             }
             case MACHADO -> {
                 System.out.println("Cortando com a ferramenta " + this.getNomeItem());
-                // aplicar efeito no ambiente (remover o item cortado da lista de recursos disponíveis do ambiente!
+                // aplicar efeito no ambiente
                 this.diminuirDurabilidade(5.0);
             }
             case ISQUEIRO -> {
