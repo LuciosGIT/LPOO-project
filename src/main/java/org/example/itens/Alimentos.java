@@ -40,13 +40,15 @@ public class  Alimentos extends Item {
     }
     @Override
     public void usar() {
-            System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
+
+        System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
+
+        consumir();
     }
 
     public void consumir() {
 
         if (validado()) {
-            this.usar();
             if(this.getPersonagem() instanceof Sobrevivente) {
                 this.getPersonagem().habilidade();
             }
