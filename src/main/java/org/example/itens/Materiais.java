@@ -6,6 +6,8 @@ import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
 
+import javax.naming.NameNotFoundException;
+
 public class Materiais extends Item {
 
     private TipoMaterial tipoMaterial;
@@ -28,10 +30,14 @@ public class Materiais extends Item {
 
     @Override
     public void usar() {
-        // System.out.println("");
+        switch (tipoMaterial) {
+            case METAL -> System.out.println("Usando material de metal");
+            case PEDRA -> System.out.println("Usando material de pedra");
+            case MADEIRA -> System.out.println("Usando material de madeira");
+        }
     }
 
-    public Materiais combinar(Materiais outroMaterial) {
+    public Materiais combinar(Materiais outroMaterial) throws NameNotFoundException {
 
         Materiais resultado = BancoDeReceitas.buscarReceita(this.getTipoMaterial(), outroMaterial.getTipoMaterial());
 
@@ -39,6 +45,8 @@ public class Materiais extends Item {
             // Faz uma cópia e associa ao personagem atual (que está neste material)
             Materiais copia = resultado.copiarPara(this.getPersonagem());
             this.getPersonagem().getInventario().adicionarItem(copia);
+            this.getPersonagem().getInventario().removerItem(this.getNomeItem());
+            this.getPersonagem().getInventario().removerItem(outroMaterial.getNomeItem());
             return copia;
         }
 
