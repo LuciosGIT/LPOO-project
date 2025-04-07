@@ -1,5 +1,6 @@
 package org.example.itens;
 
+import org.example.domain.Criatura;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoArma;
@@ -25,7 +26,7 @@ public class Armas extends Item {
         System.out.println("Você acabou de golpear: " + this.tipoArma.getValue());
     }
 
-    public void atacar(Personagem inimigo) {
+    public void atacar(Criatura inimigo) {
         switch (this.tipoArma) {
             case CORPO -> inimigo.diminuirVida(dano);
             case DISTANCIA -> {
