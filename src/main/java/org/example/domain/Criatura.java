@@ -42,4 +42,11 @@ public abstract class Criatura implements CriaturaInterface {
         return danoDeAtaque;
     }
 
+    public void diminuirVida(Double vida) {
+        this.vida -= vida;
+    }
+
+    public void aumentarVida(Double vida) {
+        this.vida += vida;
+    }
 }
