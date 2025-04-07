@@ -34,7 +34,9 @@ public abstract class Personagem implements PersonagemInterface{
 
     protected double modificadorSede = 1.0;
 
-    public Personagem(String nome) {
+    private Double danoDeAtaque;
+
+    public Personagem(String nome, Double danoDeAtaque) {
         this.nome = nome;
         this.energia = 100.0;
         this.fome = 50.0;
@@ -44,10 +46,16 @@ public abstract class Personagem implements PersonagemInterface{
         this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
         this.localizacao = new AmbienteSpawn();
         this.estaEnvenenado = false;
+        this.danoDeAtaque = danoDeAtaque;
 
     }
 
     public Personagem() { }
+
+    public Double atacarCriatura(Criatura criatura) {
+        criatura.diminuirVida(this.danoDeAtaque);
+        return danoDeAtaque;
+    }
 
     public Double getEnergia() {
         return energia;
