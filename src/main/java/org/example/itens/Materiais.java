@@ -38,6 +38,7 @@ public class Materiais extends Item {
         if (resultado != null) {
             // Faz uma cópia e associa ao personagem atual (que está neste material)
             Materiais copia = resultado.copiarPara(this.getPersonagem());
+            this.getPersonagem().getInventario().adicionarItem(copia);
             return copia;
         }
 
