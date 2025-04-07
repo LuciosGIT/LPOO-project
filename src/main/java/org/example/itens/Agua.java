@@ -21,12 +21,11 @@ public class Agua extends Item {
     @Override
     public void usar() {
         System.out.println("Consumindo Água" + this.pureza.getValue());
+        this.beber();
     }
 
 
     public void beber() {
-
-        this.usar();
 
         if (this.getPersonagem() instanceof Sobrevivente) {
             this.getPersonagem().habilidade();
