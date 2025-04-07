@@ -52,13 +52,21 @@ public class Inventario {
 
     public void usarItem(String nomeItem) throws NameNotFoundException {
         boolean itemEncontrado = false;
+
         for (Item item : this.listaDeItems) {
             if (item.getNomeItem().equals(nomeItem)) {
-                item.usar();
                 itemEncontrado = true;
-                break;  // Saia do loop após usar o item
+
+                if (item instanceof Agua || item instanceof Alimentos || item instanceof Ferramentas) {
+                    item.usar();
+                    this.removerItem(nomeItem);
+                } else {
+                    System.out.println("Esse item não pode ser usado diretamente.");
+                }
+                break;
             }
         }
+
         if (!itemEncontrado) {
             throw new NameNotFoundException("Item não encontrado: " + nomeItem);
         }
