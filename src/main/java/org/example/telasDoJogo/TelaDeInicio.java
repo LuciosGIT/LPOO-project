@@ -105,19 +105,19 @@ public class TelaDeInicio implements Screen {
 
         // Inicializar o SpriteBatch e a textura como campos da classe
         batch = new SpriteBatch();
-        backgroundTexture = new Texture("backgroundTelaDeInicio.png");
-        somAmbiente = Gdx.audio.newSound(Gdx.files.internal("somAmbiente.mp3"));
-        buttonClikedSound = Gdx.audio.newSound(Gdx.files.internal("buttonCliked.wav"));
+        backgroundTexture = new Texture("imagens/backgrounds/backgroundTelaDeInicio.png");
+        somAmbiente = Gdx.audio.newSound(Gdx.files.internal("sons/somAmbiente.mp3"));
+        buttonClikedSound = Gdx.audio.newSound(Gdx.files.internal("sons/buttonCliked.wav"));
 
     }
 
     private void criarBotao(){
         //botãos normais
-        buttonTextureJogar = new Texture("imagemBotaoJogar.png");
-        buttonTextureSair = new Texture("imagemBotaoSair.png");
+        buttonTextureJogar = new Texture("imagens/assets/imagemBotaoJogar.png");
+        buttonTextureSair = new Texture("imagens/assets/imagemBotaoSair.png");
         //botãos pressionados
-        buttonTextureJogarPressionado = new Texture("imagemBotaoJogarPressionado.png");
-        buttonTextureSairPressionado = new Texture("imagemBotaoSairPressionado.png");
+        buttonTextureJogarPressionado = new Texture("imagens/assets/imagemBotaoJogarPressionado.png");
+        buttonTextureSairPressionado = new Texture("imagens/assets/imagemBotaoSairPressionado.png");
 
         //drawables dos botões
         TextureRegionDrawable buttonDrawableJogar = new TextureRegionDrawable(new TextureRegion(buttonTextureJogar));
