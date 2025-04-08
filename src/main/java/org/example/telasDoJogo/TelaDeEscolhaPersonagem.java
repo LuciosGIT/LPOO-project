@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+import org.example.domain.Personagem;
 
 
 public class TelaDeEscolhaPersonagem implements Screen {
@@ -32,13 +36,51 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         batch = new SpriteBatch();
 
+        int larguraImagem = 350;
+        int alturaImagem = 300;
+        int espacamento = 50;
+
+        String[] nomesPersonagens = {"Sobrevivente", "Mecânico", "Médico"};
+
+
         backgroundTexture = new Texture("imagens/backgrounds/backgroundTelaDeEscolhaPersonagem.png");
 
         texturasDosPersonagens = new Texture[]{
                 new Texture("imagens/imagemPersonagemEscolhaSobrevivente.png"),
                 new Texture("imagens/imagemPersonagemEscolhaMecanico.png"),
-                new Texture("imagens/imagemPersonagemEscolhaMecanico.png")
+                new Texture("imagens/imagemPersonagemEscolhaMedico.png")
         };
+
+        Table botoesTable = new Table();
+
+        for(int i = 0; i < texturasDosPersonagens.length; i++){
+            TextureRegionDrawable drawable = new TextureRegionDrawable(texturasDosPersonagens[i]);
+            ImageButton button = new ImageButton(drawable);
+
+            button.setSize(larguraImagem, alturaImagem);
+
+            int finalI = i;
+
+            button.addListener(new ClickListener(){
+                public void clicked(InputEvent event, float x, float y) {
+                    personagemSelecionado(nomesPersonagens[finalI]);
+                }
+            });
+
+            if(i > 0){
+                botoesTable.add(button).width(larguraImagem).height(alturaImagem).padLeft(espacamento);
+
+            }
+            else{
+                botoesTable.add(button).width(larguraImagem).height(alturaImagem);
+
+            }
+
+        }
+
+        table.add(botoesTable).center();
+        stage.addActor(table);
+
     }
 
     @Override
@@ -53,30 +95,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-
-        int quantidadeImagens = texturasDosPersonagens.length;
-        int larguraImagem = 350; // Tamanho fixo para todas as imagens
-        int alturaImagem = 300;
-        int espacamento = 50; // Espaço fixo entre as imagens
-
-        // Calcular largura total ocupada por todas as imagens e espaços
-        int larguraTotal = (larguraImagem * quantidadeImagens) + (espacamento * (quantidadeImagens - 1));
-
-        // Posição inicial X para centralizar todo o conjunto
-        int posicaoXInicial = (Gdx.graphics.getWidth() - larguraTotal) / 2;
-
-        // Posição Y (centralizado verticalmente)
-        int posicaoY = (Gdx.graphics.getHeight() - alturaImagem) / 2;
-
-        // Desenhar cada personagem na posição calculada
-        for (int i = 0; i < quantidadeImagens; i++) {
-            int posicaoX = posicaoXInicial + (i * (larguraImagem + espacamento));
-            batch.draw(texturasDosPersonagens[i], posicaoX, posicaoY, larguraImagem, alturaImagem);
-        }
-
         batch.end();
-
 
         stage.act(delta);
         stage.draw();
@@ -106,6 +125,10 @@ public class TelaDeEscolhaPersonagem implements Screen {
         for(Texture texture : texturasDosPersonagens){
             texture.dispose();
         }
+    }
+
+    private void personagemSelecionado(String nomesPersonagen) {
+        System.out.println(nomesPersonagen);
     }
 
 }
