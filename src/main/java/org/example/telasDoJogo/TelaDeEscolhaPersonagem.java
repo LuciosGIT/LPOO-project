@@ -1,4 +1,5 @@
 package org.example.telasDoJogo;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.graphics.Color;
+
 
 
 public class TelaDeEscolhaPersonagem implements Screen {
@@ -22,10 +23,16 @@ public class TelaDeEscolhaPersonagem implements Screen {
     private Batch batch;
     private Stage stage;
     private Texture backgroundTexture;
-
     private Texture[] texturasDosPersonagens;
+    private Texture[] texturaImagensflutuantes;
+    private Actor[] atoresImagensFlutuantes;
+    private Game game;
 
     private Table table;
+
+    public TelaDeEscolhaPersonagem(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -93,11 +100,52 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         backgroundTexture = new Texture("imagens/backgrounds/backgroundTelaDeEscolhaPersonagem.png");
 
+        texturaImagensflutuantes = new Texture[]{
+                new Texture("imagens/textboxes/textoTelaDeEscolhaSobrevivente.png"),
+                new Texture("imagens/textboxes/textoTelaDeEscolhaMecanico.png"),
+                new Texture("imagens/textboxes/textoTelaDeEscolhaMedico.png")
+        };
 
 
     }
 
+    private void textoBox(){
+        atoresImagensFlutuantes = new Actor[texturaImagensflutuantes.length];
+
+        // Posição fixa onde as imagens flutuantes vão aparecer
+        float posX = Gdx.graphics.getWidth() * 0.1f;
+        float posY = Gdx.graphics.getHeight() * 0.1f;
+
+        // Inicializar os atores para as imagens flutuantes
+        for (int i = 0; i < texturaImagensflutuantes.length; i++) {
+            final int index = i;
+
+            // Criar um ator para cada imagem flutuante
+            atoresImagensFlutuantes[i] = new Actor() {
+                @Override
+                public void draw(Batch batch, float parentAlpha) {
+                    if (isVisible()) {
+                        batch.draw(texturaImagensflutuantes[index],
+                                getX(), getY(),
+                                getWidth(), getHeight());
+                    }
+                }
+            };
+
+            // Configurar o ator com posição fixa
+            atoresImagensFlutuantes[i].setSize(300, 300); // Tamanho da imagem
+            atoresImagensFlutuantes[i].setPosition(posX, posY);
+            atoresImagensFlutuantes[i].setVisible(false); // Inicialmente invisível
+
+            // Adicionar ao stage
+            stage.addActor(atoresImagensFlutuantes[i]);
+        }
+
+    }
+
     private void criarImagensClicaveis(){
+
+        textoBox();
 
         int larguraImagem = 350;
         int alturaImagem = 300;
@@ -143,6 +191,12 @@ public class TelaDeEscolhaPersonagem implements Screen {
                     // Anima para cima
                     button.addAction(Actions.moveTo(button.getX(), posicaoOriginal + DESLOCAMENTO_Y, 0.2f));
 
+                    for (Actor imagem : atoresImagensFlutuantes) {
+                        imagem.setVisible(false);
+                    }
+                    // Mostrar apenas a imagem flutuante correspondente
+                    atoresImagensFlutuantes[finalI].setVisible(true);
+                    atoresImagensFlutuantes[finalI].addAction(Actions.moveTo(Gdx.graphics.getWidth()*0.1f, button.getY(), 0.2f));
 
 
                 }
@@ -157,8 +211,9 @@ public class TelaDeEscolhaPersonagem implements Screen {
                     // Anima de volta para a posição original
                     button.addAction(Actions.moveTo(button.getX(), posicaoOriginal, 0.2f));
 
+                    atoresImagensFlutuantes[finalI].setVisible(false);
 
-
+                    atoresImagensFlutuantes[finalI].addAction(Actions.moveTo(-Gdx.graphics.getWidth()*0.1f, button.getY(), 0.2f));
 
                 }
 

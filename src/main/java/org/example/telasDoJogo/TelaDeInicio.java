@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Sound;
-
+import com.badlogic.gdx.Game;
 
 public class TelaDeInicio implements Screen {
 
@@ -27,6 +27,11 @@ public class TelaDeInicio implements Screen {
     private Texture buttonTextureSairPressionado;
     private Sound somAmbiente;
     private Sound buttonClikedSound;
+    private Game game;
+
+    public TelaDeInicio(Game game) {
+        this.game = game;
+    }
 
     @Override
     public void show() {
@@ -109,6 +114,7 @@ public class TelaDeInicio implements Screen {
         somAmbiente = Gdx.audio.newSound(Gdx.files.internal("sons/somAmbiente.mp3"));
         buttonClikedSound = Gdx.audio.newSound(Gdx.files.internal("sons/buttonCliked.wav"));
 
+        game = this.game;
     }
 
     private void criarBotao(){
@@ -159,6 +165,9 @@ public class TelaDeInicio implements Screen {
                 },0.1f);
 
                 super.clicked(event, x, y);
+
+                game.setScreen(new TelaDeEscolhaPersonagem(game));
+
 
             }
         });

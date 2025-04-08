@@ -13,7 +13,7 @@ public class MyGame extends Game {
     public void create() {
         // Inicialização do seu jogo
 
-        setScreen(new TelaDeEscolhaPersonagem());
+        setScreen(new TelaDeInicio(this));
 
     }
 
