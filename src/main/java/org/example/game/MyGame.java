@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import org.example.telasDoJogo.TelaDeEscolhaPersonagem;
 import org.example.telasDoJogo.TelaDeInicio;
 
 public class MyGame extends Game {
@@ -12,7 +13,7 @@ public class MyGame extends Game {
     public void create() {
         // Inicialização do seu jogo
 
-        setScreen( new TelaDeInicio());
+        setScreen(new TelaDeEscolhaPersonagem());
 
     }
 
