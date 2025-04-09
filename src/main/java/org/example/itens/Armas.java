@@ -20,6 +20,18 @@ public class Armas extends Item {
         this.tipoArma = tipoArma;
     }
 
+    public Armas copiarPara(Personagem personagem) {
+        return new Armas(
+                this.getNomeItem(),
+                this.getDano(),
+                personagem,
+                this.getPeso(),
+                this.getDurabilidade(),
+                this.getProbabilidadeDeEncontrar(),
+                this.getAlcance(),
+                this.getTipoArma()
+        );
+    }
 
     @Override
     public void usar() {
