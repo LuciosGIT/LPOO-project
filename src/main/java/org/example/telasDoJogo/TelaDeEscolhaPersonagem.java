@@ -26,7 +26,11 @@ public class TelaDeEscolhaPersonagem implements Screen {
     private Texture[] texturasDosPersonagens;
     private Texture[] texturaImagensflutuantes;
     private Actor[] atoresImagensFlutuantes;
+    private Texture texturaBotaoSelecionar;
+    private Texture texturaBotaoVoltar;
     private Game game;
+
+
 
     private Table table;
 
@@ -39,7 +43,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         inicializar();
         criarImagensClicaveis();
-
+        criarBotaos();
 
 
 
@@ -83,6 +87,8 @@ public class TelaDeEscolhaPersonagem implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+        texturaBotaoSelecionar.dispose();
+        texturaBotaoVoltar.dispose();
         backgroundTexture.dispose();
         for(Texture texture : texturasDosPersonagens){
             texture.dispose();
@@ -236,6 +242,53 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
     private void personagemSelecionado(String nomesPersonagen) {
         System.out.println(nomesPersonagen);
+    }
+
+    private void criarBotaos(){
+        //Texture texturaBotaoSelecionar = new Texture("imagens/botoes/botaoJogar.png");
+        texturaBotaoVoltar = new Texture("imagens/assets/TelaDeEscolhaPersonagem/botaoDeVoltar.png");
+
+       // ImageButton buttonJogar = new ImageButton(new TextureRegionDrawable(texturaBotaoSelecionar));
+        ImageButton buttonSair = new ImageButton(new TextureRegionDrawable(texturaBotaoVoltar));
+
+       // buttonJogar.setPosition(
+        //        (float) Gdx.graphics.getWidth()*0.7f,
+        //        (float) Gdx.graphics.getHeight() * 0.9f
+       // );
+
+        buttonSair.setSize(Gdx.graphics.getWidth()*0.2f, Gdx.graphics.getWidth()*0.07f);
+
+        buttonSair.setPosition(
+                (float) Gdx.graphics.getWidth()*0.05f,
+                (float) Gdx.graphics.getHeight() * 0.8f
+        );
+
+        final float posicaoOriginal = (float) Gdx.graphics.getWidth()*0.05f;
+
+        buttonSair.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new TelaDeInicio(game));
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                buttonSair.clearActions();
+                buttonSair.addAction(Actions.moveTo(posicaoOriginal-5f, buttonSair.getY(), 0.2f));
+
+
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                buttonSair.clearActions();
+                buttonSair.addAction(Actions.moveTo(posicaoOriginal, buttonSair.getY(), 0.2f));
+            }
+        });
+
+
+        stage.addActor(buttonSair);
+        //stage.addActor(buttonJogar);
+
     }
 
 }

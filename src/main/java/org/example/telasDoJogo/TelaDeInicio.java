@@ -119,11 +119,11 @@ public class TelaDeInicio implements Screen {
 
     private void criarBotao(){
         //botãos normais
-        buttonTextureJogar = new Texture("imagens/assets/imagemBotaoJogar.png");
-        buttonTextureSair = new Texture("imagens/assets/imagemBotaoSair.png");
+        buttonTextureJogar = new Texture("imagens/assets/TelaDeInicio/imagemBotaoJogar.png");
+        buttonTextureSair = new Texture("imagens/assets/TelaDeInicio/imagemBotaoSair.png");
         //botãos pressionados
-        buttonTextureJogarPressionado = new Texture("imagens/assets/imagemBotaoJogarPressionado.png");
-        buttonTextureSairPressionado = new Texture("imagens/assets/imagemBotaoSairPressionado.png");
+        buttonTextureJogarPressionado = new Texture("imagens/assets/TelaDeInicio/imagemBotaoJogarPressionado.png");
+        buttonTextureSairPressionado = new Texture("imagens/assets/TelaDeInicio/imagemBotaoSairPressionado.png");
 
         //drawables dos botões
         TextureRegionDrawable buttonDrawableJogar = new TextureRegionDrawable(new TextureRegion(buttonTextureJogar));
