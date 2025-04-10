@@ -27,7 +27,7 @@ public class TelaDeInicio implements Screen {
     private Texture buttonTextureSairPressionado;
     private Sound somAmbiente;
     private Sound buttonClikedSound;
-    private Game game;
+    private final Game game;
 
     public TelaDeInicio(Game game) {
         this.game = game;
@@ -114,7 +114,6 @@ public class TelaDeInicio implements Screen {
         somAmbiente = Gdx.audio.newSound(Gdx.files.internal("sons/somAmbiente.mp3"));
         buttonClikedSound = Gdx.audio.newSound(Gdx.files.internal("sons/buttonCliked.wav"));
 
-        game = this.game;
     }
 
     private void criarBotao(){
@@ -156,13 +155,6 @@ public class TelaDeInicio implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 buttonClikedSound.play(1f);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        System.out.println("oi");
-                    }
-                },0.1f);
 
                 super.clicked(event, x, y);
 

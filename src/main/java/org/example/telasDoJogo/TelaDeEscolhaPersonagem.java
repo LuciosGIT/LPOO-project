@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -26,12 +27,9 @@ public class TelaDeEscolhaPersonagem implements Screen {
     private Texture[] texturasDosPersonagens;
     private Texture[] texturaImagensflutuantes;
     private Actor[] atoresImagensFlutuantes;
-    private Texture texturaBotaoSelecionar;
+    private Texture texturaTextoEcolhaSobrevivente;
     private Texture texturaBotaoVoltar;
-    private Game game;
-
-
-
+    private final Game game;
     private Table table;
 
     public TelaDeEscolhaPersonagem(Game game) {
@@ -44,7 +42,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
         inicializar();
         criarImagensClicaveis();
         criarBotaos();
-
+        criarTexto();
 
 
     }
@@ -87,7 +85,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        texturaBotaoSelecionar.dispose();
+        texturaTextoEcolhaSobrevivente.dispose();
         texturaBotaoVoltar.dispose();
         backgroundTexture.dispose();
         for(Texture texture : texturasDosPersonagens){
@@ -115,18 +113,16 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
     }
 
-    private void textoBox(){
+    private void textoBox() {
         atoresImagensFlutuantes = new Actor[texturaImagensflutuantes.length];
 
-        // Posição fixa onde as imagens flutuantes vão aparecer
-        float posX = Gdx.graphics.getWidth() * 0.1f;
-        float posY = Gdx.graphics.getHeight() * 0.1f;
+        // Nova posição na lateral superior direita
+        float posX = Gdx.graphics.getWidth() * 0.7f; // 70% da largura da tela
+        float posY = Gdx.graphics.getHeight() * 0.7f; // 70% da altura da tela
 
-        // Inicializar os atores para as imagens flutuantes
         for (int i = 0; i < texturaImagensflutuantes.length; i++) {
             final int index = i;
 
-            // Criar um ator para cada imagem flutuante
             atoresImagensFlutuantes[i] = new Actor() {
                 @Override
                 public void draw(Batch batch, float parentAlpha) {
@@ -138,15 +134,12 @@ public class TelaDeEscolhaPersonagem implements Screen {
                 }
             };
 
-            // Configurar o ator com posição fixa
-            atoresImagensFlutuantes[i].setSize(300, 300); // Tamanho da imagem
+            atoresImagensFlutuantes[i].setSize(300, 300);
             atoresImagensFlutuantes[i].setPosition(posX, posY);
-            atoresImagensFlutuantes[i].setVisible(false); // Inicialmente invisível
+            atoresImagensFlutuantes[i].setVisible(false);
 
-            // Adicionar ao stage
             stage.addActor(atoresImagensFlutuantes[i]);
         }
-
     }
 
     private void criarImagensClicaveis(){
@@ -178,7 +171,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
             button.addListener(new ClickListener(){
                 private float posicaoOriginal = -1;
 
-                float DESLOCAMENTO_Y = 20;
+                final float DESLOCAMENTO_Y = 20;
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -191,20 +184,21 @@ public class TelaDeEscolhaPersonagem implements Screen {
                         posicaoOriginal = button.getY();
                     }
 
-                    // Para qualquer animação em andamento
                     button.clearActions();
-
-                    // Anima para cima
                     button.addAction(Actions.moveTo(button.getX(), posicaoOriginal + DESLOCAMENTO_Y, 0.2f));
 
                     for (Actor imagem : atoresImagensFlutuantes) {
                         imagem.setVisible(false);
                     }
-                    // Mostrar apenas a imagem flutuante correspondente
+
                     atoresImagensFlutuantes[finalI].setVisible(true);
-                    atoresImagensFlutuantes[finalI].addAction(Actions.moveTo(Gdx.graphics.getWidth()*0.1f, button.getY(), 0.2f));
-
-
+                    atoresImagensFlutuantes[finalI].addAction(
+                            Actions.moveTo(
+                                    Gdx.graphics.getWidth() * 0.8f, // Nova posição X
+                                    Gdx.graphics.getHeight() * 0.67f, // Nova posição Y
+                                    0.2f
+                            )
+                    );
                 }
 
 
@@ -219,7 +213,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
                     atoresImagensFlutuantes[finalI].setVisible(false);
 
-                    atoresImagensFlutuantes[finalI].addAction(Actions.moveTo(-Gdx.graphics.getWidth()*0.1f, button.getY(), 0.2f));
+                    atoresImagensFlutuantes[finalI].addAction(Actions.moveTo(Gdx.graphics.getWidth()*0.9f, Gdx.graphics.getHeight() * 0.67f, 0.2f));
 
                 }
 
@@ -238,6 +232,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         table.add(botoesTable).center();
         stage.addActor(table);
+
     }
 
     private void personagemSelecionado(String nomesPersonagen) {
@@ -245,16 +240,10 @@ public class TelaDeEscolhaPersonagem implements Screen {
     }
 
     private void criarBotaos(){
-        //Texture texturaBotaoSelecionar = new Texture("imagens/botoes/botaoJogar.png");
+
         texturaBotaoVoltar = new Texture("imagens/assets/TelaDeEscolhaPersonagem/botaoDeVoltar.png");
 
-       // ImageButton buttonJogar = new ImageButton(new TextureRegionDrawable(texturaBotaoSelecionar));
         ImageButton buttonSair = new ImageButton(new TextureRegionDrawable(texturaBotaoVoltar));
-
-       // buttonJogar.setPosition(
-        //        (float) Gdx.graphics.getWidth()*0.7f,
-        //        (float) Gdx.graphics.getHeight() * 0.9f
-       // );
 
         buttonSair.setSize(Gdx.graphics.getWidth()*0.2f, Gdx.graphics.getWidth()*0.07f);
 
@@ -285,9 +274,24 @@ public class TelaDeEscolhaPersonagem implements Screen {
             }
         });
 
-
         stage.addActor(buttonSair);
-        //stage.addActor(buttonJogar);
+
+    }
+
+    private void criarTexto(){
+        texturaTextoEcolhaSobrevivente = new Texture("imagens/textos/textoDeEscolha.png");
+
+        Image  textoEscolhaSobrevivente = new Image(texturaTextoEcolhaSobrevivente);
+
+        textoEscolhaSobrevivente.setSize(Gdx.graphics.getWidth()*0.3f, Gdx.graphics.getHeight()*0.2f);
+
+        textoEscolhaSobrevivente.setPosition(
+                (float) Gdx.graphics.getWidth()/2 - textoEscolhaSobrevivente.getWidth()/2,
+                (float) Gdx.graphics.getHeight()/2 + 200
+        );
+
+        stage.addActor(textoEscolhaSobrevivente);
+
 
     }
 
