@@ -1,17 +1,23 @@
 package org.example.personagens;
 
-import org.example.domain.Ambiente;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.domain.Personagem;
-import org.example.itens.Ferramentas;
+
+import java.util.HashMap;
 
 public class Sobrevivente extends Personagem {
 
-
+    private HashMap<String, TextureRegion> sprites;
 
     public Sobrevivente(String nome) {
         this.alterarNomePersonagem(nome);
+        //to do: criar o hashmap passando os endereçoes das texturas
     }
 
+    @Override
+    public HashMap<String, TextureRegion> getSprites() {
+        return sprites;
+    }
 
     @Override
     public void habilidade() {

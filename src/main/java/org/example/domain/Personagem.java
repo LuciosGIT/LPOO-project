@@ -1,11 +1,13 @@
 package org.example.domain;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.ambientes.AmbienteSpawn;
 import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -218,6 +220,5 @@ public abstract class Personagem implements PersonagemInterface{
         });
     }
 
-
-
+    public abstract HashMap<String, TextureRegion> getSprites();
 }

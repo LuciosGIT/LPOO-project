@@ -1,7 +1,7 @@
 package org.example.personagens;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.construcao.BancoDeArmas;
-import org.example.construcao.BancoDeReceitas;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
@@ -10,14 +10,22 @@ import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 
 import javax.naming.NameNotFoundException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.HashMap;
 
 
 public class Mecanico extends Personagem {
 
+    private HashMap<String, TextureRegion> sprites;
+
     public Mecanico(String nome) {
         this.alterarNomePersonagem(nome);
+
+        //to do: criar o hashmap passando os endereçoes das texturas
+    }
+
+    public HashMap<String, TextureRegion> getSprites(){
+        return sprites;
     }
 
     @Override
