@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.domain.Personagem;
+import org.example.personagens.Mecanico;
 import org.example.personagens.Sobrevivente;
 
 
@@ -239,16 +240,18 @@ public class TelaDeEscolhaPersonagem implements Screen {
     private void personagemSelecionado(String nomePersonagem) {
         System.out.println(nomePersonagem);
 
-        //to do: criar objeto personagem
         switch (nomePersonagem){
             case "Sobrevivente":
-               // game.setScreen(new TelaDeJogoFloresta(game, "Sobrevivente"));
+                Personagem sobrevivente = new Sobrevivente("Sobrevivente");
+                game.setScreen(new TelaDeJogoFloresta(game, sobrevivente));
                 break;
             case "Mecânico":
-               // game.setScreen(new TelaDeJogoFloresta(game, "Mecânico"));
+                Personagem mecanico = new Mecanico("Mecânico");
+                game.setScreen(new TelaDeJogoFloresta(game, mecanico));
                 break;
             case "Médico":
-              //  game.setScreen(new TelaDeJogoFloresta(game, "Médico"));
+                Personagem medico = new Mecanico("Médico");
+                game.setScreen(new TelaDeJogoFloresta(game, medico));
                 break;
             default:
                 throw new IllegalArgumentException("Personagem inválido: " + nomePersonagem);
