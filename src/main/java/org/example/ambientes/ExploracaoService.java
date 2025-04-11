@@ -1,7 +1,6 @@
 package org.example.ambientes;
 
 import org.example.domain.Ambiente;
-import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.gerenciadores.GerenciadorDeAmbientes;
@@ -9,24 +8,24 @@ import org.example.personagens.Rastreador;
 import org.example.utilitarios.Utilitario;
 
 import java.util.List;
-import java.util.Random;
 
 public class ExploracaoService {
 
     public static void explorar(Personagem jogador, Ambiente ambiente) {
-        // Verificar se é viável explorar
-        if (ambiente.getDificuldadeExploracao() >= 5 || !jogador.getInventario().temEspaco()) {
-            System.out.println("Exploração impossível: dificuldade alta ou inventário cheio.");
-            return;
-        }
 
-        // Gerar um evento no ambiente
         ambiente.gerarEvento(jogador);
 
+        // Verificar se é viável explorar
+
         // Caso o jogador ainda esteja vivo, buscar itens no ambiente
-        if (jogador.getVida() > 0) {
+        if (jogador.getVida() > 0 && jogador.getInventario().temEspaco()) {
             encontrarItens(jogador, ambiente.getRecursosDisponiveis());
         }
+
+        else {
+            System.out.println("Você não tem espaço no inventário!");
+        }
+
     }
 
 
