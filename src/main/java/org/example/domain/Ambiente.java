@@ -44,17 +44,6 @@ public abstract class Ambiente implements AmbienteInterface {
 
     }
 
-    //métodos
-
-   /* public void setProbabilidades(){
-        Random random = new Random();
-        for(Item item : recursosDisponiveis) {
-            item.setProbabilidadeDeEncontrar(random.nextDouble(0.6,1.0));
-        }
-    }
-    */
-
-
     public String getNome() {
         return this.nome;
     }
