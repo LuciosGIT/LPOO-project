@@ -57,14 +57,6 @@ public class AmbienteFloresta extends Ambiente {
     @Override
     public void explorar(Personagem jogador) {
 
-        // to do : se o jogador for instancia de Rastreador : as chances de se encontrar recursos são maiores!!!
-        if (jogador instanceof Rastreador) {
-            Random random = new Random();
-            for (Item recurso : this.getRecursosDisponiveis()) {
-                recurso.setProbabilidadeDeEncontrar(random.nextDouble(recurso.getProbabilidadeDeEncontrar() + 0.1, 0.99));
-            }
-        }
-
         ExploracaoService.explorar(jogador, this);
 
         if (this.vegetacaoDensa) {
