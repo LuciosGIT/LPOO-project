@@ -40,11 +40,15 @@ public class Armas extends Item {
 
     public void atacar(Criatura inimigo) {
         switch (this.tipoArma) {
-            case CORPO -> inimigo.diminuirVida(dano);
+            case CORPO ->  {
+                inimigo.diminuirVida(dano);
+                diminuirDurabilidade(20.0);
+            }
             case DISTANCIA -> {
                 if (this.tipoArma.getMunicao() > 0) {
                     inimigo.diminuirVida(dano);
                     this.tipoArma.diminuirMunicao(1);
+                    diminuirDurabilidade(15.0);
                 }
                 else {
                     System.out.println("Arma sem munição suficiente!");
