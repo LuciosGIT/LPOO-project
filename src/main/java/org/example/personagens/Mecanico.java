@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.construcao.BancoDeArmas;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
+import org.example.enums.TipoFerramenta;
 import org.example.enums.TipoMaterial;
 import org.example.itens.Armas;
 import org.example.itens.Ferramentas;
@@ -19,6 +20,20 @@ public class Mecanico extends Personagem {
     private HashMap<String, TextureRegion> sprites;
 
     public Mecanico(String nome) {
+        this.getInventario().adicionarItem(new Materiais("Placa Metálica",
+                this,
+                2.5,
+                70.0,
+                0.3,
+                15.0,
+                TipoMaterial.METAL));
+        this.getInventario().adicionarItem(new Ferramentas("Poli-Faca",
+                this,
+                2.5,
+                70.0,
+                0.3,
+                15.0,
+                TipoFerramenta.FACA));
         this.alterarNomePersonagem(nome);
 
         //to do: criar o hashmap passando os endereçoes das texturas
