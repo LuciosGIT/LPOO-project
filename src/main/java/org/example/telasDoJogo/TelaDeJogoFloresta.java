@@ -2,12 +2,16 @@ package org.example.telasDoJogo;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
@@ -35,7 +39,7 @@ public class TelaDeJogoFloresta implements Screen {
         actorPlayer.setTexture("parado");
 
         actorPlayer.setSize(64, 64);
-        actorPlayer.setPosition(100,100);
+        actorPlayer.setPosition( (float) Gdx.graphics.getWidth() /2-actorPlayer.getWidth()/2, (float) Gdx.graphics.getHeight() /2-actorPlayer.getHeight()/2);
         stage.addActor(actorPlayer);
 
     }
@@ -57,6 +61,8 @@ public class TelaDeJogoFloresta implements Screen {
         batch.end();
         stage.act(delta);
         stage.draw();
+
+        movement();
 
     }
 
@@ -97,6 +103,21 @@ public class TelaDeJogoFloresta implements Screen {
 
     private void movement() {
 
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            float x = Gdx.input.getX();
+            float y = Gdx.input.getY();
+
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    Vector2 actorCoordenadas = stage.screenToStageCoordinates(new Vector2(x, y));
+                    actorPlayer.addAction(Actions.moveTo(actorCoordenadas.x, actorCoordenadas.y, 4f));
+                }
+            },0.1f);
+
+
+
+        }
 
     }
 
