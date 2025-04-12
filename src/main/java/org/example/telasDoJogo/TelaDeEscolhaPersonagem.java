@@ -33,6 +33,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
     private Texture texturaBotaoVoltar;
     private final Game game;
     private Table table;
+    private Personagem mecanico;
 
     public TelaDeEscolhaPersonagem(Game game) {
         this.game = game;
@@ -45,7 +46,6 @@ public class TelaDeEscolhaPersonagem implements Screen {
         criarImagensClicaveis();
         criarBotaos();
         criarTexto();
-
 
     }
 
