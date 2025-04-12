@@ -119,8 +119,8 @@ public class TelaDeEscolhaPersonagem implements Screen {
         atoresImagensFlutuantes = new Actor[texturaImagensflutuantes.length];
 
         // Nova posição na lateral superior direita
-        float posX = Gdx.graphics.getWidth() * 0.7f; // 70% da largura da tela
-        float posY = Gdx.graphics.getHeight() * 0.7f; // 70% da altura da tela
+        float posX = Gdx.graphics.getWidth() * 0.8f; // 70% da largura da tela
+        float posY = Gdx.graphics.getHeight() * 0.67f; // 70% da altura da tela
 
         for (int i = 0; i < texturaImagensflutuantes.length; i++) {
             final int index = i;
@@ -241,20 +241,21 @@ public class TelaDeEscolhaPersonagem implements Screen {
         System.out.println(nomePersonagem);
 
         switch (nomePersonagem){
-            case "Sobrevivente":
+            case "Sobrevivente" ->{
                 Personagem sobrevivente = new Sobrevivente("Sobrevivente");
                 game.setScreen(new TelaDeJogoFloresta(game, sobrevivente));
-                break;
-            case "Mecânico":
+            }
+            case "Mecânico" ->{
                 Personagem mecanico = new Mecanico("Mecânico");
                 game.setScreen(new TelaDeJogoFloresta(game, mecanico));
-                break;
-            case "Médico":
+            }
+            case "Médico" ->{
                 Personagem medico = new Mecanico("Médico");
                 game.setScreen(new TelaDeJogoFloresta(game, medico));
-                break;
-            default:
+            }
+            default -> {
                 throw new IllegalArgumentException("Personagem inválido: " + nomePersonagem);
+            }
         }
 
     }

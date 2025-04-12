@@ -9,8 +9,7 @@ import java.util.HashMap;
 
 public class actorPersonagem extends Actor {
 
-    private HashMap<String, TextureRegion> sprites;
-    private TextureRegion spriteAtual;
+    private final HashMap<String, TextureRegion> sprites;
 
     public actorPersonagem(Personagem player) {
         this.sprites = player.getSprites();
@@ -20,7 +19,7 @@ public class actorPersonagem extends Actor {
 
     public void setTexture(String key) {
         if (sprites.containsKey(key)) {
-            spriteAtual = sprites.get(key);
+            TextureRegion spriteAtual = sprites.get(key);
             // Atualiza os bounds do actor de acordo com as dimensões do novo sprite
             setBounds(getX(), getY(), spriteAtual.getRegionWidth(), spriteAtual.getRegionHeight());
         } else {
