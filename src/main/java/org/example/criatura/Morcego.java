@@ -1,4 +1,16 @@
 package org.example.criatura;
 
-public class Morcego {
+import org.example.domain.Criatura;
+import org.example.domain.Personagem;
+
+public class Morcego extends Criatura {
+
+    public Morcego(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque) {
+        super(nome, vida, nivelDePerigo, danoDeAtaque);
+    }
+
+    @Override
+    public void ataque(Personagem jogador) {
+        jogador.diminuirVida(this.getDanoDeAtaque());
+    }
 }
