@@ -22,6 +22,8 @@ public class EventoDescoberta extends Evento {
 
     }
 
+    public EventoDescoberta() {}
+
     @Override
     public void executar(Personagem jogador, Ambiente local) {
 
