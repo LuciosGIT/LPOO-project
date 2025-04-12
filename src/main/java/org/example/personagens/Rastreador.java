@@ -15,6 +15,7 @@ public class Rastreador extends Personagem {
     private HashMap<String, TextureRegion> sprites;
 
     public Rastreador(String nome) {
+        super(nome, 5.0);
         this.getInventario().adicionarItem(new Materiais("Granito Perfurante",
                 this,
                 7.0,

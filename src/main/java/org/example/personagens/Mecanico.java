@@ -1,5 +1,6 @@
 package org.example.personagens;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.construcao.BancoDeArmas;
 import org.example.domain.Item;
@@ -17,9 +18,10 @@ import java.util.HashMap;
 
 public class Mecanico extends Personagem {
 
-    private HashMap<String, TextureRegion> sprites;
+    private HashMap<String, TextureRegion> sprites = new HashMap<>();
 
     public Mecanico(String nome) {
+        super(nome, 10.0);
         this.getInventario().adicionarItem(new Materiais("Placa Metálica",
                 this,
                 2.5,
@@ -34,7 +36,17 @@ public class Mecanico extends Personagem {
                 0.3,
                 15.0,
                 TipoFerramenta.FACA));
-        this.alterarNomePersonagem(nome);
+
+
+        sprites = new HashMap<>( Map.of(
+                "parado", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),
+                "direita", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),
+                "esquerda", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),
+                "baixo", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),
+                "cima", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png"))
+        ));
+
+
 
         //to do: criar o hashmap passando os endereçoes das texturas
     }

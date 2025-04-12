@@ -6,10 +6,7 @@ import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public abstract class Personagem implements PersonagemInterface{
@@ -45,7 +42,7 @@ public abstract class Personagem implements PersonagemInterface{
         this.vida = 100.0;
         this.sede = 50.0;
         this.sanidade = 100.0;
-        this.inventario = new Inventario(6, Collections.emptyList(), 0.0);
+        this.inventario = new Inventario(6, new ArrayList<>(), 0.0);
         this.localizacao = new AmbienteSpawn();
         this.estaEnvenenado = false;
         this.danoDeAtaque = danoDeAtaque;

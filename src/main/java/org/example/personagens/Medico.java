@@ -19,6 +19,7 @@ public class Medico extends Personagem {
     private HashMap<String, TextureRegion> sprites;
 
     public Medico(String nome) {
+        super(nome, 5.0);
         this.alterarNomePersonagem(nome);
         this.cura = 15.0;
 
