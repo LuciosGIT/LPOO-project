@@ -5,9 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -24,6 +26,15 @@ public class TelaDeJogoFloresta implements Screen {
     private Texture backgroundFloresta;
     private Batch batch;
     private Stage stage;
+    private OrthographicCamera camera;
+    private float tamanhoTelaX;
+    private float tamanhoTelaY;
+
+    private float worldWidth; // Largura do mundo
+    private float worldHeight; // Altura do mundo
+    private float viewportWidth; // Largura visível da câmera
+    private float viewportHeight; // Altura visível da câmera
+
 
     public TelaDeJogoFloresta(Game game, Personagem player){
         // Inicializa a tela de jogo com o personagem
@@ -36,11 +47,7 @@ public class TelaDeJogoFloresta implements Screen {
     public void show() {
 
         inicializar();
-        actorPlayer.setTexture("parado");
 
-        actorPlayer.setSize(64, 64);
-        actorPlayer.setPosition( (float) Gdx.graphics.getWidth() /2-actorPlayer.getWidth()/2, (float) Gdx.graphics.getHeight() /2-actorPlayer.getHeight()/2);
-        stage.addActor(actorPlayer);
 
     }
 
@@ -54,15 +61,20 @@ public class TelaDeJogoFloresta implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         stage.getViewport().apply();
 
-        batch.draw(backgroundFloresta, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(backgroundFloresta,
+                0, 0,
+                worldWidth, worldHeight
+        );
         batch.end();
         stage.act(delta);
         stage.draw();
 
-        movement();
+        movement(delta);
+        camera();
 
     }
 
@@ -98,14 +110,38 @@ public class TelaDeJogoFloresta implements Screen {
 
         backgroundFloresta = new Texture("imagens/backgrounds/mapaTelaDeJogoFloresta.png");
 
+        //camera
+        camera = (OrthographicCamera) stage.getCamera();
+        tamanhoTelaX = Gdx.graphics.getWidth();
+        tamanhoTelaY = Gdx.graphics.getHeight();
+
+        worldWidth = backgroundFloresta.getWidth(); // Largura do mundo
+        worldHeight = backgroundFloresta.getHeight(); // Altura do mundo
+        viewportWidth = camera.viewportWidth * camera.zoom; // Largura visível da câmera
+        viewportHeight = camera.viewportHeight * camera.zoom;
+
+        //actor
+        actorPlayer.setTexture("parado");
+        actorPlayer.setSize(64, 64);
+        actorPlayer.setPosition(
+                worldWidth / 2 - actorPlayer.getWidth() / 2,
+                worldHeight / 2 - actorPlayer.getHeight() / 2
+        );
+
+        stage.addActor(actorPlayer);
+
+
 
     }
 
-    private void movement() {
+    private void movement(float delta) {
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
+
+            Vector2 cordenadasPersonagem = new Vector2(actorPlayer.getX(), actorPlayer.getY());
+            float distancia = (float) Math.pow(Math.pow(cordenadasPersonagem.x - x,2) + Math.pow(cordenadasPersonagem.y - y,2),0.5f);
 
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -119,6 +155,36 @@ public class TelaDeJogoFloresta implements Screen {
 
         }
 
+    }
+
+    private void camera() {
+        // Calcula a posição desejada da câmera (centro do personagem)
+        float posX = actorPlayer.getX() + actorPlayer.getWidth() / 2;
+        float posY = actorPlayer.getY() + actorPlayer.getHeight() / 2;
+
+        // Suavização do movimento da câmera
+        float lerp = 0.1f;
+
+        // Calcula os limites da câmera
+        float minX = viewportWidth / 2;
+        float maxX = worldWidth - viewportWidth / 2;
+        float minY = viewportHeight / 2;
+        float maxY = worldHeight - viewportHeight / 2;
+
+        // Aplica interpolação com limites
+        camera.position.x = MathUtils.clamp(
+                camera.position.x + (posX - camera.position.x) * lerp,
+                minX,
+                maxX
+        );
+
+        camera.position.y = MathUtils.clamp(
+                camera.position.y + (posY - camera.position.y) * lerp,
+                minY,
+                maxY
+        );
+
+        camera.update();
     }
 
 }
