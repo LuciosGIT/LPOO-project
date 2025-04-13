@@ -188,5 +188,3 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
 }
-
-
