@@ -4,22 +4,17 @@ import org.example.domain.Ambiente;
 import org.example.domain.Condicao;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
+import org.example.enums.TipoCondicao;
+import org.example.enums.TipoRemedio;
 import org.example.itens.Remedios;
 
 public class EventoDoencaFerimento extends Evento {
 
-    private Condicao tipoCondicao;
+    private TipoCondicao tipoCondicao;
 
-    private Remedios cura;
 
-    public EventoDoencaFerimento(Remedios remedio, Condicao tipoCondicao) {
-        this.cura = remedio;
-        this.tipoCondicao = tipoCondicao;
-    }
-
-    public EventoDoencaFerimento(boolean ativavel, String descricao, String impacto, String nome, Double probabilidadeOcorrencia, Remedios remedio, Condicao tipoCondicao) {
+    public EventoDoencaFerimento(boolean ativavel, String descricao, String impacto, String nome, Double probabilidadeOcorrencia, TipoCondicao tipoCondicao) {
         super(ativavel, descricao, impacto, nome, probabilidadeOcorrencia);
-        this.cura = remedio;
         this.tipoCondicao = tipoCondicao;
     }
 
@@ -29,11 +24,43 @@ public class EventoDoencaFerimento extends Evento {
 
     @Override
     public void executar(Personagem jogador, Ambiente local) {
-        System.out.println("Você está sendo afetado por uma" + tipoCondicao.getDescricao());
+       switch (tipoCondicao) {
 
-        /* ajeitar lógica! para só dar dano enquanto o jogador não usar o remédio*/
-        while (jogador.getInventario().getListaDeItems().contains(cura) == false) {
-            tipoCondicao.impacto(jogador);
-        }
+           case INFECCAO -> {
+               jogador.diminuirEnergia(20.0);
+               jogador.diminuirVida(25.0);
+               jogador.diminuirSanidade(15.0);
+           }
+           case HIPOTERMIA  -> {
+               jogador.diminuirEnergia(20.0);
+               jogador.diminuirVida(10.0);
+               jogador.diminuirSanidade(10.0);
+
+               // Após 4 segundos, perde energia novamente
+               new Thread(() -> {
+                   try {
+                       Thread.sleep(4000);
+                       jogador.diminuirEnergia(15.0);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }).start();
+
+           }
+           case DESIDRATACAO ->  {
+               jogador.diminuirEnergia(25.0);
+               jogador.aumentarSede(25.0);
+
+               // Segunda vez após 4 segundos
+               new Thread(() -> {
+                   try {
+                       Thread.sleep(4000);
+                       jogador.aumentarSede(15.0);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+               }).start();
+           }
+       }
     }
 }
