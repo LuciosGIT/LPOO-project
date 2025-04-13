@@ -141,6 +141,7 @@ public class TelaDeJogoFloresta implements Screen {
             float y = Gdx.input.getY();
 
             Vector2 cordenadasPersonagem = new Vector2(actorPlayer.getX(), actorPlayer.getY());
+
             float distancia = (float) Math.pow(Math.pow(cordenadasPersonagem.x - x,2) + Math.pow(cordenadasPersonagem.y - y,2),0.5f);
 
             Timer.schedule(new Timer.Task() {
