@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
@@ -27,8 +28,6 @@ public class TelaDeJogoFloresta implements Screen {
     private Batch batch;
     private Stage stage;
     private OrthographicCamera camera;
-    private float tamanhoTelaX;
-    private float tamanhoTelaY;
 
     private float worldWidth; // Largura do mundo
     private float worldHeight; // Altura do mundo
@@ -53,7 +52,8 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // Implement resize logic here
+        stage.getViewport().update(width, height, true);
+        camera.update();
     }
 
     @Override
@@ -105,36 +105,37 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void inicializar() {
+        // 1. Configuração da câmera
+        camera = new OrthographicCamera(1920f, 1080f);
 
-        stage = new Stage(new ScreenViewport());
+        // 2. Define dimensões do mundo
+        worldWidth = 1920f;
+        worldHeight = 1080f;
+
+        // 3. Configuração do viewport e stage
+        stage = new Stage(new FitViewport(worldWidth, worldHeight, camera));
         Gdx.input.setInputProcessor(stage);
 
+        // 4. Batch e texturas
         batch = new SpriteBatch();
-
         backgroundFloresta = new Texture("imagens/backgrounds/mapaTelaDeJogoFloresta.png");
 
-        //camera
-        camera = (OrthographicCamera) stage.getCamera();
-        tamanhoTelaX = Gdx.graphics.getWidth();
-        tamanhoTelaY = Gdx.graphics.getHeight();
+        // 5. Atualiza viewport
+        viewportWidth = worldWidth;
+        viewportHeight = worldHeight;
 
-        worldWidth = backgroundFloresta.getWidth(); // Largura do mundo
-        worldHeight = backgroundFloresta.getHeight(); // Altura do mundo
-        viewportWidth = camera.viewportWidth * camera.zoom; // Largura visível da câmera
-        viewportHeight = camera.viewportHeight * camera.zoom;
-
-        //actor
+        // 6. Configuração do player
         actorPlayer.setTexture("parado");
         actorPlayer.setSize(64, 64);
         actorPlayer.setPosition(
                 worldWidth / 2 - actorPlayer.getWidth() / 2,
                 worldHeight / 2 - actorPlayer.getHeight() / 2
         );
-
         stage.addActor(actorPlayer);
 
-
-
+        // 7. Aplica zoom por último
+        camera.zoom = 0.5f; // Teste com 0.5 para ver se está funcionando
+        camera.update();
     }
 
     private void movement(float deltaTime) {
@@ -168,18 +169,20 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void camera() {
-        // Calcula a posição desejada da câmera (centro do personagem)
         float posX = actorPlayer.getX() + actorPlayer.getWidth() / 2;
         float posY = actorPlayer.getY() + actorPlayer.getHeight() / 2;
 
-        // Suavização do movimento da câmera
         float lerp = 0.1f;
 
-        // Calcula os limites da câmera
-        float minX = viewportWidth / 2;
-        float maxX = worldWidth - viewportWidth / 2;
-        float minY = viewportHeight / 2;
-        float maxY = worldHeight - viewportHeight / 2;
+        // Ajusta viewport pelo zoom
+        float adjustedViewportWidth = viewportWidth * camera.zoom;
+        float adjustedViewportHeight = viewportHeight * camera.zoom;
+
+        float minX = adjustedViewportWidth / 2;
+        float maxX = worldWidth - adjustedViewportWidth / 2;
+        float minY = adjustedViewportHeight / 2;
+        float maxY = worldHeight - adjustedViewportHeight / 2;
+
 
         // Aplica interpolação com limites
         camera.position.x = MathUtils.clamp(
@@ -196,5 +199,6 @@ public class TelaDeJogoFloresta implements Screen {
 
         camera.update();
     }
+
 
 }
