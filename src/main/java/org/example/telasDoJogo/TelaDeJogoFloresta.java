@@ -58,6 +58,9 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void render(float delta) {
+
+        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -70,10 +73,10 @@ public class TelaDeJogoFloresta implements Screen {
                 worldWidth, worldHeight
         );
         batch.end();
-        stage.act(delta);
+        stage.act(deltaTime);
         stage.draw();
 
-        movement(delta);
+        movement(deltaTime);
         camera();
 
     }
@@ -134,28 +137,34 @@ public class TelaDeJogoFloresta implements Screen {
 
     }
 
-    private void movement(float delta) {
-
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            float x = Gdx.input.getX();
-            float y = Gdx.input.getY();
-
-            Vector2 cordenadasPersonagem = new Vector2(actorPlayer.getX(), actorPlayer.getY());
-
-            float distancia = (float) Math.pow(Math.pow(cordenadasPersonagem.x - x,2) + Math.pow(cordenadasPersonagem.y - y,2),0.5f);
-
+    private void movement(float deltaTime) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    Vector2 actorCoordenadas = stage.screenToStageCoordinates(new Vector2(x, y));
-                    actorPlayer.addAction(Actions.moveTo(actorCoordenadas.x, actorCoordenadas.y, 4f));
+                    // Limpa ações anteriores
+                    actorPlayer.clearActions();
+
+                    // Obtém coordenadas do clique e converte para coordenadas do mundo
+                    Vector2 clickPos = stage.screenToStageCoordinates(
+                            new Vector2(Gdx.input.getX(), Gdx.input.getY())
+                    );
+
+                    // Posição atual do personagem
+                    Vector2 playerPos = new Vector2(actorPlayer.getX(), actorPlayer.getY());
+
+                    // Velocidade constante em pixels por segundo
+                    float velocidadeConstante = 150f;
+
+                    // Calcula o tempo baseado em uma velocidade fixa
+                    float distancia = playerPos.dst(clickPos);
+                    float tempo = distancia / velocidadeConstante;
+
+                    // Move o personagem
+                    actorPlayer.addAction(Actions.moveTo(clickPos.x, clickPos.y, tempo));
                 }
-            },0.1f);
-
-
-
+            }, 0.35f);
         }
-
     }
 
     private void camera() {

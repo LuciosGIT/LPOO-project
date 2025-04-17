@@ -155,9 +155,9 @@ public class TelaDeEscolhaPersonagem implements Screen {
         String[] nomesPersonagens = {"Sobrevivente", "Mecânico", "Médico"};
 
         texturasDosPersonagens = new Texture[]{
-                new Texture("imagens/imagemPersonagemEscolhaSobrevivente.png"),
-                new Texture("imagens/imagemPersonagemEscolhaMecanico.png"),
-                new Texture("imagens/imagemPersonagemEscolhaMedico.png")
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaSobrevivente.png"),
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMecanico.png"),
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMedico.png")
         };
 
         Table botoesTable = new Table();
