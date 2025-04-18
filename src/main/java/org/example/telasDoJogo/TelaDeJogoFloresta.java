@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
+import org.example.utilitarios.telas.InicializarMundo;
 
 public class TelaDeJogoFloresta implements Screen {
 
@@ -34,18 +35,28 @@ public class TelaDeJogoFloresta implements Screen {
     private float viewportWidth; // Largura visível da câmera
     private float viewportHeight; // Altura visível da câmera
 
+    InicializarMundo inicializarMundo;
 
     public TelaDeJogoFloresta(Game game, Personagem player){
-        // Inicializa a tela de jogo com o personagem
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
+
     }
 
     @Override
     public void show() {
+        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta.png");
 
-        inicializar();
+        this.camera = inicializarMundo.getCamera();
+        this.stage = inicializarMundo.getStage();
+        this.batch = inicializarMundo.getBatch();
+        this.backgroundFloresta = inicializarMundo.getBackgroundFloresta();
+        this.worldWidth = inicializarMundo.getWorldWidth();
+        this.worldHeight = inicializarMundo.getWorldHeight();
+        this.viewportWidth = inicializarMundo.getViewportWidth();
+        this.viewportHeight = inicializarMundo.getViewportHeight();
+
 
 
     }
@@ -98,44 +109,8 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
-        backgroundFloresta.dispose();
-        stage.dispose();
+        inicializarMundo.dispose();
         // Dispose of other resources if needed
-    }
-
-    private void inicializar() {
-        // 1. Configuração da câmera
-        camera = new OrthographicCamera(1920f, 1080f);
-
-        // 2. Define dimensões do mundo
-        worldWidth = 1920f;
-        worldHeight = 1080f;
-
-        // 3. Configuração do viewport e stage
-        stage = new Stage(new FitViewport(worldWidth, worldHeight, camera));
-        Gdx.input.setInputProcessor(stage);
-
-        // 4. Batch e texturas
-        batch = new SpriteBatch();
-        backgroundFloresta = new Texture("imagens/backgrounds/mapaTelaDeJogoFloresta.png");
-
-        // 5. Atualiza viewport
-        viewportWidth = worldWidth;
-        viewportHeight = worldHeight;
-
-        // 6. Configuração do player
-        actorPlayer.setTexture("parado");
-        actorPlayer.setSize(64, 64);
-        actorPlayer.setPosition(
-                worldWidth / 2 - actorPlayer.getWidth() / 2,
-                worldHeight / 2 - actorPlayer.getHeight() / 2
-        );
-        stage.addActor(actorPlayer);
-
-        // 7. Aplica zoom por último
-        camera.zoom = 0.5f; // Teste com 0.5 para ver se está funcionando
-        camera.update();
     }
 
     private void movement(float deltaTime) {
