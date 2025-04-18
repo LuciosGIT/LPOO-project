@@ -10,14 +10,14 @@ import org.example.actor.actorPersonagem;
 
 public class InicializarMundo {
 
-    private OrthographicCamera camera;
-    private Stage stage;
-    private SpriteBatch batch;
-    private Texture backgroundFloresta;
-    private float worldWidth;
-    private float worldHeight;
-    private float viewportWidth;
-    private float viewportHeight;
+    private final OrthographicCamera camera;
+    private final Stage stage;
+    private final SpriteBatch batch;
+    private final Texture backgroundFloresta;
+    private final float worldWidth;
+    private final float worldHeight;
+    private final float viewportWidth;
+    private final float viewportHeight;
 
 
     public InicializarMundo(actorPersonagem actorPlayer, String imagemPath) {
@@ -50,7 +50,7 @@ public class InicializarMundo {
         stage.addActor(actorPlayer);
 
         // 7. Aplica zoom por último
-        camera.zoom = 0.5f; // Teste com 0.5 para ver se está funcionando
+        camera.zoom = 0.7f; // Teste com 0.5 para ver se está funcionando
         camera.update();
     }
 

@@ -8,17 +8,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
 import org.example.utilitarios.telas.InicializarMundo;
+import org.example.utilitarios.telas.Inputs;
 
 public class TelaDeJogoFloresta implements Screen {
 
@@ -36,6 +34,7 @@ public class TelaDeJogoFloresta implements Screen {
     private float viewportHeight; // Altura visível da câmera
 
     InicializarMundo inicializarMundo;
+    Inputs inputs;
 
     public TelaDeJogoFloresta(Game game, Personagem player){
         this.game = game;
@@ -57,7 +56,7 @@ public class TelaDeJogoFloresta implements Screen {
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
-
+        inputs = new Inputs();
 
     }
 
@@ -87,8 +86,10 @@ public class TelaDeJogoFloresta implements Screen {
         stage.act(deltaTime);
         stage.draw();
 
+        //métodos
         movement(deltaTime);
         camera();
+        inputs.inputListener();
 
     }
 
