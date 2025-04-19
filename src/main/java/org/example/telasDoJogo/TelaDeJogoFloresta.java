@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.LifeBar;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
 import org.example.utilitarios.telas.InicializarMundo;
@@ -35,6 +36,7 @@ public class TelaDeJogoFloresta implements Screen {
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
+    LifeBar lifeBar;
 
     public TelaDeJogoFloresta(Game game, Personagem player){
         this.game = game;
@@ -57,6 +59,9 @@ public class TelaDeJogoFloresta implements Screen {
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
         inputs = new Inputs();
+
+        lifeBar = new LifeBar(actorPlayer);
+        stage.addActor(lifeBar.getLifeBar());
 
     }
 
@@ -90,6 +95,7 @@ public class TelaDeJogoFloresta implements Screen {
         movement(deltaTime);
         camera();
         inputs.inputListener();
+        lifeBar.setPosition(actorPlayer);
 
     }
 
