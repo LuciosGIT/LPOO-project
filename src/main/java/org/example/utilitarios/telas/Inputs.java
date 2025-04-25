@@ -3,12 +3,14 @@ package org.example.utilitarios.telas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Timer;
+import org.example.domain.Personagem;
 
 public class Inputs {
-    public void inputListener(){
+    public void inputListener(Personagem player) {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             executarTeclaQ();
+            player.diminuirVida(5.0);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             executarTeclaW();

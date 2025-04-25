@@ -69,7 +69,13 @@ public class LifeBar {
        if(pixmap2 != null) pixmap2.dispose();
     }
 
-    //to do: set lifebar value according to player life
+    public void setLifeBarValue(double value) {
+        lifeBar.setValue((float) value);
+    }
+
+    public float getLifeBarValue() {
+        return lifeBar.getValue();
+    }
 
 
 }

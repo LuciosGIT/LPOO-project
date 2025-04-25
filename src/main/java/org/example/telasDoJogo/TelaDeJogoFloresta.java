@@ -94,8 +94,9 @@ public class TelaDeJogoFloresta implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener();
+        inputs.inputListener(player);
         lifeBar.setPosition(actorPlayer);
+        lifeBar.setLifeBarValue(player.getVida());
 
     }
 
