@@ -109,7 +109,8 @@ public class TelaDeEscolhaPersonagem implements Screen {
         texturaImagensflutuantes = new Texture[]{
                 new Texture("imagens/textboxes/textoTelaDeEscolhaSobrevivente.png"),
                 new Texture("imagens/textboxes/textoTelaDeEscolhaMecanico.png"),
-                new Texture("imagens/textboxes/textoTelaDeEscolhaMedico.png")
+                new Texture("imagens/textboxes/textoTelaDeEscolhaMedico.png"),
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMedico.png")// criar para o rastreador
         };
 
 
@@ -150,14 +151,15 @@ public class TelaDeEscolhaPersonagem implements Screen {
 
         int larguraImagem = 350;
         int alturaImagem = 300;
-        int espacamento = 50;
+        int espacamento = 5;
 
-        String[] nomesPersonagens = {"Sobrevivente", "Mecânico", "Médico"};
+        String[] nomesPersonagens = {"Sobrevivente", "Mecânico", "Médico", "Rastreador"};
 
         texturasDosPersonagens = new Texture[]{
                 new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaSobrevivente.png"),
                 new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMecanico.png"),
-                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMedico.png")
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMedico.png"),
+                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaRastreador.png")//mudar para rastreador
         };
 
         Table botoesTable = new Table();
@@ -252,6 +254,10 @@ public class TelaDeEscolhaPersonagem implements Screen {
             case "Médico" ->{
                 Personagem medico = new Mecanico("Médico");
                 game.setScreen(new TelaDeJogoFloresta(game, medico));
+            }
+            case "Rastreador" ->{
+                Personagem rastreador = new Mecanico("Rastreador");
+                game.setScreen(new TelaDeJogoFloresta(game, rastreador));
             }
             default -> {
                 throw new IllegalArgumentException("Personagem inválido: " + nomePersonagem);
