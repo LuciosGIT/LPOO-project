@@ -22,10 +22,10 @@ public class ConfiguracaoDoMundo {
     //lista de animais
     public static List<Criatura> getCriaturasPadrao() {
         return List.of(
-                new Cobra("Cobra", 7.0, 3.0, 5.0),
-                new Lobo("Lobo", 7.0, 3.0, 5.0),
-                new Corvo("Corvo", 7.0, 3.0, 5.0),
-                new Urso("Urso", 7.0, 3.0, 5.0)
+                new Cobra("Cobra Venenosa", 7.0, 3.0, 5.0),
+                new Lobo("Lobo Nômade", 7.0, 3.0, 5.0),
+                new Corvo("Corvo Atordoante", 7.0, 3.0, 5.0),
+                new Urso("Urso Raivoso", 7.0, 3.0, 5.0)
         );
     }
 
