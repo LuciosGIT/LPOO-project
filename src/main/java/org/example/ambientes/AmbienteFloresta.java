@@ -42,10 +42,10 @@ public class AmbienteFloresta extends Ambiente {
         this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
-        this.getEventos().add(new EventoCriatura(true, "Impacto", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3) , Utilitario.getValorAleatorio()));
-        this.getEventos().add(new EventoCriatura(true, "Impacto", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), Utilitario.getValorAleatorio()));
+        this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
+                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
+        this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
+                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(0).getNivelDePerigo()));
 
     }
 
