@@ -189,9 +189,10 @@ public class TelaDeInicio implements Screen {
 
     private void criarSom(){
 
-        somAmbiente.setLooping(0,true);
-        somAmbiente.setVolume(0,2f);
-        somAmbiente.play();
+        long id = somAmbiente.play(2f);
+        somAmbiente.setLooping(id,true);
+
+
 
     }
 
