@@ -1,4 +1,4 @@
-package org.example.utilitarios.telas;
+package org.example.utilitariosInterfaceGrafica;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;

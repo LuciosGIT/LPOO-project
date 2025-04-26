@@ -14,16 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.LifeBar;
+import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
-import org.example.utilitarios.telas.InicializarMundo;
-import org.example.utilitarios.telas.Inputs;
+import org.example.utilitariosInterfaceGrafica.InicializarMundo;
+import org.example.utilitariosInterfaceGrafica.Inputs;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TelaDeJogoFloresta implements Screen {
 
     private Game game;
     private Personagem player;
     private actorPersonagem actorPlayer;
+    private List<actorArvore> listaDeArvores = new ArrayList<>();
     private Texture backgroundFloresta;
     private Batch batch;
     private Stage stage;
@@ -47,7 +52,7 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void show() {
-        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta.png");
+        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
         this.camera = inicializarMundo.getCamera();
         this.stage = inicializarMundo.getStage();
@@ -62,6 +67,8 @@ public class TelaDeJogoFloresta implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        criarActorArvore();
 
     }
 
@@ -183,5 +190,33 @@ public class TelaDeJogoFloresta implements Screen {
         camera.update();
     }
 
+    private void criarActorArvore() {
+
+        float difference = 100;
+
+        for(int i = 0; i < 10; i++){
+
+            float areaX = worldWidth / 5;
+            float areaY = worldHeight / 3;
+
+            // Escolhe uma região aleatória
+            float regiaoX = MathUtils.random(0, 4) * areaX;
+            float regiaoY = MathUtils.random(0, 2) * areaY;
+
+            // Gera posição aleatória dentro da região
+            float posX = regiaoX + MathUtils.random(100, areaX - 100);
+            float posY = regiaoY + MathUtils.random(100, areaY - 100);
+
+            actorArvore arvore = new actorArvore(posX, posY);
+            stage.addActor(arvore);
+
+
+
+        }
+
+    }
+
 
 }
+
+
