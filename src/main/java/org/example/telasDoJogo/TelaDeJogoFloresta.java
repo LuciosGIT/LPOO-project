@@ -28,6 +28,7 @@ public class TelaDeJogoFloresta implements Screen {
     private Game game;
     private Personagem player;
     private actorPersonagem actorPlayer;
+    actorArvore arvore;
     private List<actorArvore> listaDeArvores = new ArrayList<>();
     private Texture backgroundFloresta;
     private Batch batch;
@@ -104,6 +105,7 @@ public class TelaDeJogoFloresta implements Screen {
         inputs.inputListener(player);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+        actorPlayer.checkCollision(listaDeArvores);
 
     }
 
@@ -125,6 +127,9 @@ public class TelaDeJogoFloresta implements Screen {
     @Override
     public void dispose() {
         inicializarMundo.dispose();
+        for(actorArvore arvore : listaDeArvores){
+            arvore.dispose();
+        }
         // Dispose of other resources if needed
     }
 
@@ -192,13 +197,13 @@ public class TelaDeJogoFloresta implements Screen {
 
     private void criarActorArvore() {
 
-        float difference = 100;
+        for(int i = 0; i < 15; i++){
 
-        for(int i = 0; i < 10; i++){
 
             float areaX = worldWidth / 5;
             float areaY = worldHeight / 3;
 
+            boolean isColliding = false;
             // Escolhe uma região aleatória
             float regiaoX = MathUtils.random(0, 4) * areaX;
             float regiaoY = MathUtils.random(0, 2) * areaY;
@@ -207,8 +212,22 @@ public class TelaDeJogoFloresta implements Screen {
             float posX = regiaoX + MathUtils.random(100, areaX - 100);
             float posY = regiaoY + MathUtils.random(100, areaY - 100);
 
-            actorArvore arvore = new actorArvore(posX, posY);
-            stage.addActor(arvore);
+            arvore = new actorArvore(posX, posY);
+
+            for(actorArvore umaArvoreDaLista : listaDeArvores) {
+                if (arvore.checkCollision(umaArvoreDaLista.getCollider())) {
+                    isColliding = true;
+                    break;
+                }
+            }
+
+            if(!isColliding) {
+                listaDeArvores.add(arvore);
+                stage.addActor(arvore);
+            } else {
+                i--;
+            }
+
 
 
 
