@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -197,39 +198,38 @@ public class TelaDeJogoFloresta implements Screen {
 
     private void criarActorArvore() {
 
-        for(int i = 0; i < 15; i++){
+        float espacoMinimo = 200f; // Espaço mínimo entre árvores
+        int maxTentativas = 30;    // Evita loop infinito
+        int arvoresCriadas = 0;
 
+        while(arvoresCriadas < 15 && maxTentativas > 0) {
+            // Gera posição aleatória
+            float posX = MathUtils.random(100, worldWidth - 100);
+            float posY = MathUtils.random(100, worldHeight - 100);
 
-            float areaX = worldWidth / 5;
-            float areaY = worldHeight / 3;
+            boolean posicaoValida = true;
 
-            boolean isColliding = false;
-            // Escolhe uma região aleatória
-            float regiaoX = MathUtils.random(0, 4) * areaX;
-            float regiaoY = MathUtils.random(0, 2) * areaY;
+            // Verifica distância com outras árvores
+            for(actorArvore outraArvore : listaDeArvores) {
+                float distanciaX = Math.abs(posX - outraArvore.getX());
+                float distanciaY = Math.abs(posY - outraArvore.getY());
 
-            // Gera posição aleatória dentro da região
-            float posX = regiaoX + MathUtils.random(100, areaX - 100);
-            float posY = regiaoY + MathUtils.random(100, areaY - 100);
-
-            arvore = new actorArvore(posX, posY);
-
-            for(actorArvore umaArvoreDaLista : listaDeArvores) {
-                if (arvore.checkCollision(umaArvoreDaLista.getCollider())) {
-                    isColliding = true;
+                // Se estiver muito perto de outra árvore
+                if(distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
+                    posicaoValida = false;
                     break;
                 }
             }
 
-            if(!isColliding) {
-                listaDeArvores.add(arvore);
-                stage.addActor(arvore);
-            } else {
-                i--;
+            // Se a posição for válida, cria a árvore
+            if(posicaoValida) {
+                actorArvore novaArvore = new actorArvore(posX, posY);
+                listaDeArvores.add(novaArvore);
+                stage.addActor(novaArvore);
+                arvoresCriadas++;
             }
 
-
-
+            maxTentativas--;
 
         }
 

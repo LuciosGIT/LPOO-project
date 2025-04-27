@@ -16,7 +16,7 @@ import org.example.domain.Personagem;
 public class actorArvore extends Actor{
 
     private final Texture textureArvore;
-    private final Polygon collider;
+    private Polygon collider;
 
     public actorArvore(float x, float y) {
         textureArvore = new Texture(Gdx.files.internal("imagens/itens do cenario/arvoreFloresta.png"));
@@ -25,18 +25,20 @@ public class actorArvore extends Actor{
 
         setOrigin(getWidth()/2, getHeight()/2);
 
-        float baseWidth = getWidth() * 0.3f;  // 20% da largura
-        float baseHeight = getHeight() * 0.1f; // 10% da altura
-        float baseX = x + (getWidth() - baseWidth) / 2; // Centraliza na base
+        float baseWidth = getWidth() * 0.5f;    // 60% da largura
+        float baseHeight = getHeight() * 0.2f;   // 20% da altura
+        float baseX = getWidth() * 0.1f;         // 20% da esquerda
+        float baseY = 0;                         // Base da árvore
 
         float[] vertices = new float[] {
-                baseX, y,                       // Inferior esquerdo
-                baseX + baseWidth, y,           // Inferior direito
-                baseX + baseWidth, y + baseHeight, // Superior direito
-                baseX, y + baseHeight           // Superior esquerdo
+                baseX, baseY,
+                baseX + baseWidth, baseY,
+                baseX + baseWidth, baseY + baseHeight,
+                baseX, baseY + baseHeight
         };
 
         collider = new Polygon(vertices);
+        collider.setPosition(x, y);
 
         addListener(new ClickListener() {
             @Override
@@ -92,6 +94,10 @@ public class actorArvore extends Actor{
 
     public boolean checkCollision(Polygon other) {
         return collider.getBoundingRectangle().overlaps(other.getBoundingRectangle());
+    }
+
+    public void setCollider(Polygon collider) {
+        this.collider = collider;
     }
 
     public Polygon getCollider() {

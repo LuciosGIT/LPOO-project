@@ -24,15 +24,20 @@ public class actorPersonagem extends Actor {
         setPosition(100, 100);
         setTexture("parado");
 
+        // Ajusta o tamanho do collider
+        float width = spriteAtual.getRegionWidth() * 0.3f;   // 30% da largura
+        float height = spriteAtual.getRegionHeight() * 0.2f; // 20% da altura
+
+        // Define os vértices centralizados
         float[] vertices = new float[]{
-                0, 0,                                              // Inferior esquerdo
-                spriteAtual.getRegionWidth() * 0.3f, 0,            // Inferior direito
-                spriteAtual.getRegionWidth() * 0.3f, spriteAtual.getRegionHeight() * 0.3f, // Superior direito
-                0, spriteAtual.getRegionHeight() * 0.3f            // Superior esquerdo
+                -width/2, 0,           // Inferior esquerdo
+                width/2, 0,            // Inferior direito
+                width/2, height,       // Superior direito
+                -width/2, height       // Superior esquerdo
         };
 
         collider = new Polygon(vertices);
-        collider.setPosition(100,100);
+        collider.setPosition(getX() + (float) spriteAtual.getRegionWidth() /2, getY());
     }
 
     @Override
@@ -73,7 +78,18 @@ public class actorPersonagem extends Actor {
     public void checkCollision(List<actorArvore> arvores) {
         for(actorArvore arvore : arvores) {
             if(Intersector.overlaps(collider.getBoundingRectangle(), arvore.getCollider().getBoundingRectangle())) {
-                this.addAction(Actions.moveTo(getX()-5, getY()-5, 0.5f));
+                this.clearActions();
+
+                // Calcula a direção do impulso
+                float playerCenterX = getX() + getWidth()/2;
+                float arvoreCenterX = arvore.getX() + arvore.getWidth()/2;
+
+                // Se o jogador está à esquerda da árvore, move para esquerda
+                // Se está à direita, move para direita
+                float moveX = playerCenterX < arvoreCenterX ? -20 : 20;
+
+                // Aplica o movimento de repulsão
+                addAction(Actions.moveBy(moveX, 0, 0.2f));
                 break;
             }
         }
