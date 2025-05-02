@@ -42,3 +42,5 @@ build/
 
 # Ignore Gradle build output directory
 build
+
+.idea/gradle.xml

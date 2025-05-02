@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
@@ -25,13 +24,11 @@ import org.example.utilitariosInterfaceGrafica.Inputs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TelaDeJogoFloresta implements Screen {
+public class TelaDeJogoCaverna implements Screen {
 
     private Game game;
     private Personagem player;
     private actorPersonagem actorPlayer;
-    actorArvore arvore;
-    private List<actorArvore> listaDeArvores = new ArrayList<>();
     private Texture backgroundFloresta;
     private Batch batch;
     private Stage stage;
@@ -46,7 +43,7 @@ public class TelaDeJogoFloresta implements Screen {
     Inputs inputs;
     LifeBar lifeBar;
 
-    public TelaDeJogoFloresta(Game game, Personagem player){
+    public TelaDeJogoCaverna(Game game, Personagem player){
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
@@ -55,7 +52,7 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void show() {
-        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
+        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta.png");
 
         this.camera = inicializarMundo.getCamera();
         this.stage = inicializarMundo.getStage();
@@ -70,8 +67,6 @@ public class TelaDeJogoFloresta implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
-
-        criarActorArvore();
 
     }
 
@@ -107,7 +102,6 @@ public class TelaDeJogoFloresta implements Screen {
         inputs.inputListener(player);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
-        actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 
     }
@@ -130,9 +124,7 @@ public class TelaDeJogoFloresta implements Screen {
     @Override
     public void dispose() {
         inicializarMundo.dispose();
-        for(actorArvore arvore : listaDeArvores){
-            arvore.dispose();
-        }
+
         // Dispose of other resources if needed
     }
 
@@ -198,44 +190,7 @@ public class TelaDeJogoFloresta implements Screen {
         camera.update();
     }
 
-    private void criarActorArvore() {
 
-        float espacoMinimo = 200f; // Espaço mínimo entre árvores
-        int maxTentativas = 30;    // Evita loop infinito
-        int arvoresCriadas = 0;
-
-        while(arvoresCriadas < 8 && maxTentativas > 0) {
-            // Gera posição aleatória
-            float posX = MathUtils.random(100, worldWidth - 100);
-            float posY = MathUtils.random(100, worldHeight - 100);
-
-            boolean posicaoValida = true;
-
-            // Verifica distância com outras árvores
-            for(actorArvore outraArvore : listaDeArvores) {
-                float distanciaX = Math.abs(posX - outraArvore.getX());
-                float distanciaY = Math.abs(posY - outraArvore.getY());
-
-                // Se estiver muito perto de outra árvore
-                if(distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
-                    posicaoValida = false;
-                    break;
-                }
-            }
-
-            // Se a posição for válida, cria a árvore
-            if(posicaoValida) {
-                actorArvore novaArvore = new actorArvore(posX, posY);
-                listaDeArvores.add(novaArvore);
-                stage.addActor(novaArvore);
-                arvoresCriadas++;
-            }
-
-            maxTentativas--;
-
-        }
-
-    }
 
     private void sairDoCenario() {
         float playerX = actorPlayer.getX();
@@ -252,11 +207,9 @@ public class TelaDeJogoFloresta implements Screen {
 
         if (naBoradaEsquerda || naBordaDireita || naBordaSuperior || naBordaInferior) {
 
-            actorPlayer.addAction(Actions.fadeIn(0.1f));
 
-            game.setScreen(new TelaDeJogoCaverna(game, player));
-            dispose();
 
+            game.setScreen(new TelaDeInicio(game));
         }
     }
 

@@ -110,7 +110,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
                 new Texture("imagens/textboxes/textoTelaDeEscolhaSobrevivente.png"),
                 new Texture("imagens/textboxes/textoTelaDeEscolhaMecanico.png"),
                 new Texture("imagens/textboxes/textoTelaDeEscolhaMedico.png"),
-                new Texture("imagens/assets/TelaDeEscolhaPersonagem/imagemPersonagemEscolhaMedico.png")// criar para o rastreador
+                new Texture("imagens/textboxes/textoTelaDeEscolhaRastreador.png")// criar para o rastreador
         };
 
 
