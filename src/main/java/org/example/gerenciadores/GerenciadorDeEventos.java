@@ -24,11 +24,26 @@ public class GerenciadorDeEventos {
     public static Evento sortearEvento(Ambiente local) {
         Random random = new Random();
 
-        int index = random.nextInt(local.getEventos().size());
+        List<Evento> eventos = local.getEventos();
 
-        Evento eventoAleatorio = local.getEventos().get(index);
+        // Soma todas as probabilidades
+        double somaProbabilidades = 0;
+        for (Evento evento : eventos) {
+            somaProbabilidades += evento.getProbabilidadeOcorrencia();
+        }
 
-        return eventoAleatorio;
+        // Gera um número aleatório entre 0 e soma das probabilidades
+        double r = random.nextDouble() * somaProbabilidades;
+
+        // Seleciona o evento correspondente
+        double acumulador = 0;
+        for (Evento evento : eventos) {
+            acumulador += evento.getProbabilidadeOcorrencia();
+            if (r <= acumulador) {
+                return evento;
+            }
+        }
+        return eventos.get(eventos.size() - 1);
     }
 
     public static void aplicarEvento(Personagem jogador, Evento evento) {
