@@ -1,10 +1,7 @@
 package org.example.utilitarios;
 
 import org.example.ambientes.*;
-import org.example.criatura.Cobra;
-import org.example.criatura.Corvo;
-import org.example.criatura.Lobo;
-import org.example.criatura.Urso;
+import org.example.criatura.*;
 import org.example.domain.Ambiente;
 import org.example.domain.Criatura;
 import org.example.domain.Evento;
@@ -22,10 +19,12 @@ public class ConfiguracaoDoMundo {
     //lista de animais
     public static List<Criatura> getCriaturasPadrao() {
         return List.of(
-                new Cobra("Cobra Venenosa", 7.0, 3.0, 5.0),
-                new Lobo("Lobo Nômade", 7.0, 3.0, 5.0),
-                new Corvo("Corvo Atordoante", 7.0, 3.0, 5.0),
-                new Urso("Urso Raivoso", 7.0, 3.0, 5.0)
+                new Cobra("Cobra Venenosa", 7.0, 4.0, 12.0),
+                new Morcego("Morcego Espantoso", 7.0, 2.0, 7.0),
+                new Lobo("Lobo Nômade", 7.0, 4.5, 20.0),
+                new Corvo("Corvo Atordoante", 7.0, 2.0, 7.0),
+                new Crocodilo("Crocodilo Feroz", 7.0, 4.0, 15.0),
+                new Urso("Urso Raivoso", 7.0, 5.0, 25.0)
         );
     }
 
