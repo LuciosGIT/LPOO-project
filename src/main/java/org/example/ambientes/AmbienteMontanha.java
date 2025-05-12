@@ -66,7 +66,7 @@ public class AmbienteMontanha extends Ambiente {
         //melhorar isso
         if (this.terrenoAcidentado)
         {
-            System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
+            System.out.println("O terreno acidentado dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
             jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);

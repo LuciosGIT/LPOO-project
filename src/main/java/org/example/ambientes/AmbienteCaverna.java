@@ -25,11 +25,13 @@ import static org.example.enums.TipoClimatico.CALOR;
 
 public class AmbienteCaverna extends Ambiente {
 
-    private boolean poucaLuminosidade;
+    private boolean poucaLuminosidade; // se o atributo for true, colocar na interface tela muito escura, até que o personagem utilize sua lanterna!
 
     private boolean temCriaturas;
 
     private boolean fonteAgua;
+
+    private boolean utilizandoLanterna;
 
     //construtor
     public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean poucaLuminosidade){
@@ -38,10 +40,11 @@ public class AmbienteCaverna extends Ambiente {
         this.getRecursosDisponiveis().add(new Materiais("Diamante Vermelho", null, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais("Metal Firme", null, 8.0, 40.0, 0.2, 20.0, TipoMaterial.METAL));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
+                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(1).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(2).getNivelDePerigo()));
+                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(3).getNivelDePerigo()));
         this.poucaLuminosidade = poucaLuminosidade;
+        this.utilizandoLanterna = false;
 
     }
 
@@ -60,7 +63,7 @@ public class AmbienteCaverna extends Ambiente {
         //melhorar isso
 
 
-        if (this.poucaLuminosidade)
+        if (this.poucaLuminosidade && !utilizandoLanterna)
         {
             System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
@@ -90,6 +93,10 @@ public class AmbienteCaverna extends Ambiente {
     @Override
     public void modificarClima(){
         //metodo para modificar o clima
+    }
+
+    public void ativarLanterna() {
+        this.utilizandoLanterna = true;
     }
 
 }
