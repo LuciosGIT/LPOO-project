@@ -37,11 +37,11 @@ public class Sobrevivente extends Personagem {
         this.alterarNomePersonagem(nome);
 
         sprites = new HashMap<>( Map.of(
-                "parado", new TextureRegion(new Texture("sprites/mecanico/parado.png")),
-                "direita", new TextureRegion(new Texture("sprites/mecanico/andando.png")),
-                "esquerda", new TextureRegion(new Texture("sprites/mecanico/correndo.png")),
-                "baixo", new TextureRegion(new Texture("sprites/mecanico/atacando.png")),
-                "cima", new TextureRegion(new Texture("sprites/mecanico/pulando.png"))
+                "parado", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png")),
+                "direita", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png")),
+                "esquerda", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png")),
+                "baixo", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png")),
+                "cima", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png"))
         ));
 
         //to do: criar o hashmap passando os endereçoes das texturas

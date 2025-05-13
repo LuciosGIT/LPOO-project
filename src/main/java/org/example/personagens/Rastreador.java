@@ -1,5 +1,6 @@
 package org.example.personagens;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
@@ -9,6 +10,7 @@ import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Rastreador extends Personagem {
 
@@ -34,6 +36,15 @@ public class Rastreador extends Personagem {
 
         this.alterarNomePersonagem(nome);
         //to do: criar o hashmap passando os endereçoes das texturas
+
+        sprites = new HashMap<>( Map.of(
+                "parado", new TextureRegion(new Texture("imagens/sprites/rastreador.png")),
+                "direita", new TextureRegion(new Texture("imagens/sprites/rastreador.png")),
+                "esquerda", new TextureRegion(new Texture("imagens/sprites/rastreador.png")),
+                "baixo", new TextureRegion(new Texture("imagens/sprites/rastreador.png")),
+                "cima", new TextureRegion(new Texture("imagens/sprites/rastreador.png"))
+        ));
+
     }
 
     @Override
