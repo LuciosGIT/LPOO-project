@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
@@ -45,6 +46,7 @@ public class TelaDeJogoFloresta implements Screen {
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
+    Inventory inventory;
 
     public TelaDeJogoFloresta(Game game, Personagem player){
         this.game = game;
@@ -70,6 +72,8 @@ public class TelaDeJogoFloresta implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        inventory = new Inventory(stage, 5);
 
         criarActorArvore();
 
@@ -107,6 +111,7 @@ public class TelaDeJogoFloresta implements Screen {
         inputs.inputListener(player);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+        inventory.setPosition(camera);
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 
