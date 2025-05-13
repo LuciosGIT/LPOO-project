@@ -31,7 +31,23 @@ public class BancoDeArmas  {
                 new Armas("Clava com Pedra", 12.0, null, 2.5, 70.0, 0.25, 1.0, TipoArma.CORPO)
         ));
 
-        // Adicione mais receitas conforme necessário
+        receitasDeArmas.add(new ReceitaArma(
+                TipoMaterial.METAL,
+                TipoMaterial.METAL,
+                new Armas("Lança de Guerra", 30.0, null, 4.0, 95.0, 0.15, 1.8, TipoArma.DISTANCIA)
+        ));
+
+        receitasDeArmas.add(new ReceitaArma(
+                TipoMaterial.MADEIRA,
+                TipoMaterial.MADEIRA,
+                new Armas("Bastão Duplo", 10.0, null, 2.0, 75.0, 0.3, 1.2, TipoArma.CORPO)
+        ));
+
+        receitasDeArmas.add(new ReceitaArma(
+                TipoMaterial.PEDRA,
+                TipoMaterial.PEDRA,
+                new Armas("Machado de Pedra", 25.0, null, 3.5, 85.0, 0.2, 1.5, TipoArma.CORPO)
+        ));
     }
 
     public static Armas buscarArma(TipoMaterial m1, TipoMaterial m2, Personagem personagem) {
