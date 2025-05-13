@@ -1,8 +1,9 @@
 package org.example.eventos;
 
-import jdk.jshell.execution.Util;
 import org.example.domain.*;
 import org.example.enums.TipoDescoberta;
+import org.example.personagens.Rastreador;
+import org.example.personagens.Sobrevivente;
 import org.example.utilitarios.Utilitario;
 
 import java.util.List;
@@ -13,56 +14,62 @@ public class EventoDescoberta extends Evento {
 
     private List<Item> recursosEncontrados;
 
-    // to do : implementar as habilidades requeridas para descoberta
-
-    public EventoDescoberta(boolean ativavel, String impacto, String nome, Double probabilidadeOcorrencia, String descricao, TipoDescoberta tipoDescoberta, List<Item> recursosEncontrados) {
-        super(ativavel, "Evento de criatura acionado!", impacto, nome, probabilidadeOcorrencia);
-        this.recursosEncontrados = recursosEncontrados;
+    public EventoDescoberta(boolean ativavel, String impacto, String nome, Double probabilidadeOcorrencia,
+                            String descricao, TipoDescoberta tipoDescoberta, List<Item> recursosEncontrados) {
+        super(ativavel, "Evento de descoberta acionado!", impacto, nome, probabilidadeOcorrencia);
         this.tipoDescoberta = tipoDescoberta;
-
+        this.recursosEncontrados = recursosEncontrados;
     }
 
     public EventoDescoberta() {}
 
     @Override
     public void executar(Personagem jogador, Ambiente local) {
-
-        switch (tipoDescoberta)  {
+        switch (tipoDescoberta) {
             case ABRIGO -> {
+                System.out.println("Você encontrou um abrigo!");
+
                 if (Utilitario.spawnarSobrevivente(jogador)) {
-                    System.out.println("Você encontrou um abrigo, mas um sobrevivente lhe expulsou!");
-                }
-                else {
-                    System.out.println("Você encontrou um abrigo, hora de coletar os recursos!");
+                    System.out.println("Mas um sobrevivente lhe expulsou!");
+                } else if (jogador instanceof Rastreador) {
+                    System.out.println("Você tem as habilidades para explorar e coletar os recursos.");
                     pegarItensEncontrados(jogador);
+                } else {
+                    System.out.println("Mas você não tem habilidade suficiente para explorá-lo.");
                 }
             }
+
             case CAVERNA -> {
+                System.out.println("Você encontrou uma caverna!");
+
                 if (Utilitario.spawnarMorcego(jogador)) {
-                    System.out.println("Você encontrou uma caverna, mas um bando de morcegos estava protegendo os recursos!");
-                }
-                else {
-                    System.out.println("Você encontrou uma caverna, hora de coletar os recursos!");
+                    System.out.println("Mas um bando de morcegos protege os recursos!");
+                } else if (jogador instanceof Sobrevivente) {
+                    System.out.println("Você tem as habilidades para explorar e coletar os recursos.");
                     pegarItensEncontrados(jogador);
+                } else {
+                    System.out.println("Mas você não tem habilidade suficiente para explorá-la.");
                 }
             }
+
             case RUINAS_MISTERIOSAS -> {
+                System.out.println("Você encontrou ruínas misteriosas!");
+
                 if (Utilitario.armadilhaInstaurada(jogador)) {
-                    System.out.println("Você encontrou ruínas misteriosas, mas uma armadilha lhe impediu de explorá-las!");
-                }
-                else {
-                    System.out.println("Você encontrou ruínas misteriosas, hora de coletar os recursos!");
+                    System.out.println("Mas uma armadilha o impediu de explorá-las!");
+                } else if (jogador instanceof Rastreador) {
+                    System.out.println("Você tem as habilidades para explorar e coletar os recursos.");
                     pegarItensEncontrados(jogador);
+                } else {
+                    System.out.println("Mas você não tem habilidade suficiente para explorá-las.");
                 }
             }
         }
-
     }
 
     private void pegarItensEncontrados(Personagem jogador) {
-        for(Item item : recursosEncontrados) {
+        for (Item item : recursosEncontrados) {
             jogador.getInventario().adicionarItem(item);
         }
-
     }
 }
