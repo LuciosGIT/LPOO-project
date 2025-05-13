@@ -52,7 +52,7 @@ public class TelaDeJogoCaverna implements Screen {
 
     @Override
     public void show() {
-        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta.png");
+        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoCaverna.png");
 
         this.camera = inicializarMundo.getCamera();
         this.stage = inicializarMundo.getStage();
