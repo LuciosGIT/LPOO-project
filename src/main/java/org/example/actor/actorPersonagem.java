@@ -19,14 +19,19 @@ public class actorPersonagem extends Actor {
     private TextureRegion spriteAtual;
     private Polygon collider;
 
+    private static final float CHARACTER_WIDTH = 100f;
+    private static final float CHARACTER_HEIGHT = 100f;
+
     public actorPersonagem(Personagem player) {
         this.sprites = player.getSprites();
         setPosition(100, 100);
         setTexture("parado");
 
+        setSize(CHARACTER_WIDTH, CHARACTER_HEIGHT);
+
         // Ajusta o tamanho do collider
         float width = spriteAtual.getRegionWidth() * 0.3f;   // 30% da largura
-        float height = spriteAtual.getRegionHeight() * 0.2f; // 20% da altura
+        float height = spriteAtual.getRegionHeight() * 0.15f; // 20% da altura
 
         // Define os vértices centralizados
         float[] vertices = new float[]{
