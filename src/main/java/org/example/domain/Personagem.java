@@ -42,7 +42,7 @@ public abstract class Personagem implements PersonagemInterface{
         this.vida = 100.0;
         this.sede = 50.0;
         this.sanidade = 100.0;
-        this.inventario = new Inventario(6, new ArrayList<>(), 0.0);
+        this.inventario = new Inventario(5, new ArrayList<>(), 0.0);
         this.localizacao = new AmbienteSpawn();
         this.estaEnvenenado = false;
         this.danoDeAtaque = danoDeAtaque;
