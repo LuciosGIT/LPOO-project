@@ -56,6 +56,44 @@ public abstract class Personagem implements PersonagemInterface{
         return danoDeAtaque;
     }
 
+    public void aplicarEfeitosDoTurno() {
+        // Aumenta fome e sede com o tempo
+        fome = Math.min(fome + 10, 100);
+        sede = Math.min(sede + 12, 100);
+        sanidade = Math.max(sanidade - 5, 0);
+
+        // Reduz energia conforme fome/sede aumentam
+        if (fome > 70) {
+            energia = Math.max(energia - 10, 0);
+        }
+        if (sede > 70) {
+            energia = Math.max(energia - 10, 0);
+        }
+
+        // Reduz vida se fome ou sede estiver muito alta
+        if (fome >= 90 || sede >= 90) {
+            vida = Math.max(vida - 5, 0);
+        }
+
+        // Reduz vida se sanidade estiver baixa
+        if (sanidade <= 20) {
+            vida = Math.max(vida - 3, 0);
+        }
+
+        // Exibir status
+        exibirStatus();
+    }
+
+    public void exibirStatus() {
+        System.out.println("----- Novo Turno -----");
+        System.out.println("Vida: " + vida);
+        System.out.println("Energia: " + energia);
+        System.out.println("Fome: " + fome);
+        System.out.println("Sede: " + sede);
+        System.out.println("Sanidade: " + sanidade);
+        System.out.println("----------------------");
+    }
+
     public Double getEnergia() {
         return energia;
     }
