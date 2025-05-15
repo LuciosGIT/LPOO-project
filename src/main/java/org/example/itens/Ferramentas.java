@@ -91,4 +91,26 @@ public class Ferramentas extends Item {
     public void setEficiencia(Double eficiencia) {
         this.eficiencia = eficiencia;
     }
+
+    @Override
+    public String getImage() {
+
+        switch (this.tipoFerramenta) {
+            case FACA -> {
+                return "imagens/assets/itens/faca.png";
+            }
+            case MACHADO -> {
+                return "imagens/assets/itens/machado.png";
+            }
+            case ISQUEIRO -> {
+                return "imagens/assets/itens/isqueiro.png";
+            }
+            case LANTERNA -> {
+                return "imagens/assets/itens/lanterna.png";
+            }
+
+        }
+        return "imagens/assets/itens/default.png";
+    }
+
 }

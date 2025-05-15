@@ -28,16 +28,10 @@ public class Inventory {
         inventoryTable.setZIndex(9999);
         stage.setDebugAll(false);
 
-        for (int i = 0; i < cols; i++) {
-            Drawable slotDrawable = createSlotDrawable();
-            Image slotImage = new Image(slotDrawable);
-            inventoryTable.add(slotImage).size(64, 64).pad(5);
-        }
-
-        inventoryTable.pack();
-
         Inventario inventarioDoPlayer = actorPlayer.getPlayer().getInventario();
         itensInventario = inventarioDoPlayer.getListaDeItems();
+
+        updateInventory(); // Initialize inventory display
     }
 
     public void setPosition(OrthographicCamera camera) {
@@ -74,8 +68,11 @@ public class Inventory {
 
     public void updateInventory() {
         inventoryTable.clearChildren();
+        int cols = 5; // Number of items per row
 
         for (int i = 0; i < itensInventario.size(); i++) {
+            Item item = itensInventario.get(i);
+
             // Create a container for each slot
             Table slotContainer = new Table();
 
@@ -85,19 +82,26 @@ public class Inventory {
             slotContainer.add(slotImage).size(64, 64);
 
             // Add item image if exists
-            Item item = itensInventario.get(i);
             if (item != null) {
                 String imagePath = item.getImage();
                 if (imagePath != null) {
                     Texture itemTexture = new Texture(imagePath);
                     Image itemImage = new Image(itemTexture);
                     itemImage.setSize(48, 48);
-                    // Stack item on top of slot
-                    slotContainer.add(itemImage).size(48, 48).expand().center();
+                    // Position the item image in the center of the slot
+                    itemImage.setPosition(
+                            (64 - 48) / 2, // center horizontally
+                            (64 - 48) / 2  // center vertically
+                    );
+                    slotContainer.addActor(itemImage); // Add as actor instead of cell
                 }
             }
 
             inventoryTable.add(slotContainer).pad(5);
+
+            if ((i + 1) % cols == 0) {
+                inventoryTable.row();
+            }
         }
 
         inventoryTable.pack();

@@ -36,7 +36,21 @@ public class Mecanico extends Personagem {
                 0.3,
                 15.0,
                 TipoFerramenta.FACA));
+        this.getInventario().adicionarItem(new Materiais("Madeira",
+                this,
+                2.5,
+                70.0,
+                0.3,
+                15.0,
+                TipoMaterial.MADEIRA));
 
+        this.getInventario().adicionarItem(new Ferramentas("Madeira",
+                this,
+                2.5,
+                70.0,
+                0.3,
+                15.0,
+                TipoFerramenta.ISQUEIRO));
 
         sprites = new HashMap<>( Map.of(
                 "parado", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),
