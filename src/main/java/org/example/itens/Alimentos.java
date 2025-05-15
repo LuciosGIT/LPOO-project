@@ -92,4 +92,33 @@ public class  Alimentos extends Item {
         }
         this.valorNutricional = valorNutricional;
     }
+
+    @Override
+    public String getImage(){
+        switch (this.tipoAlimento){
+            case CARNE -> {
+                return "imagens/assets/itens/alimentos/carne.png";
+            }
+            case FRUTA -> {
+                return "imagens/assets/itens/alimentos/fruta.png";
+            }
+            case PEIXE -> {
+                return "imagens/assets/itens/alimentos/peixe.png";
+            }
+            case RAIZES -> {
+                return "imagens/assets/itens/alimentos/raizes.png";
+            }
+            case COGUMELO -> {
+                return "imagens/assets/itens/alimentos/cogumelo.png";
+            }
+            case ENLATADO -> {
+                return "imagens/assets/itens/alimentos/enlatado.png"; // to do: colocar o caminho da imagem do enlatado
+            }
+            default -> {
+                return "imagens/assets/itens/default.png";
+            }
+
+        }
+    }
+
 }

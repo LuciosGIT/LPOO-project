@@ -97,16 +97,16 @@ public class Ferramentas extends Item {
 
         switch (this.tipoFerramenta) {
             case FACA -> {
-                return "imagens/assets/itens/faca.png";
+                return "imagens/assets/itens/ferramentas/faca.png";
             }
             case MACHADO -> {
-                return "imagens/assets/itens/machado.png";
+                return "imagens/assets/itens/ferramentas/machado.png";
             }
             case ISQUEIRO -> {
-                return "imagens/assets/itens/isqueiro.png";
+                return "imagens/assets/itens/ferramentas/isqueiro.png";
             }
             case LANTERNA -> {
-                return "imagens/assets/itens/lanterna.png";
+                return "imagens/assets/itens/ferramentas/lanterna.png";
             }
 
         }

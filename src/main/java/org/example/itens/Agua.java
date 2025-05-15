@@ -60,4 +60,23 @@ public class Agua extends Item {
     public void alterarVolume(Double volume) {
         this.volume = volume;
     }
+
+    @Override
+    public String getImage(){
+        switch (this.pureza){
+
+            case POTAVEL -> {
+                return "imagens/assets/itens/alimentos/aguaPotavel.png";
+            }
+            case CONTAMINADA -> {
+                return "imagens/assets/itens/alimentos/aguaContaminada.png";
+            }
+
+            default -> {
+                return "imagens/assets/itens/default.png";
+            }
+        }
+
+
+    }
 }

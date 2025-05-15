@@ -80,4 +80,24 @@ public class Armas extends Item {
     public void setTipoArma(TipoArma tipoArma) {
         this.tipoArma = tipoArma;
     }
+
+    @Override
+    public String getImage() {
+        switch (this.getNomeItem()){
+            case "MACHADO":
+                return "imagens/assets/itens/armas/machadoArma.png";
+            case "ESPADA":
+                return "imagens/assets/itens/armas/espada.png";
+            case "FACA":
+                return "imagens/assets/itens/armas/facaArma.png";
+            case "ARCO":
+                return "imagens/assets/itens/armas/arco.png";
+            case "BESTA":
+                return "imagens/assets/itens/armas/besta.png";
+            case "REVOLVER":
+                return "imagens/assets/itens/armas/revolver.png";
+            default:
+                return "imagens/assets/itens/default.png";
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package org.example.itens;
 
 import org.example.construcao.BancoDeReceitas;
-import org.example.construcao.Receita;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
@@ -88,16 +87,19 @@ public class Materiais extends Item {
 
         switch (this.tipoMaterial){
             case METAL -> {
-                return "imagens/assets/itens/metal.png";
+                return "imagens/assets/itens/recursos/metal.png";
             }
             case PEDRA -> {
-                return "imagens/assets/itens/pedra.png";
+                return "imagens/assets/itens/recursos/pedra.png";
             }
             case MADEIRA -> {
-                return "imagens/assets/itens/madeira.png";
+                return "imagens/assets/itens/recursos/madeira.png";
+            }
+            default -> {
+                return "imagens/assets/itens/default.png";
             }
         }
-        return "imagens/assets/itens/default.png";
+
     }
 
 

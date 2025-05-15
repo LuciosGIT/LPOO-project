@@ -5,11 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.construcao.BancoDeArmas;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
+import org.example.enums.TipoArma;
 import org.example.enums.TipoFerramenta;
 import org.example.enums.TipoMaterial;
 import org.example.itens.Armas;
 import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
+import org.example.itens.Remedios;
+import org.example.enums.TipoRemedio;
 
 import javax.naming.NameNotFoundException;
 import java.util.*;
@@ -51,6 +54,15 @@ public class Mecanico extends Personagem {
                 0.3,
                 15.0,
                 TipoFerramenta.ISQUEIRO));
+
+        this.getInventario().adicionarItem(new Remedios(
+                "Remédio",
+                this,
+                2.5,
+                70.0,
+                0.3,
+                TipoRemedio.BANDAGEM
+        ));
 
         sprites = new HashMap<>( Map.of(
                 "parado", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),

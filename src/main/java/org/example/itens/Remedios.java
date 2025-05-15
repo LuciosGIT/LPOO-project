@@ -25,4 +25,23 @@ public class Remedios extends Item {
             case TRATAR -> this.getPersonagem().aumentarVida(10.0);
         }
     }
+
+    @Override
+    public String getImage() {
+        switch (tipoRemedio) {
+            case POCAO -> {
+                return "imagens/assets/itens/remedio/cura.png";
+            }
+            case BANDAGEM -> {
+                return "imagens/assets/itens/remedio/bandagem.png";
+            }
+            case ANTIBIOTICO -> {
+                return "imagens/assets/itens/remedio/trata.png";
+            }
+            default -> {
+                return "imagens/assets/itens/default.png";
+            }
+        }
+    }
+
 }
