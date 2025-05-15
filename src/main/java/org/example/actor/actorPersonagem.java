@@ -15,6 +15,7 @@ import java.util.List;
 
 public class actorPersonagem extends Actor {
 
+    private Personagem player;
     private final HashMap<String, TextureRegion> sprites;
     private TextureRegion spriteAtual;
     private Polygon collider;
@@ -43,6 +44,7 @@ public class actorPersonagem extends Actor {
 
         collider = new Polygon(vertices);
         collider.setPosition(getX() + (float) spriteAtual.getRegionWidth() /2, getY());
+        this.player = player;
     }
 
     @Override
@@ -61,6 +63,10 @@ public class actorPersonagem extends Actor {
         }
     }
 
+    public Personagem getPlayer() {
+        return this.player;
+    }
+
     public void setTexture(String key) {
         if (sprites.containsKey(key)) {
 
@@ -77,8 +83,6 @@ public class actorPersonagem extends Actor {
     private void setColliderPosition() {
         collider.setPosition(this.getX(), this.getY());
     }
-
-
 
     public void checkCollision(List<actorArvore> arvores) {
         for(actorArvore arvore : arvores) {

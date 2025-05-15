@@ -73,7 +73,7 @@ public class TelaDeJogoFloresta implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
-        inventory = new Inventory(stage, 5);
+        inventory = new Inventory(stage, 5, actorPlayer);
 
         criarActorArvore();
 
@@ -112,6 +112,7 @@ public class TelaDeJogoFloresta implements Screen {
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
+        inventory.updateInventory();
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 

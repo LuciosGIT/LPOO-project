@@ -105,4 +105,9 @@ public abstract class Item implements ItemInterface {
     public void setDurabilidade(Double durabilidade) {
         this.durabilidade = durabilidade;
     }
+
+    public String getImage() {
+        // Default implementation
+        return "imagens/assets/itens/default.png";
+    }
 }

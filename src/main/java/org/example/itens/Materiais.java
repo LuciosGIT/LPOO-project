@@ -82,4 +82,23 @@ public class Materiais extends Item {
     public void setTipoMaterial(TipoMaterial tipoMaterial) {
         this.tipoMaterial = tipoMaterial;
     }
+
+    @Override
+    public String getImage(){
+
+        switch (this.tipoMaterial){
+            case METAL -> {
+                return "imagens/assets/itens/metal.png";
+            }
+            case PEDRA -> {
+                return "imagens/assets/itens/pedra.png";
+            }
+            case MADEIRA -> {
+                return "imagens/assets/itens/madeira.png";
+            }
+        }
+        return "imagens/assets/itens/default.png";
+    }
+
+
 }

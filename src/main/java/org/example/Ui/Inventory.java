@@ -11,11 +11,16 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import org.example.actor.actorPersonagem;
+import org.example.domain.Item;
+import org.example.itens.Inventario;
+import java.util.List;
 
 public class Inventory {
     private Table inventoryTable;
 
-    public Inventory(Stage stage, int cols) {
+    private final List<Item> itensInventario;
+
+    public Inventory(Stage stage, int cols, actorPersonagem actorPlayer) {
         inventoryTable = new Table();
         stage.addActor(inventoryTable);
 
@@ -30,6 +35,9 @@ public class Inventory {
         }
 
         inventoryTable.pack();
+
+        Inventario inventarioDoPlayer = actorPlayer.getPlayer().getInventario();
+        itensInventario = inventarioDoPlayer.getListaDeItems();
     }
 
     public void setPosition(OrthographicCamera camera) {
@@ -64,5 +72,34 @@ public class Inventory {
         return new NinePatchDrawable(patch);
     }
 
+    public void updateInventory() {
+        inventoryTable.clearChildren();
 
+        for (int i = 0; i < itensInventario.size(); i++) {
+            // Create a container for each slot
+            Table slotContainer = new Table();
+
+            // Add slot background
+            Drawable slotDrawable = createSlotDrawable();
+            Image slotImage = new Image(slotDrawable);
+            slotContainer.add(slotImage).size(64, 64);
+
+            // Add item image if exists
+            Item item = itensInventario.get(i);
+            if (item != null) {
+                String imagePath = item.getImage();
+                if (imagePath != null) {
+                    Texture itemTexture = new Texture(imagePath);
+                    Image itemImage = new Image(itemTexture);
+                    itemImage.setSize(48, 48);
+                    // Stack item on top of slot
+                    slotContainer.add(itemImage).size(48, 48).expand().center();
+                }
+            }
+
+            inventoryTable.add(slotContainer).pad(5);
+        }
+
+        inventoryTable.pack();
+    }
 }
