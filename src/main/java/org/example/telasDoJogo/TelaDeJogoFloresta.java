@@ -76,6 +76,7 @@ public class TelaDeJogoFloresta implements Screen {
         inventory = new Inventory(stage, 5, actorPlayer);
 
         criarActorArvore();
+        inventory.updateInventory();
 
     }
 
@@ -112,7 +113,7 @@ public class TelaDeJogoFloresta implements Screen {
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
-        inventory.updateInventory();
+
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 
@@ -139,7 +140,9 @@ public class TelaDeJogoFloresta implements Screen {
         for(actorArvore arvore : listaDeArvores){
             arvore.dispose();
         }
-        // Dispose of other resources if needed
+
+        inventory.dispose();
+
     }
 
     private void movement(float deltaTime) {
