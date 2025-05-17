@@ -57,7 +57,7 @@ public class Inventario {
             if (item.getNomeItem().equals(nomeItem)) {
                 itemEncontrado = true;
 
-                if (item instanceof Agua || item instanceof Alimentos || item instanceof Ferramentas) {
+                if (item instanceof Agua || item instanceof Alimentos || item instanceof Ferramentas || item instanceof Remedios) {
                     item.usar();
                     this.removerItem(nomeItem);
                 } else {

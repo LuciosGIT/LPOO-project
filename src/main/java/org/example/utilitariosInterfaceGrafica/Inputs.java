@@ -8,11 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Inventory;
 import org.example.actor.actorPersonagem;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
+
+import java.util.List;
 
 public class Inputs {
 
     private Personagem player;
+    private int keySelect;
 
     public void inputListener(actorPersonagem actorplayer, Inventory inventory) {
 
@@ -20,7 +24,7 @@ public class Inputs {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             executarTeclaQ();
-            player.diminuirVida(5.0);
+
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
@@ -39,16 +43,14 @@ public class Inputs {
             executarTeclaD(actorplayer);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            executarTeclaE();
-        }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             executarTeclaR();
+            player.diminuirVida(5.0);
         }
 
 
         inputsInventario(inventory);
+        keySelectListener(actorplayer, inventory);
 
     }
 
@@ -61,6 +63,7 @@ public class Inputs {
                 Table slotContainer = (Table) inventoryTable.getChildren().get(0);
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 1;
                 }
             }
         }
@@ -71,6 +74,7 @@ public class Inputs {
                 Table slotContainer = (Table) inventoryTable.getChildren().get(1);
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 2;
                 }
             }
         }
@@ -81,6 +85,7 @@ public class Inputs {
                 Table slotContainer = (Table) inventoryTable.getChildren().get(2);
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 3;
                 }
             }
         }
@@ -91,6 +96,7 @@ public class Inputs {
                 Table slotContainer = (Table) inventoryTable.getChildren().get(3);
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 4;
                 }
             }
         }
@@ -101,6 +107,25 @@ public class Inputs {
                 Table slotContainer = (Table) inventoryTable.getChildren().get(4);
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 5;
+                }
+            }
+        }
+    }
+
+    private void keySelectListener(actorPersonagem actorplayer, Inventory inventory) {
+        List<Item> itensInventario = actorplayer.getPlayer().getInventario().getListaDeItems();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            if (keySelect >= 1 && keySelect <= 5) {
+                int index = keySelect - 1;
+                if (index < itensInventario.size()) {
+                    try {
+                        actorplayer.getPlayer().getInventario().usarItem(itensInventario.get(index).getNomeItem());
+                        inventory.updateInventory();
+                    } catch (javax.naming.NameNotFoundException e) {
+                        System.out.println("Item not found: " + e.getMessage());
+                    }
                 }
             }
         }
@@ -116,23 +141,23 @@ public class Inputs {
     }
 
     private void executarTeclaW(actorPersonagem actorplayer) {
-         System.out.println("Tecla W pressionada");
+
     }
 
     private void executarTeclaA(actorPersonagem actorplayer) {
-        System.out.println("Tecla A pressionada");
+
     }
 
     private void executarTeclaS(actorPersonagem actorplayer) {
-        System.out.println("Tecla S pressionada");
+
     }
 
     private void executarTeclaD(actorPersonagem actorplayer) {
-        System.out.println("Tecla D pressionada");
+
     }
 
     private void executarTeclaQ() {
-        System.out.println("Tecla Q pressionada");
+
         Timer.schedule(new Timer.Task(){
             @Override
             public void run(){
@@ -141,12 +166,9 @@ public class Inputs {
         }, 1.0f);
     }
 
-    private void executarTeclaE() {
-        System.out.println("Tecla E pressionada");
-    }
 
     private void executarTeclaR() {
-        System.out.println("Tecla R pressionada");
+
     }
 
 }
