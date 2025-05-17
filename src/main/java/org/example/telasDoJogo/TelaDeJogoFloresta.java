@@ -109,7 +109,7 @@ public class TelaDeJogoFloresta implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(player);
+        inputs.inputListener(actorPlayer);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
@@ -146,33 +146,17 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void movement(float deltaTime) {
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            Timer.schedule(new Timer.Task() {
-                @Override
-                public void run() {
-                    // Limpa ações anteriores
-                    actorPlayer.clearActions();
 
-                    // Obtém coordenadas do clique e converte para coordenadas do mundo
-                    Vector2 clickPos = stage.screenToStageCoordinates(
-                            new Vector2(Gdx.input.getX(), Gdx.input.getY())
-                    );
+        float dx = 0, dy = 0;
+        float moveSpeed = 200f;
 
-                    // Posição atual do personagem
-                    Vector2 playerPos = new Vector2(actorPlayer.getX(), actorPlayer.getY());
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * deltaTime;
 
-                    // Velocidade constante em pixels por segundo
-                    float velocidadeConstante = 150f;
+        actorPlayer.moveBy(dx, dy);
 
-                    // Calcula o tempo baseado em uma velocidade fixa
-                    float distancia = playerPos.dst(clickPos);
-                    float tempo = distancia / velocidadeConstante;
-
-                    // Move o personagem
-                    actorPlayer.addAction(Actions.moveTo(clickPos.x, clickPos.y, tempo));
-                }
-            }, 0.35f);
-        }
     }
 
     private void camera() {
