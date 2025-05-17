@@ -13,12 +13,16 @@ import com.badlogic.gdx.graphics.Texture;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Item;
 import org.example.itens.Inventario;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Inventory {
     private Table inventoryTable;
 
     private final List<Item> itensInventario;
+
+    private List<Texture> textureToDispose = new ArrayList<>();
 
     public Inventory(Stage stage, int cols, actorPersonagem actorPlayer) {
         inventoryTable = new Table();
@@ -59,6 +63,7 @@ public class Inventory {
 
         // Create texture from pixmap
         Texture texture = new Texture(pixmap);
+        textureToDispose.add(texture);
         pixmap.dispose();
 
         // Create NinePatch for better scaling
@@ -86,6 +91,7 @@ public class Inventory {
                 String imagePath = item.getImage();
                 if (imagePath != null) {
                     Texture itemTexture = new Texture(imagePath);
+                    textureToDispose.add(itemTexture);
                     Image itemImage = new Image(itemTexture);
                     itemImage.setSize(48, 48);
                     // Position the item image in the center of the slot
@@ -106,4 +112,11 @@ public class Inventory {
 
         inventoryTable.pack();
     }
+
+    public void dispose(){
+        for(Texture texture : textureToDispose){
+            texture.dispose();
+        }
+    }
+
 }
