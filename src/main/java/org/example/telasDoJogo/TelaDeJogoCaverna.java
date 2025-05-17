@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
@@ -42,6 +43,8 @@ public class TelaDeJogoCaverna implements Screen {
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
+    Inventory inventory;
+
 
     public TelaDeJogoCaverna(Game game, Personagem player){
         this.game = game;
@@ -67,6 +70,10 @@ public class TelaDeJogoCaverna implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        inventory = new Inventory(stage, 5, actorPlayer);
+        inventory.updateInventory();
+
 
     }
 
@@ -104,6 +111,8 @@ public class TelaDeJogoCaverna implements Screen {
         lifeBar.setLifeBarValue(player.getVida());
         sairDoCenario();
 
+        inventory.setPosition(camera);
+
     }
 
     @Override
@@ -125,7 +134,8 @@ public class TelaDeJogoCaverna implements Screen {
     public void dispose() {
         inicializarMundo.dispose();
 
-        // Dispose of other resources if needed
+        inventory.dispose();
+
     }
 
     private void movement(float deltaTime) {
