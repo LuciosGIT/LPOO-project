@@ -218,7 +218,7 @@ public class TelaDeJogoFloresta implements Screen {
 
             // Se a posição for válida, cria a árvore
             if(posicaoValida) {
-                actorArvore novaArvore = new actorArvore(posX, posY);
+                actorArvore novaArvore = new actorArvore(posX, posY, player);
                 listaDeArvores.add(novaArvore);
                 stage.addActor(novaArvore);
                 arvoresCriadas++;

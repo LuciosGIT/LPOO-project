@@ -11,14 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.math.Polygon;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
+import org.example.enums.TipoMaterial;
+import org.example.itens.Materiais;
 
 public class actorArvore extends Actor{
 
     private final Texture textureArvore;
     private Polygon collider;
+    private int batidas = 0;
+    private Personagem player;
 
-    public actorArvore(float x, float y) {
+    public actorArvore(float x, float y, Personagem player) {
         textureArvore = new Texture(Gdx.files.internal("imagens/itens do cenario/arvoreFloresta.png"));
         setBounds(x,y, textureArvore.getWidth()*0.5f, textureArvore.getHeight()*0.5f);
         setPosition(x, y);
@@ -48,7 +53,7 @@ public class actorArvore extends Actor{
             }
         });
 
-
+        this.player = player;
 
     }
 
@@ -72,6 +77,7 @@ public class actorArvore extends Actor{
 
     private void interagir() {
 
+
         this.clearActions();
 
         Action tremer = Actions.sequence(
@@ -87,12 +93,36 @@ public class actorArvore extends Actor{
                 Actions.rotateTo(0, 0.1f)  // Retorna à rotação original (0 graus)
         );
 
+        //to do: remover collider e colocar um e ajeitar a adição de itens
 
-        this.addAction(tremer);
+
+        if(batidas < 10){
+            batidas++;
+            System.out.println("Batida na arvore: " + batidas);
+            this.addAction(tremer);
+        } else {
+            System.out.println("Arvore derrubada");
+            try {
+                Item madeira = new Materiais(10.0,TipoMaterial.MADEIRA);
+                if (player != null && player.getInventario() != null) {
+                    player.getInventario().adicionarItem(madeira);
+                    dispose();
+                    this.remove();
+                }
+            } catch (Exception e) {
+                System.err.println("Error adding item to inventory: " + e.getMessage());
+            }
+        }
 
     }
 
+
+
     public boolean checkCollision(Polygon other) {
+        if (getStage() == null) {
+            return false;
+        }
+
         return collider.getBoundingRectangle().overlaps(other.getBoundingRectangle());
     }
 
