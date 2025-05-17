@@ -129,6 +129,21 @@ public class Inputs {
                 }
             }
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            if (keySelect >= 1 && keySelect <= 5) {
+                int index = keySelect - 1;
+                if (index < itensInventario.size()) {
+                    try {
+                        actorplayer.getPlayer().getInventario().removerItem(itensInventario.get(index).getNomeItem());
+                        inventory.updateInventory();
+                    } catch (javax.naming.NameNotFoundException e) {
+                        System.out.println("Item not found: " + e.getMessage());
+                    }
+                }
+            }
+        }
+
     }
 
     private void clearColor(Table inventoryTable) {
@@ -165,7 +180,6 @@ public class Inputs {
             }
         }, 1.0f);
     }
-
 
     private void executarTeclaR() {
 
