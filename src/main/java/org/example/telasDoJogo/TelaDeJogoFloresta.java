@@ -193,7 +193,7 @@ public class TelaDeJogoFloresta implements Screen {
 
     private void criarActorArvore() {
 
-        float espacoMinimo = 200f; // Espaço mínimo entre árvores
+        float espacoMinimo = 250f; // Espaço mínimo entre árvores
         int maxTentativas = 30;    // Evita loop infinito
         int arvoresCriadas = 0;
 

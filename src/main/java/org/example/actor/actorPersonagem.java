@@ -95,10 +95,10 @@ public class actorPersonagem extends Actor {
 
                 // Se o jogador está à esquerda da árvore, move para esquerda
                 // Se está à direita, move para direita
-                float moveX = playerCenterX < arvoreCenterX ? -20 : 20;
+                float moveX = playerCenterX < arvoreCenterX ? -5 : 5;
 
                 // Aplica o movimento de repulsão
-                addAction(Actions.moveBy(moveX, 0, 0.2f));
+                addAction(Actions.moveBy(moveX, 0, 0.01f));
                 break;
             }
         }
