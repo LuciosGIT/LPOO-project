@@ -72,6 +72,7 @@ public class TelaDeJogoCaverna implements Screen {
         stage.addActor(lifeBar.getLifeBar());
 
         inventory = new Inventory(stage, 5, actorPlayer);
+        stage.addActor(inventory.getInventoryTable());
         inventory.updateInventory();
 
 
@@ -106,7 +107,7 @@ public class TelaDeJogoCaverna implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer);
+        inputs.inputListener(actorPlayer, inventory);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         sairDoCenario();

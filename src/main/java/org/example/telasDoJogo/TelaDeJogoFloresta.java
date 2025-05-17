@@ -109,7 +109,7 @@ public class TelaDeJogoFloresta implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer);
+        inputs.inputListener(actorPlayer,inventory);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
@@ -252,6 +252,8 @@ public class TelaDeJogoFloresta implements Screen {
 
         }
     }
+
+
 
 
 }
