@@ -86,6 +86,9 @@ public class actorPersonagem extends Actor {
 
     public void checkCollision(List<actorArvore> arvores) {
         for(actorArvore arvore : arvores) {
+            if(arvore.getCollider() == null) {
+                continue;
+            }
             if(Intersector.overlaps(collider.getBoundingRectangle(), arvore.getCollider().getBoundingRectangle())) {
                 this.clearActions();
 

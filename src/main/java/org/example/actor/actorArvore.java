@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.math.Polygon;
+import org.example.Ui.Inventory;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
@@ -22,8 +23,9 @@ public class actorArvore extends Actor{
     private Polygon collider;
     private int batidas = 0;
     private Personagem player;
+    private Inventory inventory;
 
-    public actorArvore(float x, float y, Personagem player) {
+    public actorArvore(float x, float y, Personagem player, Inventory inventory) {
         textureArvore = new Texture(Gdx.files.internal("imagens/itens do cenario/arvoreFloresta.png"));
         setBounds(x,y, textureArvore.getWidth()*0.5f, textureArvore.getHeight()*0.5f);
         setPosition(x, y);
@@ -54,7 +56,7 @@ public class actorArvore extends Actor{
         });
 
         this.player = player;
-
+        this.inventory = inventory;
     }
 
     @Override
@@ -97,15 +99,27 @@ public class actorArvore extends Actor{
 
 
         if(batidas < 10){
+
             batidas++;
             System.out.println("Batida na arvore: " + batidas);
             this.addAction(tremer);
+
         } else {
             System.out.println("Arvore derrubada");
             try {
-                Item madeira = new Materiais(10.0,TipoMaterial.MADEIRA);
+
+                Item madeira = new Materiais("Madeira",
+                        player,
+                        2.5,
+                        70.0,
+                        0.3,
+                        15.0,
+                        TipoMaterial.MADEIRA);
+
                 if (player != null && player.getInventario() != null) {
                     player.getInventario().adicionarItem(madeira);
+                    inventory.updateInventory();
+                    collider = null;
                     dispose();
                     this.remove();
                 }
@@ -116,19 +130,6 @@ public class actorArvore extends Actor{
 
     }
 
-
-
-    public boolean checkCollision(Polygon other) {
-        if (getStage() == null) {
-            return false;
-        }
-
-        return collider.getBoundingRectangle().overlaps(other.getBoundingRectangle());
-    }
-
-    public void setCollider(Polygon collider) {
-        this.collider = collider;
-    }
 
     public Polygon getCollider() {
         return collider;
