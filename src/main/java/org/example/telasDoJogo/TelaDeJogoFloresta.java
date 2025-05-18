@@ -19,6 +19,7 @@ import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
+import org.example.actor.actorPilhaDeItem;
 import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
@@ -28,11 +29,12 @@ import java.util.List;
 
 public class TelaDeJogoFloresta implements Screen {
 
-    private Game game;
-    private Personagem player;
-    private actorPersonagem actorPlayer;
+    private final Game game;
+    private final Personagem player;
+    private final actorPersonagem actorPlayer;
     actorArvore arvore;
-    private List<actorArvore> listaDeArvores = new ArrayList<>();
+    private final List<actorArvore> listaDeArvores = new ArrayList<>();
+    private actorPilhaDeItem pilhaDeItem;
     private Texture backgroundFloresta;
     private Batch batch;
     private Stage stage;
@@ -57,6 +59,7 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void show() {
+
         inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
         this.camera = inicializarMundo.getCamera();
@@ -75,8 +78,14 @@ public class TelaDeJogoFloresta implements Screen {
 
         inventory = new Inventory(stage, 5, actorPlayer);
 
+        pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
+        stage.addActor(pilhaDeItem);
+
+        stage.addActor(actorPlayer);
+
         criarActorArvore();
         inventory.updateInventory();
+
 
     }
 
@@ -116,6 +125,7 @@ public class TelaDeJogoFloresta implements Screen {
 
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
+
 
     }
 

@@ -47,7 +47,6 @@ public class InicializarMundo {
                 worldWidth / 2 - actorPlayer.getWidth() / 2,
                 worldHeight / 2 - actorPlayer.getHeight() / 2
         );
-        stage.addActor(actorPlayer);
 
         // 7. Aplica zoom por último
         camera.zoom = 0.7f; // Teste com 0.5 para ver se está funcionando

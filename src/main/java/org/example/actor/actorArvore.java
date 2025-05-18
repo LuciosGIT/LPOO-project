@@ -30,6 +30,8 @@ public class actorArvore extends Actor{
         setBounds(x,y, textureArvore.getWidth()*0.5f, textureArvore.getHeight()*0.5f);
         setPosition(x, y);
 
+        setZIndex(10);
+
         setOrigin(getWidth()/2, getHeight()/2);
 
         float baseWidth = getWidth() * 0.5f;    // 60% da largura
