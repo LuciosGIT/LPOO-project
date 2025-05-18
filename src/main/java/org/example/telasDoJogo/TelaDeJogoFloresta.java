@@ -253,7 +253,7 @@ public class TelaDeJogoFloresta implements Screen {
         boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
         boolean naBordaInferior = playerY <= margin;
 
-        if (naBoradaEsquerda || naBordaDireita || naBordaSuperior || naBordaInferior) {
+        if (naBoradaEsquerda || naBordaDireita || naBordaSuperior) {
 
             actorPlayer.addAction(Actions.fadeIn(0.1f));
 
@@ -261,6 +261,14 @@ public class TelaDeJogoFloresta implements Screen {
             dispose();
 
         }
+
+        if (naBordaInferior) {
+            actorPlayer.addAction(Actions.fadeIn(0.1f));
+
+            game.setScreen(new TelaDeJogoLagoRio(game, player));
+            dispose();
+        }
+
     }
 
 
