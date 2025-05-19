@@ -3,6 +3,7 @@ package org.example.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,15 +19,18 @@ import org.example.itens.Agua;
 public class actorLago extends Actor implements Collidable {
 
     private final Texture texturaLago;
-    private Polygon collider;
-    private int interacoes = 0;
+    private final Polygon collider;
     private final Personagem player;
     private final Inventory inventory;
+    private final Pureza pureza;
+
+    private int interacoes = 0;
 
     public actorLago(float x, float y, Personagem player, Inventory inventory) {
         this.texturaLago = new Texture(Gdx.files.internal("imagens/itens do cenario/lago.png"));
         this.player = player;
         this.inventory = inventory;
+        this.pureza = MathUtils.randomBoolean(0.7f) ? Pureza.POTAVEL : Pureza.CONTAMINADA;
 
         setBounds(x, y, texturaLago.getWidth() * 0.5f, texturaLago.getHeight() * 0.5f);
         setPosition(x, y);
@@ -64,21 +68,28 @@ public class actorLago extends Actor implements Collidable {
                 false, false);
     }
 
-
-
     public void dispose() {
         texturaLago.dispose();
     }
 
     private void interagir() {
-
         this.clearActions();
 
-        Action animacao = Actions.sequence(
-                Actions.alpha(0.5f, 0.1f),
-                Actions.alpha(1f, 0.1f)
+        Action animacaoCombinada = Actions.parallel(
+                Actions.sequence(
+                        Actions.rotateBy(2, 0.1f),
+                        Actions.rotateTo(0, 0.1f),
+                        Actions.rotateBy(-2, 0.1f),
+                        Actions.rotateTo(0, 0.1f),
+                        Actions.rotateBy(1.5f, 0.1f),
+                        Actions.rotateTo(0, 0.1f)
+                ),
+                Actions.sequence(
+                        Actions.alpha(0.5f, 0.1f),
+                        Actions.alpha(1f, 0.1f)
+                )
         );
-        this.addAction(animacao);
+        this.addAction(animacaoCombinada);
 
         interacoes++;
         System.out.println("Interação com lago: " + interacoes);
@@ -86,20 +97,19 @@ public class actorLago extends Actor implements Collidable {
         if (interacoes >= 5) {
             try {
                 Item agua = new Agua(
-                        "Água Potável",
+                        pureza == Pureza.POTAVEL ? "Água Potável" : "Água Contaminada",
                         player,
                         0.5,
                         1.0,
                         0.5,
-                        Pureza.POTAVEL,
+                        pureza,
                         25.0
                 );
 
                 if (player != null && player.getInventario() != null) {
                     player.getInventario().adicionarItem(agua);
                     inventory.updateInventory();
-                    // dispose();
-                    // this.remove();
+                    System.out.println("Item adicionado: " + agua.getNomeItem() + " (" + pureza + ")");
                 }
             } catch (Exception e) {
                 System.err.println("Erro ao adicionar água ao inventário: " + e.getMessage());
