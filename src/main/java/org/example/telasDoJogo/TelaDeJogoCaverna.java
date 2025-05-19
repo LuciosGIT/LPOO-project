@@ -75,6 +75,8 @@ public class TelaDeJogoCaverna implements Screen {
         stage.addActor(inventory.getInventoryTable());
         inventory.updateInventory();
 
+        stage.addActor(actorPlayer);
+
 
     }
 
