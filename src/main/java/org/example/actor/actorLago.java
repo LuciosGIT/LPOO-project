@@ -15,7 +15,7 @@ import org.example.domain.Personagem;
 import org.example.enums.Pureza;
 import org.example.itens.Agua;
 
-public class actorLago extends Actor {
+public class actorLago extends Actor implements Collidable {
 
     private final Texture texturaLago;
     private Polygon collider;
@@ -64,6 +64,8 @@ public class actorLago extends Actor {
                 false, false);
     }
 
+
+
     public void dispose() {
         texturaLago.dispose();
     }
@@ -92,16 +94,20 @@ public class actorLago extends Actor {
                         Pureza.POTAVEL,
                         25.0
                 );
-                player.getInventario().adicionarItem(agua);
-                inventory.updateInventory();
-                interacoes = 0; // Reinicia após adicionar Água
-                System.out.println("Água coletada do lago!");
+
+                if (player != null && player.getInventario() != null) {
+                    player.getInventario().adicionarItem(agua);
+                    inventory.updateInventory();
+                    // dispose();
+                    // this.remove();
+                }
             } catch (Exception e) {
                 System.err.println("Erro ao adicionar água ao inventário: " + e.getMessage());
             }
         }
     }
 
+    @Override
     public Polygon getCollider() {
         return collider;
     }

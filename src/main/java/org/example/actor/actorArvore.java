@@ -17,7 +17,9 @@ import org.example.domain.Personagem;
 import org.example.enums.TipoMaterial;
 import org.example.itens.Materiais;
 
-public class actorArvore extends Actor{
+import java.awt.*;
+
+public class actorArvore extends Actor implements Collidable{
 
     private final Texture textureArvore;
     private Polygon collider;
@@ -133,6 +135,7 @@ public class actorArvore extends Actor{
     }
 
 
+    @Override
     public Polygon getCollider() {
         return collider;
     }
