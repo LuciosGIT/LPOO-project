@@ -8,12 +8,13 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import org.example.domain.Personagem;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class actorPersonagem extends Actor {
+public class actorPersonagem extends Actor implements Collidable{
 
     private Personagem player;
     private final HashMap<String, TextureRegion> sprites;
@@ -70,7 +71,7 @@ public class actorPersonagem extends Actor {
     public void setTexture(String key) {
         if (sprites.containsKey(key)) {
 
-             spriteAtual = sprites.get(key);
+            spriteAtual = sprites.get(key);
             // Atualiza os bounds do actor de acordo com as dimensões do novo sprite
             setBounds(getX(), getY(), spriteAtual.getRegionWidth(), spriteAtual.getRegionHeight());
         } else {
@@ -84,28 +85,46 @@ public class actorPersonagem extends Actor {
         collider.setPosition(this.getX(), this.getY());
     }
 
-    public void checkCollision(List<actorArvore> arvores) {
-        for(actorArvore arvore : arvores) {
-            if(arvore.getCollider() == null) {
-                continue;
-            }
-            if(Intersector.overlaps(collider.getBoundingRectangle(), arvore.getCollider().getBoundingRectangle())) {
-                this.clearActions();
-
-                // Calcula a direção do impulso
-                float playerCenterX = getX() + getWidth()/2;
-                float arvoreCenterX = arvore.getX() + arvore.getWidth()/2;
-
-                // Se o jogador está à esquerda da árvore, move para esquerda
-                // Se está à direita, move para direita
-                float moveX = playerCenterX < arvoreCenterX ? -5 : 5;
-
-                // Aplica o movimento de repulsão
-                addAction(Actions.moveBy(moveX, 0, 0.01f));
-                break;
+    // Método existente para verificar colisão com uma lista de objetos
+    public void checkCollision(List<? extends Collidable> objetos) {
+        for (Collidable objeto : objetos) {
+            if (checkCollision(objeto)) {
+                break; // Se colidiu com algum objeto, interrompe o loop
             }
         }
-
     }
 
+    // Novo método para verificar colisão com um único objeto
+    public boolean checkCollision(Collidable objeto) {
+        Polygon objCollider = objeto.getCollider();
+
+        if (objCollider == null || collider == null) return false;
+
+        if (Intersector.overlapConvexPolygons(collider, objCollider)) {
+            this.clearActions();
+
+            // Verifica se o objeto é um Actor para obter sua posição central
+            float objCenterX;
+            if (objeto instanceof Actor) {
+                Actor actorObj = (Actor) objeto;
+                objCenterX = actorObj.getX() + actorObj.getWidth() / 2;
+            } else {
+                // Se não for um Actor, usa a posição do collider
+                objCenterX = objCollider.getX();
+            }
+
+            float playerCenterX = getX() + getWidth() / 2;
+            float moveX = playerCenterX < objCenterX ? -5 : 5;
+
+            addAction(Actions.moveBy(moveX, 0, 0.01f));
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Polygon getCollider() {
+        return collider; // Corrigido para retornar o collider em vez de null
+    }
 }
