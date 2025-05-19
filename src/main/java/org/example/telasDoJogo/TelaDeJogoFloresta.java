@@ -81,7 +81,6 @@ public class TelaDeJogoFloresta implements Screen {
         pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
         stage.addActor(pilhaDeItem);
 
-        stage.addActor(actorPlayer);
 
         criarActorArvore();
         inventory.updateInventory();
