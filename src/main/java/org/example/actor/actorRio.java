@@ -21,13 +21,21 @@ public class actorRio extends Actor implements Collidable {
         this.personagem = personagem;
         this.inventory = inventory;
 
+        // Keep collider thin and shift left
+        float colliderWidth = largura * 0.3f;  // 10% of original width
+        float colliderHeight = altura * 1.38f;  // 130% of original height
+
+        // Move the collider more to the left by adjusting the offset
+        float offsetX = (largura - colliderWidth) / 2 - 50f;  // Shifted 50 units left
+        float offsetY = -altura * 0.15f;  // Keep vertical offset the same
+
         setBounds(x, y, largura, altura);
 
         float[] vertices = new float[]{
-                0, 0,
-                largura, 0,
-                largura, altura,
-                0, altura
+                offsetX, offsetY,                    // bottom left
+                offsetX + colliderWidth, offsetY,    // bottom right
+                offsetX + colliderWidth, colliderHeight + offsetY,  // top right
+                offsetX, colliderHeight + offsetY    // top left
         };
 
         collider = new Polygon(vertices);
@@ -45,7 +53,32 @@ public class actorRio extends Actor implements Collidable {
     }
 
     public void aplicarEfeitoDeCorrente(actorPersonagem player, float deltaTime) {
-        player.setY(player.getY() - correnteForca * deltaTime);
+        float playerX = player.getX();
+        float playerY = player.getY();
+        float playerWidth = player.getWidth();
+        float playerHeight = player.getHeight();
+
+        // Calculate river boundaries using collider
+        float riverLeft = getX() + collider.getVertices()[0];
+        float riverRight = riverLeft + (collider.getVertices()[2] - collider.getVertices()[0]);
+        float riverBottom = getY() + collider.getVertices()[1];
+        float riverTop = riverBottom + (collider.getVertices()[5] - collider.getVertices()[1]);
+
+        float pushForce = 4f;
+
+        // Check for collision
+        if (playerX + playerWidth > riverLeft && playerX < riverRight &&
+                playerY + playerHeight > riverBottom && playerY < riverTop) {
+
+            // Only push in Y direction based on player's vertical position
+            if (playerY < riverBottom + (riverTop - riverBottom) / 2) {
+                // Player is in lower half of river, push down
+                player.setY(player.getY() - pushForce);
+            } else {
+                // Player is in upper half of river, push up
+                player.setY(player.getY() + pushForce);
+            }
+        }
     }
 
     @Override
