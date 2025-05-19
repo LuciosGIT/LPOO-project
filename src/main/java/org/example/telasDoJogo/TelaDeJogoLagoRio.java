@@ -73,9 +73,6 @@ public class TelaDeJogoLagoRio implements Screen {
 
         inputs = new Inputs();
 
-        lifeBar = new LifeBar(actorPlayer);
-        stage.addActor(lifeBar.getLifeBar());
-
         inventory = new Inventory(stage, 5, actorPlayer);
 
         pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
@@ -86,6 +83,9 @@ public class TelaDeJogoLagoRio implements Screen {
         stage.addActor(actorPlayer);
 
         inventory.updateInventory();
+
+        lifeBar = new LifeBar(actorPlayer);
+        stage.addActor(lifeBar.getLifeBar());
     }
 
     @Override
