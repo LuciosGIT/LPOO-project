@@ -20,7 +20,7 @@ public class Agua extends Item {
 
     @Override
     public void usar() {
-        System.out.println("Consumindo Água" + this.pureza.getValue());
+        System.out.println("Consumindo Água " + this.pureza.getValue());
         this.beber();
     }
 
