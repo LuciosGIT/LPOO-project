@@ -43,9 +43,9 @@ public class Materiais extends Item {
         if (resultado != null) {
             // Faz uma cópia e associa ao personagem atual (que está neste material)
             Materiais copia = resultado.copiarPara(this.getPersonagem());
-            this.getPersonagem().getInventario().adicionarItem(copia);
             this.getPersonagem().getInventario().removerItem(this.getNomeItem());
             this.getPersonagem().getInventario().removerItem(outroMaterial.getNomeItem());
+            this.getPersonagem().getInventario().adicionarItem(copia);
             return copia;
         }
 
@@ -87,17 +87,41 @@ public class Materiais extends Item {
 
         switch (this.tipoMaterial){
             case METAL -> {
-                return "imagens/assets/itens/recursos/metal.png";
+                return "imagens/assets/itens/materiais/metal.png";
             }
             case PEDRA -> {
-                return "imagens/assets/itens/recursos/pedra.png";
+                return "imagens/assets/itens/materiais/pedra.png";
             }
             case MADEIRA -> {
-                return "imagens/assets/itens/recursos/madeira.png";
+                return "imagens/assets/itens/materiais/madeira.png";
             }
+            case RESULTADO_MADEIRA_MADEIRA -> {
+                return "imagens/assets/itens/materiais/tábuaReforçada.png";
+            }
+            case RESULTADO_METAL_METAL -> {
+                return "imagens/assets/itens/materiais/placaDeMetalReforçada.png";
+            }
+            case RESULTADO_PEDRA_PEDRA -> {
+                return "imagens/assets/itens/materiais/blocoDePedra.png";
+            }
+
+            /*to do: colocar as imagens dos resultados restantes
+            case RESULTADO_MADEIRA_METAL -> {
+
+            }
+            case RESULTADO_PEDRA_MADEIRA -> {
+
+            }
+            case RESULTADO_PEDRA_METAL -> {
+
+            }
+
+             */
+
             default -> {
                 return "imagens/assets/itens/default.png";
             }
+
         }
 
     }
