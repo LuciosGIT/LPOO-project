@@ -203,7 +203,7 @@ public class TelaDeJogoCaverna implements Screen {
         boolean naBordaInferior = playerY <= margin;
 
         if (naBoradaEsquerda || naBordaDireita || naBordaInferior) {
-            game.setScreen(new TelaDeInicio(game));
+            game.setScreen(new TelaDeJogoFloresta(game, player));
         }
         if (naBordaSuperior)  {
             game.setScreen(new TelaDeJogoMontanha(game, player));
