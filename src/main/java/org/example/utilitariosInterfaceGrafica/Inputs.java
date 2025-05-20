@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Item;
@@ -18,7 +19,7 @@ public class Inputs {
     private Personagem player;
     private int keySelect;
 
-    public void inputListener(actorPersonagem actorplayer, Inventory inventory) {
+    public void inputListener(actorPersonagem actorplayer, Inventory inventory, Craft popUp) {
 
         player = actorplayer.getPlayer();
 
@@ -44,10 +45,12 @@ public class Inputs {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            executarTeclaR();
             player.diminuirVida(5.0);
         }
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.C)) {
+            executarTeclaC(popUp, actorplayer);
+        }
 
         inputsInventario(inventory);
         keySelectListener(actorplayer, inventory);
@@ -181,8 +184,16 @@ public class Inputs {
         }, 1.0f);
     }
 
-    private void executarTeclaR() {
-
+    private void executarTeclaC(Craft popUp, actorPersonagem actorplayer) {
+        if (popUp != null) {
+            if (popUp.isVisible()) {
+                popUp.hide();
+            } else {
+                // Add this line to update position before showing
+                popUp.setPosition(actorplayer);
+                popUp.show();
+            }
+        }
     }
 
 }
