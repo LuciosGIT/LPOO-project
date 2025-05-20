@@ -19,11 +19,28 @@ public class Remedios extends Item {
 
     @Override
     public void usar() {
+        System.out.println("Usando Remédio " + this.tipoRemedio);
+
+        double vidaAtual = this.getPersonagem().getVida();
+
         switch (tipoEfeito) {
-            case CURAR -> this.getPersonagem().aumentarVida(100.0 - this.getPersonagem().getVida());
-            case ALIVIAR -> this.getPersonagem().aumentarVida(30.0);
-            case TRATAR -> this.getPersonagem().aumentarVida(10.0);
+            case CURAR -> {
+                if (vidaAtual < 100.0) {
+                    this.getPersonagem().aumentarVida(100.0 - vidaAtual);
+                }
+            }
+            case ALIVIAR -> {
+                if (vidaAtual < 100.0) {
+                    this.getPersonagem().aumentarVida(Math.min(30.0, 100.0 - vidaAtual));
+                }
+            }
+            case TRATAR -> {
+                if (vidaAtual < 100.0) {
+                    this.getPersonagem().aumentarVida(Math.min(10.0, 100.0 - vidaAtual));
+                }
+            }
         }
+        System.out.println(this.getPersonagem().getVida());
     }
 
     @Override
