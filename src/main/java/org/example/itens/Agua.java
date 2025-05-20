@@ -22,6 +22,7 @@ public class Agua extends Item {
     public void usar() {
         System.out.println("Consumindo Água " + this.pureza.getValue());
         this.beber();
+        System.out.println(this.getPersonagem().getVida());
     }
 
 
