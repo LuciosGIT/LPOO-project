@@ -1,0 +1,258 @@
+package org.example.telasDoJogo;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import org.example.Ui.Inventory;
+import org.example.Ui.LifeBar;
+import org.example.actor.actorCristal;
+import org.example.actor.actorPersonagem;
+import org.example.actor.actorPilhaDeItem;
+import org.example.domain.Personagem;
+import org.example.utilitariosInterfaceGrafica.InicializarMundo;
+import org.example.utilitariosInterfaceGrafica.Inputs;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class TelaDeJogoMontanha implements Screen {
+
+    private final Game game;
+    private final Personagem player;
+    private final actorPersonagem actorPlayer;
+    private actorCristal cristal;
+    private final List<actorCristal> listaDeCristais = new ArrayList<>();
+    private actorPilhaDeItem pilhaDeItem;
+    private Texture backgroundMontanha;
+    private Batch batch;
+    private Stage stage;
+    private OrthographicCamera camera;
+
+    private float worldWidth; // Largura do mundo
+    private float worldHeight; // Altura do mundo
+    private float viewportWidth; // Largura visível da câmera
+    private float viewportHeight; // Altura visível da câmera
+
+    InicializarMundo inicializarMundo;
+    Inputs inputs;
+    LifeBar lifeBar;
+    Inventory inventory;
+
+    public TelaDeJogoMontanha(Game game, Personagem player){
+        this.game = game;
+        this.player = player;
+        this.actorPlayer = new actorPersonagem(player);
+    }
+
+    @Override
+    public void show() {
+        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoMontanha.png");
+
+        this.camera = inicializarMundo.getCamera();
+        this.stage = inicializarMundo.getStage();
+        this.batch = inicializarMundo.getBatch();
+        this.backgroundMontanha = inicializarMundo.getBackgroundFloresta();
+        this.worldWidth = inicializarMundo.getWorldWidth();
+        this.worldHeight = inicializarMundo.getWorldHeight();
+        this.viewportWidth = inicializarMundo.getViewportWidth();
+        this.viewportHeight = inicializarMundo.getViewportHeight();
+
+        inputs = new Inputs();
+
+        lifeBar = new LifeBar(actorPlayer);
+        stage.addActor(lifeBar.getLifeBar());
+
+        inventory = new Inventory(stage, 5, actorPlayer);
+
+        pilhaDeItem = new actorPilhaDeItem(150, 150, player, inventory);
+        stage.addActor(pilhaDeItem);
+
+        stage.addActor(actorPlayer);
+
+        criarActorCristal();
+        inventory.updateInventory();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        stage.getViewport().update(width, height, true);
+        camera.update();
+    }
+
+    @Override
+    public void render(float delta) {
+        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        stage.getViewport().apply();
+
+        batch.draw(backgroundMontanha,
+                0, 0,
+                worldWidth, worldHeight
+        );
+        batch.end();
+        stage.act(deltaTime);
+        stage.draw();
+
+        //métodos
+        movement(deltaTime);
+        camera();
+        inputs.inputListener(actorPlayer, inventory);
+        lifeBar.setPosition(actorPlayer);
+        lifeBar.setLifeBarValue(player.getVida());
+        inventory.setPosition(camera);
+
+        actorPlayer.checkCollision(listaDeCristais);
+        sairDoCenario();
+    }
+
+    @Override
+    public void pause() {
+        // Implement pause logic here
+    }
+
+    @Override
+    public void resume() {
+        // Implement resume logic here
+    }
+
+    @Override
+    public void hide() {
+        // Implement hide logic here
+    }
+
+    @Override
+    public void dispose() {
+        inicializarMundo.dispose();
+        for(actorCristal cristal : listaDeCristais){
+            cristal.dispose();
+        }
+        inventory.dispose();
+    }
+
+    private void movement(float deltaTime) {
+        float dx = 0, dy = 0;
+        float moveSpeed = 200f;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= moveSpeed * deltaTime;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * deltaTime;
+
+        actorPlayer.moveBy(dx, dy);
+    }
+
+    private void camera() {
+        float posX = actorPlayer.getX() + actorPlayer.getWidth() / 2;
+        float posY = actorPlayer.getY() + actorPlayer.getHeight() / 2;
+
+        float lerp = 0.1f;
+
+        // Ajusta viewport pelo zoom
+        float adjustedViewportWidth = viewportWidth * camera.zoom;
+        float adjustedViewportHeight = viewportHeight * camera.zoom;
+
+        float minX = adjustedViewportWidth / 2;
+        float maxX = worldWidth - adjustedViewportWidth / 2;
+        float minY = adjustedViewportHeight / 2;
+        float maxY = worldHeight - adjustedViewportHeight / 2;
+
+        // Aplica interpolação com limites
+        camera.position.x = MathUtils.clamp(
+                camera.position.x + (posX - camera.position.x) * lerp,
+                minX,
+                maxX
+        );
+
+        camera.position.y = MathUtils.clamp(
+                camera.position.y + (posY - camera.position.y) * lerp,
+                minY,
+                maxY
+        );
+
+        camera.update();
+    }
+
+    private void criarActorCristal() {
+        float espacoMinimo = 200f; // Espaço mínimo entre cristais
+        int maxTentativas = 30;    // Evita loop infinito
+        int cristaisCriados = 0;
+
+        // Na montanha, criamos mais cristais (8 em vez de 6)
+        while(cristaisCriados < 5 && maxTentativas > 0) {
+            // Gera posição aleatória
+            float posX = MathUtils.random(100, worldWidth - 100);
+            float posY = MathUtils.random(100, worldHeight - 100);
+
+            boolean posicaoValida = true;
+
+            // Verifica distância com outros cristais
+            for(actorCristal outroCristal : listaDeCristais) {
+                float distanciaX = Math.abs(posX - outroCristal.getX());
+                float distanciaY = Math.abs(posY - outroCristal.getY());
+
+                // Se estiver muito perto de outro cristal
+                if(distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
+                    posicaoValida = false;
+                    break;
+                }
+            }
+
+            // Se a posição for válida, cria o cristal
+            if(posicaoValida) {
+                actorCristal novoCristal = new actorCristal(posX, posY, player, inventory);
+                listaDeCristais.add(novoCristal);
+                stage.addActor(novoCristal);
+                cristaisCriados++;
+            }
+
+            maxTentativas--;
+        }
+    }
+
+    private void sairDoCenario() {
+        float playerX = actorPlayer.getX();
+        float playerY = actorPlayer.getY();
+        float playerWidth = actorPlayer.getWidth();
+        float playerHeight = actorPlayer.getHeight();
+        float margin = 10f; // margem de tolerância
+
+        // Verifica cada borda
+        boolean naBordaEsquerda = playerX <= margin;
+        boolean naBordaDireita = playerX + playerWidth >= worldWidth - margin;
+        boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
+        boolean naBordaInferior = playerY <= margin;
+
+        // Na montanha, a saída inferior leva para a caverna
+        if (naBordaInferior) {
+            actorPlayer.addAction(Actions.fadeIn(0.1f));
+            game.setScreen(new TelaDeJogoCaverna(game, player));
+            dispose();
+        }
+
+        // As outras bordas podem levar a outras áreas (se existirem)
+        if (naBordaEsquerda || naBordaDireita || naBordaSuperior) {
+            // Aqui você pode adicionar transições para outras telas
+            // Por exemplo:
+            // game.setScreen(new TelaDeJogoOutraArea(game, player));
+            // dispose();
+
+            // Por enquanto, apenas reposiciona o jogador para evitar que saia da tela
+            if (naBordaEsquerda) actorPlayer.setX(margin + 1);
+            if (naBordaDireita) actorPlayer.setX(worldWidth - playerWidth - margin - 1);
+            if (naBordaSuperior) actorPlayer.setY(worldHeight - playerHeight - margin - 1);
+        }
+    }
+}
