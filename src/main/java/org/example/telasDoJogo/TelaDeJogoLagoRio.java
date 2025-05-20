@@ -150,7 +150,7 @@ public class TelaDeJogoLagoRio implements Screen {
 
     private void movement(float deltaTime) {
         float dx = 0, dy = 0;
-        float moveSpeed = 200f;
+        float moveSpeed = 135f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += moveSpeed * deltaTime;
         if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= moveSpeed * deltaTime;
