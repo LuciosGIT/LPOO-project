@@ -123,6 +123,8 @@ public class TelaDeJogoCaverna implements Screen {
 
         inputs.inputListener(actorPlayer, inventory, popUp);
 
+        popUp.setPosition(actorPlayer);
+
     }
 
     @Override

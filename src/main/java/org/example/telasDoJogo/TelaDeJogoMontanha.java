@@ -125,6 +125,8 @@ public class TelaDeJogoMontanha implements Screen {
 
         inputs.inputListener(actorPlayer, inventory, popUp);
 
+        popUp.setPosition(actorPlayer);
+
     }
 
     @Override

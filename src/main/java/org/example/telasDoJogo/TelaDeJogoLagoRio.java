@@ -143,6 +143,8 @@ public class TelaDeJogoLagoRio implements Screen {
 
         inputs.inputListener(actorPlayer, inventory, popUp);
 
+        popUp.setPosition(actorPlayer);
+
     }
 
     private void verificarColisaoComRio(float deltaTime) {
