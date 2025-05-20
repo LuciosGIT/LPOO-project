@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
@@ -38,7 +39,9 @@ public class TelaDeJogoCaverna implements Screen {
     private float worldWidth; // Largura do mundo
     private float worldHeight; // Altura do mundo
     private float viewportWidth; // Largura visível da câmera
-    private float viewportHeight; // Altura visível da câmera
+    private float viewportHeight;
+
+    private Craft popUp;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -77,6 +80,8 @@ public class TelaDeJogoCaverna implements Screen {
 
         stage.addActor(actorPlayer);
 
+        this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
+
 
     }
 
@@ -109,12 +114,14 @@ public class TelaDeJogoCaverna implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer, inventory);
+
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         sairDoCenario();
 
         inventory.setPosition(camera);
+
+        inputs.inputListener(actorPlayer, inventory, popUp);
 
     }
 

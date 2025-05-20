@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorCristal;
@@ -35,6 +36,8 @@ public class TelaDeJogoMontanha implements Screen {
     private Batch batch;
     private Stage stage;
     private OrthographicCamera camera;
+
+    private Craft popUp;
 
     private float worldWidth; // Largura do mundo
     private float worldHeight; // Altura do mundo
@@ -79,6 +82,9 @@ public class TelaDeJogoMontanha implements Screen {
 
         criarActorCristal();
         inventory.updateInventory();
+
+        this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
+
     }
 
     @Override
@@ -109,13 +115,16 @@ public class TelaDeJogoMontanha implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer, inventory);
+
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeCristais);
         sairDoCenario();
+
+        inputs.inputListener(actorPlayer, inventory, popUp);
+
     }
 
     @Override

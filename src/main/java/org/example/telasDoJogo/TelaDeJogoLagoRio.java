@@ -24,6 +24,7 @@ import org.example.domain.Personagem;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import org.example.Ui.Craft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,8 @@ public class TelaDeJogoLagoRio implements Screen {
     private float worldHeight;
     private float viewportWidth;
     private float viewportHeight;
+
+    private Craft popUp;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -76,8 +79,6 @@ public class TelaDeJogoLagoRio implements Screen {
 
         this.isPilhaDeItemInstanciada = false;
 
-        inputs = new Inputs();
-
         inventory = new Inventory(stage, 5, actorPlayer);
 
         criarActorsLagosRioEPonte();
@@ -91,7 +92,9 @@ public class TelaDeJogoLagoRio implements Screen {
 
         instanciarPilhaDeItem();
 
+        this.popUp = new Craft(stage, "Cria Item", "Pressione 'C' para abrir o inventário", actorPlayer, inventory);
 
+        inputs = new Inputs();
 
     }
 
@@ -126,7 +129,7 @@ public class TelaDeJogoLagoRio implements Screen {
 
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer, inventory);
+
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
@@ -135,6 +138,10 @@ public class TelaDeJogoLagoRio implements Screen {
         verificarColisaoComRio(deltaTime);
 
         sairDoCenario();
+
+        popUp.setPosition(actorPlayer);
+
+        inputs.inputListener(actorPlayer, inventory, popUp);
 
     }
 

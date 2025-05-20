@@ -25,20 +25,24 @@ public class Mecanico extends Personagem {
 
     public Mecanico(String nome) {
         super(nome, 10.0);
+
         this.getInventario().adicionarItem(new Materiais("Placa Metálica",
                 this,
                 2.5,
                 70.0,
                 0.3,
                 15.0,
-                TipoMaterial.METAL));
-        this.getInventario().adicionarItem(new Ferramentas("Poli-Faca",
+                TipoMaterial.MADEIRA));
+
+        this.getInventario().adicionarItem(new Materiais(
+                "Pedra",
                 this,
                 2.5,
                 70.0,
                 0.3,
                 15.0,
-                TipoFerramenta.FACA));
+                TipoMaterial.PEDRA));
+
         this.getInventario().adicionarItem(new Materiais("Madeira",
                 this,
                 2.5,
@@ -55,14 +59,14 @@ public class Mecanico extends Personagem {
                 15.0,
                 TipoFerramenta.ISQUEIRO));
 
-        this.getInventario().adicionarItem(new Remedios(
-                "Remédio",
+        this.getInventario().adicionarItem(new Materiais(
+              "Pedra",
                 this,
                 2.5,
                 70.0,
                 0.3,
-                TipoRemedio.BANDAGEM
-        ));
+                15.0,
+                TipoMaterial.PEDRA));
 
         sprites = new HashMap<>( Map.of(
                 "parado", new TextureRegion(new Texture("imagens/sprites/mecanicoImagemTemporaria.png")),

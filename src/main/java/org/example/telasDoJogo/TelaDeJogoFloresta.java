@@ -23,6 +23,7 @@ import org.example.actor.actorPilhaDeItem;
 import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import org.example.Ui.Craft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,8 @@ public class TelaDeJogoFloresta implements Screen {
     private float worldHeight; // Altura do mundo
     private float viewportWidth; // Largura visível da câmera
     private float viewportHeight; // Altura visível da câmera
+
+    private Craft popUp;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -71,8 +74,6 @@ public class TelaDeJogoFloresta implements Screen {
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
-        inputs = new Inputs();
-
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
@@ -86,6 +87,9 @@ public class TelaDeJogoFloresta implements Screen {
         criarActorArvore();
         inventory.updateInventory();
 
+        this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
+
+        inputs = new Inputs();
 
     }
 
@@ -118,7 +122,6 @@ public class TelaDeJogoFloresta implements Screen {
         //métodos
         movement(deltaTime);
         camera();
-        inputs.inputListener(actorPlayer,inventory);
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
         inventory.setPosition(camera);
@@ -126,6 +129,9 @@ public class TelaDeJogoFloresta implements Screen {
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 
+        popUp.setPosition(actorPlayer);
+
+        inputs.inputListener(actorPlayer,inventory, popUp);
 
     }
 
