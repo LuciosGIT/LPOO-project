@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
+import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorLago;
@@ -20,6 +21,7 @@ import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorRio;
 import org.example.actor.actorPonte;
 import org.example.domain.Personagem;
+import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 
@@ -41,6 +43,7 @@ public class TelaDeJogoLagoRio implements Screen {
     private Batch batch;
     private Stage stage;
     private OrthographicCamera camera;
+    private boolean isPilhaDeItemInstanciada;
 
     private float worldWidth;
     private float worldHeight;
@@ -71,12 +74,11 @@ public class TelaDeJogoLagoRio implements Screen {
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
+        this.isPilhaDeItemInstanciada = false;
+
         inputs = new Inputs();
 
         inventory = new Inventory(stage, 5, actorPlayer);
-
-        pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
-        stage.addActor(pilhaDeItem);
 
         criarActorsLagosRioEPonte();
 
@@ -86,6 +88,24 @@ public class TelaDeJogoLagoRio implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        instanciarPilhaDeItem();
+
+
+
+    }
+
+    public void instanciarPilhaDeItem() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
+                    pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
+                    stage.addActor(pilhaDeItem);
+                    isPilhaDeItemInstanciada = true;
+                }
+            }
+        }, 0, 2);
     }
 
     @Override
@@ -115,6 +135,7 @@ public class TelaDeJogoLagoRio implements Screen {
         verificarColisaoComRio(deltaTime);
 
         sairDoCenario();
+
     }
 
     private void verificarColisaoComRio(float deltaTime) {
@@ -274,6 +295,8 @@ public class TelaDeJogoLagoRio implements Screen {
 
     @Override
     public void dispose() {
+
+
         inicializarMundo.dispose();
         inventory.dispose();
         for (actorLago lago : listaDeLagos) {
@@ -282,5 +305,6 @@ public class TelaDeJogoLagoRio implements Screen {
         if (rioSuperior != null) rioSuperior.dispose();
         if (rioInferior != null) rioInferior.dispose();
         if (rioVisual != null) rioVisual.dispose();
+
     }
 }

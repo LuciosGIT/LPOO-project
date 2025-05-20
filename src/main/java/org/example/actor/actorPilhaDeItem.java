@@ -15,6 +15,7 @@ public class actorPilhaDeItem extends Actor {
     private int batidas = 0;
     private Personagem player;
     private Inventory inventory;
+    private boolean isIstanciado;
 
     public actorPilhaDeItem(float x, float y, Personagem player, Inventory inventory){
         this.textureDaPilha = new Texture(Gdx.files.internal("imagens/itens do cenario/pilhaDeItens.png"));
@@ -35,6 +36,8 @@ public class actorPilhaDeItem extends Actor {
     public void act(float delta) {
         super.act(delta);
     }
+
+
 
 
 }
