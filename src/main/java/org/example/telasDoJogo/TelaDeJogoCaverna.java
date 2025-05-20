@@ -202,11 +202,11 @@ public class TelaDeJogoCaverna implements Screen {
         boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
         boolean naBordaInferior = playerY <= margin;
 
-        if (naBoradaEsquerda || naBordaDireita || naBordaSuperior || naBordaInferior) {
-
-
-
+        if (naBoradaEsquerda || naBordaDireita || naBordaInferior) {
             game.setScreen(new TelaDeInicio(game));
+        }
+        if (naBordaSuperior)  {
+            game.setScreen(new TelaDeJogoMontanha(game, player));
         }
     }
 
