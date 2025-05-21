@@ -6,8 +6,14 @@ public enum TipoClimatico {
     NEVASCA("Nevasca"),
     CALOR("Calor");
 
-    private TipoClimatico(String tipoDeClima){
+    private final String tipoDeClima;
 
+    TipoClimatico(String tipoDeClima) {
+        this.tipoDeClima = tipoDeClima;
+    }
+
+    public String getTipoDeClima() {
+        return tipoDeClima;
     }
 
 
