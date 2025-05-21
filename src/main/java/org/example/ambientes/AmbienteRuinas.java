@@ -8,6 +8,7 @@ import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoFerramenta;
 import org.example.enums.TipoMaterial;
+import org.example.eventos.EventoCriatura;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Ferramentas;
@@ -33,6 +34,9 @@ public class AmbienteRuinas extends Ambiente {
         this.getRecursosDisponiveis().add(new Ferramentas("Faca Esquecida", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.FACA));
         this.getRecursosDisponiveis().add(new Alimentos("Sardinha enlatada", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Alimentos("Atum em lata", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().minusDays(5)));
+        this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
+                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(0).getNivelDePerigo()));
+
         this.estruturasInstaveis = estruturasInstaveis;
     }
 

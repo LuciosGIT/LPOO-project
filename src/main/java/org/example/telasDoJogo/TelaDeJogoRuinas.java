@@ -79,8 +79,12 @@ public class TelaDeJogoRuinas implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 0.8,List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
-
+        try {
+            this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 0.8, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+        }
+        catch (Exception e) {
+            Gdx.app.error("TelaDeJogoRuinas", "Erro ao inicializar: " + e.getMessage());
+        }
     }
 
     @Override
@@ -121,6 +125,8 @@ public class TelaDeJogoRuinas implements Screen {
         soundId = soundRuins.loop(0.5f);
 
         ambienteRuinas.explorar(player);
+
+
 
     }
 

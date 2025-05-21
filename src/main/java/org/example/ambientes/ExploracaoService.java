@@ -12,20 +12,20 @@ import java.util.List;
 public class ExploracaoService {
 
     public static void explorar(Personagem jogador, Ambiente ambiente) {
+        try {
+            ambiente.gerarEvento(jogador);
 
-        ambiente.gerarEvento(jogador);
-
-        // Verificar se é viável explorar
-
-        // Caso o jogador ainda esteja vivo, buscar itens no ambiente
-        if (jogador.getVida() > 0 && jogador.getInventario().temEspaco()) {
-            encontrarItens(jogador, ambiente.getRecursosDisponiveis());
+            // Caso o jogador ainda esteja vivo, buscar itens no ambiente
+            if (jogador.getVida() > 0 && jogador.getInventario().temEspaco()) {
+                encontrarItens(jogador, ambiente.getRecursosDisponiveis());
+            } else {
+                System.out.println("Você não tem espaço no inventário!");
+            }
         }
 
-        else {
-            System.out.println("Você não tem espaço no inventário!");
+        catch (Exception e) {
+            System.out.println("Erro ao explorar o ambiente: " + e.getMessage());
         }
-
     }
 
 
