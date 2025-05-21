@@ -18,7 +18,7 @@ public abstract class Ambiente implements AmbienteInterface {
     private volatile Double dificuldadeExploracao;
     private List<Item> recursosDisponiveis = new ArrayList<>();
     private Map<Evento, Double> probabilidadeEventos;
-    private List<Evento> eventosPossiveis;
+    private List<Evento> eventosPossiveis = new ArrayList<>();
     private  List<TipoClimatico> tiposDeClimasDoAmbiente;
     private  List<EventoClimatico> listaDeclimasDoJogo;
     private  List<Criatura> criaturasAmbientes;

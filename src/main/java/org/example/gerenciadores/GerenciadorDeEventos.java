@@ -5,6 +5,7 @@ import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.utilitarios.ConfiguracaoDoMundo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -15,7 +16,7 @@ public class GerenciadorDeEventos {
 
     private Map<Evento, Double> probabilidadeDeOcorrencia;
 
-    private static List<Evento> historicoDeEventos;
+    private static final List<Evento> historicoDeEventos = new ArrayList<>();
 
     public GerenciadorDeEventos() {
         this.eventosPossiveis = ConfiguracaoDoMundo.getEventosDoJogo();
