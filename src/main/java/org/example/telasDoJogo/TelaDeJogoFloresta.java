@@ -53,6 +53,8 @@ public class TelaDeJogoFloresta implements Screen {
     private Sound soundForest;
     private long soundId;
 
+    private Texture darkOverlay;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -99,6 +101,8 @@ public class TelaDeJogoFloresta implements Screen {
         this.soundForest = Gdx.audio.newSound(Gdx.files.internal("sons/soundForest.wav"));
         soundId = soundForest.loop(0.6f);
 
+        darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
     }
 
     @Override
@@ -119,11 +123,16 @@ public class TelaDeJogoFloresta implements Screen {
         batch.begin();
         stage.getViewport().apply();
 
-        batch.draw(backgroundFloresta,
-                0, 0,
-                worldWidth, worldHeight
-        );
+        // Draw background
+        batch.draw(backgroundFloresta, 0, 0, worldWidth, worldHeight);
+
+        // Draw dark overlay
+        batch.setColor(0, 0, 0, 0.6f); // Using 30% opacity for a lighter effect
+        batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
+        batch.setColor(1, 1, 1, 1); // Reset color
+
         batch.end();
+
         stage.act(deltaTime);
         stage.draw();
 

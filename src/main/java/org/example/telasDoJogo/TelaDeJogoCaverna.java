@@ -44,6 +44,10 @@ public class TelaDeJogoCaverna implements Screen {
     private Sound soundCavern;
     private long soundId;
 
+    private Texture darkOverlay;
+    private Texture lightTexture;
+    private float lightRadius = 200f;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -86,6 +90,9 @@ public class TelaDeJogoCaverna implements Screen {
         this.soundCavern = Gdx.audio.newSound(Gdx.files.internal("sons/soudCavern.wav"));
         soundId = soundCavern.loop(0.6f);
 
+        darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+        lightTexture = new Texture(Gdx.files.internal("imagens/luz.png"));
+
     }
 
     @Override
@@ -104,13 +111,16 @@ public class TelaDeJogoCaverna implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        stage.getViewport().apply();
+        // Draw background
+        batch.draw(backgroundFloresta, 0, 0, worldWidth, worldHeight);
 
-        batch.draw(backgroundFloresta,
-                0, 0,
-                worldWidth, worldHeight
-        );
+        // Draw dark overlay
+        batch.setColor(0, 0, 0, 0.0f);
+        batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
+
+        batch.setColor(1, 1, 1, 1);
         batch.end();
+
         stage.act(deltaTime);
         stage.draw();
 
@@ -149,6 +159,9 @@ public class TelaDeJogoCaverna implements Screen {
 
     @Override
     public void dispose() {
+
+        if (darkOverlay != null) darkOverlay.dispose();
+        if (lightTexture != null) lightTexture.dispose();
 
         if (soundCavern != null) {
             soundCavern.stop();
