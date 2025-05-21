@@ -21,11 +21,14 @@ import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
+import org.example.ambientes.AmbienteFloresta;
 import org.example.domain.Personagem;
+import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
-import com.badlogic.gdx.audio.Sound;
+import org.example.enums.TipoClimatico;
+import java.util.Arrays;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class TelaDeJogoFloresta implements Screen {
     private Batch batch;
     private Stage stage;
     private OrthographicCamera camera;
+    private boolean isPilhaDeItemInstanciada;
 
     private float worldWidth; // Largura do mundo
     private float worldHeight; // Altura do mundo
@@ -57,6 +61,8 @@ public class TelaDeJogoFloresta implements Screen {
     private float currentTime = 12f; // Start at noon (12:00)
     private float dayDuration = 300f;
 
+    private AmbienteFloresta ambienteFloresta;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -66,11 +72,25 @@ public class TelaDeJogoFloresta implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-
     }
 
     @Override
     public void show() {
+
+        try {
+            this.ambienteFloresta = new AmbienteFloresta(
+                    "Floresta",
+                    "Uma floresta densa e cheia de vida.",
+                    0.5,
+                    Arrays.asList(TipoClimatico.TEMPESTADE),
+                    true,
+                    true,
+                    true,
+                    player
+            );
+        }catch (Exception e) {
+            System.out.println("Erro ao criar o ambiente: " + e.getMessage());
+        }
 
         inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
@@ -86,10 +106,9 @@ public class TelaDeJogoFloresta implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
-        inventory = new Inventory(stage, 5, actorPlayer);
+        this.isPilhaDeItemInstanciada = false;
 
-        pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
-        stage.addActor(pilhaDeItem);
+        inventory = new Inventory(stage, 5, actorPlayer);
 
         stage.addActor(actorPlayer);
 
@@ -151,6 +170,8 @@ public class TelaDeJogoFloresta implements Screen {
 
         inputs.inputListener(actorPlayer,inventory, popUp);
 
+        instanciarPilhaDeItem();
+
     }
 
     @Override
@@ -170,6 +191,10 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
+
+        if(pilhaDeItem != null) {
+            pilhaDeItem.dispose();
+        }
 
         if (soundForest != null) {
             soundForest.stop();
@@ -291,6 +316,24 @@ public class TelaDeJogoFloresta implements Screen {
         }
 
         return darkness;
+    }
+
+    public void instanciarPilhaDeItem() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
+                    float posx =  MathUtils.random(0, worldWidth - 100);
+                    float posy =  MathUtils.random(0, worldHeight - 100);
+
+
+                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteFloresta);
+                    stage.addActor(pilhaDeItem);
+
+                    isPilhaDeItemInstanciada = true;
+                }
+            }
+        }, 0, 1);
     }
 
     private void sairDoCenario() {
