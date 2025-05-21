@@ -23,16 +23,16 @@ public class AmbienteRuinas extends Ambiente {
     Boolean estruturasInstaveis;
 
     //construtor
-    public AmbienteRuinas(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean estruturasInstaveis){
+    public AmbienteRuinas(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean estruturasInstaveis, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.3, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.9, 10.0, TipoMaterial.PEDRA));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
-        this.getRecursosDisponiveis().add(new Ferramentas("Machado largado", null, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.MACHADO));
-        this.getRecursosDisponiveis().add(new Ferramentas("Faca Esquecida", null, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.FACA));
-        this.getRecursosDisponiveis().add(new Alimentos("Sardinha enlatada", null, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
-        this.getRecursosDisponiveis().add(new Alimentos("Atum em lata", null, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().minusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", player, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Raíz", player, 0.3, 12.0, 0.3, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.getRecursosDisponiveis().add(new Materiais("Pedra", player, 8.0, 20.0, 0.9, 10.0, TipoMaterial.PEDRA));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Ferramentas("Machado largado", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.MACHADO));
+        this.getRecursosDisponiveis().add(new Ferramentas("Faca Esquecida", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.FACA));
+        this.getRecursosDisponiveis().add(new Alimentos("Sardinha enlatada", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos("Atum em lata", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().minusDays(5)));
         this.estruturasInstaveis = estruturasInstaveis;
     }
 

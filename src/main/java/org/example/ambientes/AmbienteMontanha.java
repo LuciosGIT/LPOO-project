@@ -28,13 +28,13 @@ public class AmbienteMontanha extends Ambiente {
 
 
     //construtor
-    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean terrenoAcidentado, boolean climaInstavel){
+    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean terrenoAcidentado, boolean climaInstavel, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.3, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.5, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.getRecursosDisponiveis().add(new Materiais("Pedra Cristalina", null, 8.0, 20.0, 0.7, 10.0, TipoMaterial.PEDRA));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.5, 5.0, TipoMaterial.MADEIRA));
-        this.getRecursosDisponiveis().add(new Agua("Água de Degelo", null, 5.0, 20.0, 0.5, Pureza.CONTAMINADA ,10.0));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", player, 1.0, 8.0, 0.3, TipoAlimento.CARNE, OffsetDateTime.now().plusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Raíz", player, 0.3, 12.0, 0.5, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.getRecursosDisponiveis().add(new Materiais("Pedra Cristalina", player, 8.0, 20.0, 0.7, 10.0, TipoMaterial.PEDRA));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.5, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Agua("Água de Degelo", player, 5.0, 20.0, 0.5, Pureza.CONTAMINADA ,10.0));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(1).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,

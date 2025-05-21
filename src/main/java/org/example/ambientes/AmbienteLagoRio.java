@@ -24,19 +24,19 @@ public class AmbienteLagoRio extends Ambiente {
     Boolean terrenoLamacento;
 
     //construtor
-    public AmbienteLagoRio(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean terrenoLamacento){
+    public AmbienteLagoRio(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean terrenoLamacento, Personagem player) {
         super(nome,descricao,dificuldadeExploracao,condicoesClimaticas);
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
-        this.getRecursosDisponiveis().add(new Agua("Água Potável", null, 5.0, 20.0, 0.5, Pureza.POTAVEL ,10.0));
-        this.getRecursosDisponiveis().add(new Agua("Água Contaminada", null, 5.0, 20.0, 0.5, Pureza.CONTAMINADA ,10.0));
-        this.getRecursosDisponiveis().add(new Materiais("Pedra", null, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Agua("Água Potável", player, 5.0, 20.0, 0.5, Pureza.POTAVEL ,10.0));
+        this.getRecursosDisponiveis().add(new Agua("Água Contaminada", player, 5.0, 20.0, 0.5, Pureza.CONTAMINADA ,10.0));
+        this.getRecursosDisponiveis().add(new Materiais("Pedra", player, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
                 getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(4).getNivelDePerigo()));
-        this.getRecursosDisponiveis().add(new Alimentos("Peixe", null, 0.5, 5.0, 0.4, TipoAlimento.PEIXE, OffsetDateTime.now().plusDays(5)));
-        this.getRecursosDisponiveis().add(new Alimentos("Alga Doce", null, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos("Peixe", player, 0.5, 5.0, 0.4, TipoAlimento.PEIXE, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Alimentos("Alga Doce", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
         this.getEventos().add(new EventoClimatico(true, "Evento de Temepestade acionado", "Afeta a visibilidade", "Evento de Tempestade" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
         this.terrenoLamacento = terrenoLamacento;
     }

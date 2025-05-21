@@ -32,17 +32,17 @@ public class AmbienteFloresta extends Ambiente {
     private boolean climaUmido;
 
     //construtor
-    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido){
+    public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido, Personagem player) {
         super(nome,descricao,dificuldadeExploracao,condicoesClimaticas);
         Random random = new Random();
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
-        this.getRecursosDisponiveis().add(new Alimentos("Fruta", null, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", null, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos("Raíz", null, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", null, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", null, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
+        this.getRecursosDisponiveis().add(new Alimentos("Fruta", player, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
+        this.getRecursosDisponiveis().add(new Alimentos("Carne", player, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
+        this.getRecursosDisponiveis().add(new Alimentos("Raíz", player, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
         this.getEventos().add(new EventoClimatico(true, "Evento de Chuva acionado", "Afeta a visibilidade", "Evento de Chuva" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
