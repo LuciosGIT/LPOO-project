@@ -221,7 +221,6 @@ public class TelaDeJogoCaverna implements Screen {
     }
 
 
-
     private void sairDoCenario() {
         float playerX = actorPlayer.getX();
         float playerY = actorPlayer.getY();

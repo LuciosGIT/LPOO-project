@@ -54,6 +54,8 @@ public class TelaDeJogoFloresta implements Screen {
     private long soundId;
 
     private Texture darkOverlay;
+    private float currentTime = 12f; // Start at noon (12:00)
+    private float dayDuration = 300f;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -115,22 +117,21 @@ public class TelaDeJogoFloresta implements Screen {
     public void render(float delta) {
 
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+        float darkness = time(); // Get current darkness level
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        stage.getViewport().apply();
-
         // Draw background
         batch.draw(backgroundFloresta, 0, 0, worldWidth, worldHeight);
 
-        // Draw dark overlay
-        batch.setColor(0, 0, 0, 0.6f); // Using 30% opacity for a lighter effect
+        // Draw dark overlay with current darkness level
+        batch.setColor(0, 0, 0, darkness);
         batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
-        batch.setColor(1, 1, 1, 1); // Reset color
 
+        batch.setColor(1, 1, 1, 1);
         batch.end();
 
         stage.act(deltaTime);
@@ -267,6 +268,29 @@ public class TelaDeJogoFloresta implements Screen {
 
         }
 
+    }
+
+    private float time() {
+        currentTime += Gdx.graphics.getDeltaTime() * (24f / dayDuration);
+        if (currentTime >= 24f) {
+            currentTime = 0f;
+        }
+
+        // Calculate darkness level based on time
+        float darkness;
+        if (currentTime >= 18f || currentTime < 6f) { // Night
+            darkness = 0.8f;
+        } else if (currentTime >= 6f && currentTime < 7f) { // Dawn
+            float t = (currentTime - 6f);
+            darkness = 0.8f - (0.6f * t);
+        } else if (currentTime >= 17f && currentTime < 18f) { // Dusk
+            float t = (currentTime - 17f);
+            darkness = 0.2f + (0.6f * t);
+        } else { // Day
+            darkness = 0.2f;
+        }
+
+        return darkness;
     }
 
     private void sairDoCenario() {
