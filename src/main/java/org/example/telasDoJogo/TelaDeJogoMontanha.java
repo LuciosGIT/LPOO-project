@@ -17,7 +17,9 @@ import org.example.Ui.LifeBar;
 import org.example.actor.actorCristal;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
+import org.example.ambientes.AmbienteMontanha;
 import org.example.domain.Personagem;
+import org.example.enums.TipoClimatico;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
@@ -48,6 +50,8 @@ public class TelaDeJogoMontanha implements Screen {
     private Sound soundMountain;
     private long soundId;
 
+    private AmbienteMontanha ambienteMontanha;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -57,6 +61,8 @@ public class TelaDeJogoMontanha implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
+        this.ambienteMontanha = new AmbienteMontanha("Montanha", "Pico de um monte gelado",0.8, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.NEVASCA), true, false, player);
+
     }
 
     @Override
@@ -79,8 +85,6 @@ public class TelaDeJogoMontanha implements Screen {
 
         inventory = new Inventory(stage, 5, actorPlayer);
 
-
-
         stage.addActor(actorPlayer);
 
         criarActorCristal();
@@ -90,6 +94,8 @@ public class TelaDeJogoMontanha implements Screen {
 
         soundMountain = Gdx.audio.newSound(Gdx.files.internal("sons/soundMount.wav"));
         soundId = soundMountain.loop(0.5f);
+
+        ambienteMontanha.explorar(player);
 
     }
 

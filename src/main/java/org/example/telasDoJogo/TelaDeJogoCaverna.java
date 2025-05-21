@@ -19,10 +19,16 @@ import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
+import org.example.ambientes.AmbienteCaverna;
 import org.example.domain.Personagem;
+import org.example.enums.TipoClimatico;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TelaDeJogoCaverna implements Screen {
 
@@ -44,9 +50,10 @@ public class TelaDeJogoCaverna implements Screen {
     private Sound soundCavern;
     private long soundId;
 
+    private AmbienteCaverna ambienteCaverna;
+
     private Texture darkOverlay;
     private Texture lightTexture;
-    private float lightRadius = 200f;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -58,7 +65,7 @@ public class TelaDeJogoCaverna implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-
+        this.ambienteCaverna = new AmbienteCaverna("Caverna", "Um lugar escuro e misterioso", 0.5, Arrays.asList(TipoClimatico.CALOR), true, player);
     }
 
     @Override
@@ -92,6 +99,8 @@ public class TelaDeJogoCaverna implements Screen {
 
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
         lightTexture = new Texture(Gdx.files.internal("imagens/luz.png"));
+
+        ambienteCaverna.explorar(player);
 
     }
 

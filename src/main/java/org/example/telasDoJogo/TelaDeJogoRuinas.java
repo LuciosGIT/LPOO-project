@@ -17,7 +17,9 @@ import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorPilar;
 import org.example.actor.actorEstatua;
+import org.example.ambientes.AmbienteRuinas;
 import org.example.domain.Personagem;
+import org.example.enums.TipoClimatico;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
@@ -51,6 +53,8 @@ public class TelaDeJogoRuinas implements Screen {
     private Sound soundRuins;
     private long soundId;
 
+    private AmbienteRuinas ambienteRuinas;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -75,6 +79,8 @@ public class TelaDeJogoRuinas implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
+        this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 0.8,List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+
     }
 
     @Override
@@ -113,6 +119,8 @@ public class TelaDeJogoRuinas implements Screen {
 
         soundRuins = Gdx.audio.newSound(Gdx.files.internal("sons/soundRuin.wav"));
         soundId = soundRuins.loop(0.5f);
+
+        ambienteRuinas.explorar(player);
 
     }
 

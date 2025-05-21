@@ -72,25 +72,20 @@ public class TelaDeJogoFloresta implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-    }
-
-    @Override
-    public void show() {
-
-        try {
             this.ambienteFloresta = new AmbienteFloresta(
                     "Floresta",
                     "Uma floresta densa e cheia de vida.",
                     0.5,
-                    Arrays.asList(TipoClimatico.TEMPESTADE),
+                    Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR),
                     true,
                     true,
                     true,
                     player
             );
-        }catch (Exception e) {
-            System.out.println("Erro ao criar o ambiente: " + e.getMessage());
-        }
+    }
+
+    @Override
+    public void show() {
 
         inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
@@ -123,6 +118,10 @@ public class TelaDeJogoFloresta implements Screen {
         soundId = soundForest.loop(0.6f);
 
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
+        ambienteFloresta.explorar(player);
+
+        instanciarPilhaDeItem();
 
     }
 
@@ -169,8 +168,6 @@ public class TelaDeJogoFloresta implements Screen {
         popUp.setPosition(actorPlayer);
 
         inputs.inputListener(actorPlayer,inventory, popUp);
-
-        instanciarPilhaDeItem();
 
     }
 
@@ -333,7 +330,7 @@ public class TelaDeJogoFloresta implements Screen {
                     isPilhaDeItemInstanciada = true;
                 }
             }
-        }, 0, 1);
+        }, 0, 10);
     }
 
     private void sairDoCenario() {

@@ -23,6 +23,7 @@ import org.example.actor.actorPonte;
 import org.example.ambientes.AmbienteFloresta;
 import org.example.ambientes.AmbienteLagoRio;
 import org.example.domain.Personagem;
+import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
@@ -30,6 +31,7 @@ import org.example.Ui.Craft;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TelaDeJogoLagoRio implements Screen {
@@ -70,7 +72,7 @@ public class TelaDeJogoLagoRio implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 0.5, new ArrayList<>(), true);
+        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 0.5, Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
     }
 
     @Override
@@ -107,6 +109,8 @@ public class TelaDeJogoLagoRio implements Screen {
 
         soundRiver = Gdx.audio.newSound(Gdx.files.internal("sons/soundLake.wav"));
         soundId = soundRiver.loop(0.5f);
+
+        ambienteLagoRio.explorar(player);
 
     }
 
