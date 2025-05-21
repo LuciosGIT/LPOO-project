@@ -54,6 +54,9 @@ public class TelaDeJogoLagoRio implements Screen {
 
     private Craft popUp;
 
+    private Sound soundRiver;
+    private long soundId;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -96,6 +99,9 @@ public class TelaDeJogoLagoRio implements Screen {
         this.popUp = new Craft(stage, "Cria Item", "Pressione 'C' para abrir o inventário", actorPlayer, inventory);
 
         inputs = new Inputs();
+
+        soundRiver = Gdx.audio.newSound(Gdx.files.internal("sons/soundLake.wav"));
+        soundId = soundRiver.loop(0.5f);
 
     }
 
@@ -306,6 +312,10 @@ public class TelaDeJogoLagoRio implements Screen {
     @Override
     public void dispose() {
 
+        if (soundRiver != null) {
+            soundRiver.stop();
+            soundRiver.dispose();
+        }
 
         inicializarMundo.dispose();
         inventory.dispose();

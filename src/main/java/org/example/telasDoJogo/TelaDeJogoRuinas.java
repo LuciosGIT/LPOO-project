@@ -48,6 +48,9 @@ public class TelaDeJogoRuinas implements Screen {
 
     private Craft popUp;
 
+    private Sound soundRuins;
+    private long soundId;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -108,6 +111,10 @@ public class TelaDeJogoRuinas implements Screen {
         // Adiciona um efeito de fade-in para a transição
         stage.getRoot().getColor().a = 0f;
         stage.getRoot().addAction(Actions.fadeIn(1.0f));
+
+        soundRuins = Gdx.audio.newSound(Gdx.files.internal("sons/soundRuin.wav"));
+        soundId = soundRuins.loop(0.5f);
+
     }
 
     @Override
