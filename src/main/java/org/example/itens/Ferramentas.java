@@ -77,6 +77,12 @@ public class Ferramentas extends Item {
                 // aplicar efeito no ambiente
                 this.diminuirDurabilidade(15.0);
             }
+
+            case CHAVE_ESPECIAL -> {
+                System.out.println("Você está utilizando a Chave do Rei " + this.getNomeItem());
+                // aplicar efeito no ambiente
+                this.diminuirDurabilidade(15.0);
+            }
         }
     }
 
@@ -109,6 +115,9 @@ public class Ferramentas extends Item {
                 return "imagens/assets/itens/ferramentas/lanterna.png";
             }
 
+            case CHAVE_ESPECIAL -> {
+                return "imagens/assets/itens/ferramentas/chave-especial.png";
+            }
         }
         return "imagens/assets/itens/default.png";
     }
