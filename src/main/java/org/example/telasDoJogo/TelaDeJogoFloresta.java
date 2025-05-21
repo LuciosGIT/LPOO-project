@@ -259,13 +259,20 @@ public class TelaDeJogoFloresta implements Screen {
         boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
         boolean naBordaInferior = playerY <= margin;
 
-        if (naBoradaEsquerda || naBordaDireita || naBordaSuperior) {
+        if (naBoradaEsquerda || naBordaSuperior) {
 
             actorPlayer.addAction(Actions.fadeIn(0.1f));
 
             game.setScreen(new TelaDeJogoCaverna(game, player));
             dispose();
 
+        }
+
+        if(naBordaDireita) {
+            actorPlayer.addAction(Actions.fadeIn(0.1f));
+
+            game.setScreen(new TelaDeJogoRuinas(game, player));
+            dispose();
         }
 
         if (naBordaInferior) {
