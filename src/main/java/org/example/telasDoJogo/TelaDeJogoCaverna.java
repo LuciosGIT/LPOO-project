@@ -142,11 +142,19 @@ public class TelaDeJogoCaverna implements Screen {
 
     @Override
     public void hide() {
-        // Implement hide logic here
+        if (soundCavern != null) {
+            soundCavern.stop(soundId); // Stop the specific sound instance
+        }
     }
 
     @Override
     public void dispose() {
+
+        if (soundCavern != null) {
+            soundCavern.stop();
+            soundCavern.dispose();
+        }
+
         inicializarMundo.dispose();
 
         inventory.dispose();

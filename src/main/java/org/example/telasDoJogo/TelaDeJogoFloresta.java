@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +25,7 @@ import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,9 @@ public class TelaDeJogoFloresta implements Screen {
     private float viewportHeight; // Altura visível da câmera
 
     private Craft popUp;
+
+    private Sound soundForest;
+    private long soundId;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -90,6 +95,9 @@ public class TelaDeJogoFloresta implements Screen {
         this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
 
         inputs = new Inputs();
+
+        this.soundForest = Gdx.audio.newSound(Gdx.files.internal("sons/soundForest.wav"));
+        soundId = soundForest.loop(0.6f);
 
     }
 
@@ -152,6 +160,12 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
+
+        if (soundForest != null) {
+            soundForest.stop();
+            soundForest.dispose();
+        }
+
         inicializarMundo.dispose();
         for(actorArvore arvore : listaDeArvores){
             arvore.dispose();
