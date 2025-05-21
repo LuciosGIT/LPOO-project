@@ -22,12 +22,12 @@ public class actorRio extends Actor implements Collidable {
         this.inventory = inventory;
 
         // Keep collider thin and shift left
-        float colliderWidth = largura * 0.3f;  // 10% of original width
-        float colliderHeight = altura * 1.38f;  // 130% of original height
+        float colliderWidth = largura;  // 10% of original width
+        float colliderHeight = altura * 1.3f;  // 130% of original height
 
         // Move the collider more to the left by adjusting the offset
-        float offsetX = (largura - colliderWidth) / 2 - 50f;  // Shifted 50 units left
-        float offsetY = -altura * 0.15f;  // Keep vertical offset the same
+        float offsetX = (largura - colliderWidth) / 2 - 30f;
+        float offsetY = -altura * 0.12f;  // Keep vertical offset the same
 
         setBounds(x, y, largura, altura);
 
