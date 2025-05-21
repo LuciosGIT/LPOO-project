@@ -20,6 +20,8 @@ import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorRio;
 import org.example.actor.actorPonte;
+import org.example.ambientes.AmbienteFloresta;
+import org.example.ambientes.AmbienteLagoRio;
 import org.example.domain.Personagem;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
@@ -57,6 +59,8 @@ public class TelaDeJogoLagoRio implements Screen {
     private Sound soundRiver;
     private long soundId;
 
+    private AmbienteLagoRio ambienteLagoRio;
+
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
@@ -66,6 +70,7 @@ public class TelaDeJogoLagoRio implements Screen {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
+        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 0.5, new ArrayList<>(), true);
     }
 
     @Override
@@ -110,7 +115,7 @@ public class TelaDeJogoLagoRio implements Screen {
             @Override
             public void run() {
                 if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
-                    pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory);
+                    pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory, ambienteLagoRio);
                     stage.addActor(pilhaDeItem);
                     isPilhaDeItemInstanciada = true;
                 }

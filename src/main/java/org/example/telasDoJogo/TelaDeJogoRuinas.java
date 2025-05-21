@@ -96,8 +96,7 @@ public class TelaDeJogoRuinas implements Screen {
 
         inventory = new Inventory(stage, 5, actorPlayer);
 
-        pilhaDeItem = new actorPilhaDeItem(150, 150, player, inventory);
-        stage.addActor(pilhaDeItem);
+
 
         stage.addActor(actorPlayer);
 
