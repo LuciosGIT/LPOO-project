@@ -20,6 +20,7 @@ import org.example.actor.actorPilhaDeItem;
 import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,9 @@ public class TelaDeJogoMontanha implements Screen {
     private float worldHeight; // Altura do mundo
     private float viewportWidth; // Largura visível da câmera
     private float viewportHeight; // Altura visível da câmera
+
+    private Sound soundMountain;
+    private long soundId;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -84,6 +88,9 @@ public class TelaDeJogoMontanha implements Screen {
         inventory.updateInventory();
 
         this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
+
+        soundMountain = Gdx.audio.newSound(Gdx.files.internal("sons/soundMount.wav"));
+        soundId = soundMountain.loop(0.5f);
 
     }
 
@@ -146,6 +153,13 @@ public class TelaDeJogoMontanha implements Screen {
 
     @Override
     public void dispose() {
+
+        if (soundMountain != null) {
+            soundMountain.stop();
+            soundMountain.dispose();
+        }
+
+
         inicializarMundo.dispose();
         for(actorCristal cristal : listaDeCristais){
             cristal.dispose();
