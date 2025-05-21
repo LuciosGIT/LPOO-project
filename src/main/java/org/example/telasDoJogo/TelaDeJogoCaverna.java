@@ -22,9 +22,7 @@ import org.example.actor.actorPersonagem;
 import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.badlogic.gdx.audio.Sound;
 
 public class TelaDeJogoCaverna implements Screen {
 
@@ -42,6 +40,9 @@ public class TelaDeJogoCaverna implements Screen {
     private float viewportHeight;
 
     private Craft popUp;
+
+    private Sound soundCavern;
+    private long soundId;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -82,6 +83,8 @@ public class TelaDeJogoCaverna implements Screen {
 
         this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
 
+        this.soundCavern = Gdx.audio.newSound(Gdx.files.internal("sons/soudCavern.wav"));
+        soundId = soundCavern.loop(0.6f);
 
     }
 
