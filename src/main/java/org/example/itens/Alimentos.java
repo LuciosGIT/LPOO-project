@@ -42,8 +42,12 @@ public class  Alimentos extends Item {
     public void usar() {
 
         System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
+        try {
+            consumir();
+        }catch (Exception e) {
+            System.out.println("Erro ao consumir o alimento: " + e.getMessage());
+        }
 
-        consumir();
     }
 
     public void consumir() {
