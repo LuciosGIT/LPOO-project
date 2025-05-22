@@ -55,7 +55,6 @@ public class AmbienteCaverna extends Ambiente {
     @Override
     public void explorar(Personagem jogador){
 
-        this.gerarEvento(jogador);
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
         // ExploracaoService.explorar(jogador,this);
@@ -87,9 +86,10 @@ public class AmbienteCaverna extends Ambiente {
     }
 
     @Override
-    public void gerarEvento(Personagem jogador){
+    public Evento gerarEvento(Personagem jogador){
         Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
         GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
+        return eventoSorteado;
     }
 
     @Override

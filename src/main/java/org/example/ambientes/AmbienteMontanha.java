@@ -39,7 +39,7 @@ public class AmbienteMontanha extends Ambiente {
                 getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(1).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
                 getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(3).getNivelDePerigo()));
-        this.getEventos().add(new EventoClimatico(true, "Evento de Nevasca foi acionado", "Afeta a visibilidade", "Evento de Nevasca" , 0.5, TipoClimatico.NEVASCA, 5, "A nevasca reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
+        this.getEventos().add(new EventoClimatico(true, "Evento de Nevasca foi acionado", "Afeta a visibilidade", "Evento de Nevasca" , 0.7, TipoClimatico.NEVASCA, 5, "A nevasca reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
         this.terrenoAcidentado = terrenoAcidentado;
         this.climaInstavel = climaInstavel;
 
@@ -56,8 +56,6 @@ public class AmbienteMontanha extends Ambiente {
 
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
 
-
-        this.gerarEvento(jogador);
 
         // ExploracaoService.explorar(jogador,this);
 
@@ -86,9 +84,10 @@ public class AmbienteMontanha extends Ambiente {
     }
 
     @Override
-    public void gerarEvento(Personagem jogador){
+    public Evento gerarEvento(Personagem jogador){
         Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
         GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
+        return eventoSorteado;
     }
 
     @Override

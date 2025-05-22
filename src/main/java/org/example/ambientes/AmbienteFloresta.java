@@ -90,9 +90,10 @@ public class AmbienteFloresta extends Ambiente {
 
 
     @Override
-    public void gerarEvento(Personagem jogador){
+    public Evento gerarEvento(Personagem jogador){
         Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
         GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
+        return eventoSorteado;
     }
 
     @Override

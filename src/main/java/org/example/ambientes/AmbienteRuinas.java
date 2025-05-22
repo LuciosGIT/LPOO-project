@@ -50,7 +50,6 @@ public class AmbienteRuinas extends Ambiente {
     public void explorar(Personagem jogador){
 
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
-        this.gerarEvento(jogador);
 
         // ExploracaoService.explorar(jogador,this);
 
@@ -77,9 +76,10 @@ public class AmbienteRuinas extends Ambiente {
     }
 
     @Override
-    public void gerarEvento(Personagem jogador){
+    public Evento gerarEvento(Personagem jogador){
         Evento eventoSorteado = GerenciadorDeEventos.sortearEvento(this);
         GerenciadorDeEventos.aplicarEvento(jogador, eventoSorteado);
+        return eventoSorteado;
     }
 
     @Override
