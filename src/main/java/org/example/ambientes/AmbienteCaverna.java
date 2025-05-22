@@ -55,8 +55,10 @@ public class AmbienteCaverna extends Ambiente {
     @Override
     public void explorar(Personagem jogador){
 
+        this.gerarEvento(jogador);
         //metodo para encontrar itens ou enfrentar monstros dependendo de probabilidade
-        ExploracaoService.explorar(jogador,this);
+
+        // ExploracaoService.explorar(jogador,this);
 
         //ao explorar gasta 4 de energia, 1 de fome e 1 de água
         //dificuldade é dada em porcentagem?
@@ -67,8 +69,8 @@ public class AmbienteCaverna extends Ambiente {
         {
             System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
-            jogador.aumentarSede(1.0*getDificuldadeExploracao()*1.25);
-            jogador.aumentarFome(1.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
+            jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
         }
         else
         {

@@ -59,7 +59,11 @@ public class AmbienteFloresta extends Ambiente {
     @Override
     public void explorar(Personagem jogador) {
 
-        ExploracaoService.explorar(jogador, this);
+        System.out.println(jogador.getFome());
+
+        this.gerarEvento(jogador);
+
+        // ExploracaoService.explorar(jogador, this);
 
         if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
