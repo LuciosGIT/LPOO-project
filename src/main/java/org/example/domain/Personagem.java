@@ -1,6 +1,7 @@
 package org.example.domain;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import org.example.ambientes.AmbienteFloresta;
 import org.example.ambientes.AmbienteSpawn;
 import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
@@ -38,12 +39,12 @@ public abstract class Personagem implements PersonagemInterface{
     public Personagem(String nome, Double danoDeAtaque) {
         this.nome = nome;
         this.energia = 100.0;
-        this.fome = 50.0;
+        this.fome = 80.0;
         this.vida = 100.0;
-        this.sede = 50.0;
+        this.sede = 70.0;
         this.sanidade = 100.0;
         this.inventario = new Inventario(5, new ArrayList<>(), 0.0);
-        this.localizacao = new AmbienteSpawn();
+        this.localizacao = new AmbienteFloresta();
         this.estaEnvenenado = false;
         this.danoDeAtaque = danoDeAtaque;
 
