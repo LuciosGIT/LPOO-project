@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Array;
 import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
@@ -19,14 +21,18 @@ import org.example.actor.actorCristal;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.ambientes.AmbienteMontanha;
+import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.eventos.EventoClimatico;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class TelaDeJogoMontanha implements Screen {
 
@@ -58,6 +64,13 @@ public class TelaDeJogoMontanha implements Screen {
     LifeBar lifeBar;
     HungerBar hungerBar;
     Inventory inventory;
+
+    // Variáveis para o efeito de neve
+    private boolean climaNeveAtivo = false;
+    private Texture snowflakeTexture;
+    private Array<Rectangle> snowflakes;
+    private Random random;
+    private float timeSinceLastSnowflake;
 
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
@@ -99,7 +112,19 @@ public class TelaDeJogoMontanha implements Screen {
         soundMountain = Gdx.audio.newSound(Gdx.files.internal("sons/soundMount.wav"));
         soundId = soundMountain.loop(0.5f);
 
+        // Inicializar componentes do efeito de neve
+        snowflakeTexture = new Texture(Gdx.files.internal("imagens/assets/particles/neve.png"));
+        snowflakes = new Array<Rectangle>();
+        random = new Random();
+        timeSinceLastSnowflake = 0;
+
         ambienteMontanha.explorar(player);
+
+        // Verificar se há evento climático e aplicar
+        Evento evento = ambienteMontanha.gerarEvento(player);
+        if (evento instanceof EventoClimatico) {
+            aplicarClimaNaTela((EventoClimatico) evento);
+        }
     }
 
     @Override
@@ -123,6 +148,64 @@ public class TelaDeJogoMontanha implements Screen {
                 0, 0,
                 worldWidth, worldHeight
         );
+
+        // Renderizar efeito de neve lateral
+        if (climaNeveAtivo) {
+            // Calcular a área visível da câmera
+            float leftEdge = camera.position.x - viewportWidth/2 * camera.zoom;
+            float rightEdge = camera.position.x + viewportWidth/2 * camera.zoom;
+            float topEdge = camera.position.y + viewportHeight/2 * camera.zoom;
+            float bottomEdge = camera.position.y - viewportHeight/2 * camera.zoom;
+
+            // Atualizar o tempo desde o último floco
+            timeSinceLastSnowflake += delta;
+
+            // Adicionar novos flocos
+            if (timeSinceLastSnowflake > 0.01f) {
+                timeSinceLastSnowflake = 0;
+
+                // Criar vários flocos por frame para uma nevasca densa
+                for (int i = 0; i < 8; i++) {
+                    Rectangle snowflake = new Rectangle();
+
+                    // Posicionar os flocos no lado esquerdo da tela
+                    snowflake.x = leftEdge - 10; // Começar um pouco fora da tela
+
+                    // Distribuir os flocos verticalmente na parte superior da tela
+                    // Usamos 70% da altura da tela para que os flocos pareçam vir do céu
+                    float alturaDistribuicao = viewportHeight * 0.7f;
+                    snowflake.y = topEdge - random.nextFloat() * alturaDistribuicao;
+
+                    // Tamanho dos flocos
+                    snowflake.width = 4 + random.nextFloat() * 18; // Flocos maiores
+                    snowflake.height = snowflake.width;
+
+                    snowflakes.add(snowflake);
+                }
+            }
+
+            // Atualizar e desenhar os flocos existentes
+            for (Iterator<Rectangle> iter = snowflakes.iterator(); iter.hasNext(); ) {
+                Rectangle snowflake = iter.next();
+
+                // Movimento principal da esquerda para a direita
+                snowflake.x += (200 + random.nextFloat() * 150) * delta; // Velocidade horizontal
+
+                // Pequeno movimento vertical para dar mais naturalidade
+                snowflake.y -= (20 + random.nextFloat() * 40) * delta; // Queda leve
+
+                // Movimento oscilante vertical para simular flutuação
+                snowflake.y += Math.sin(snowflake.x * 0.03) * 1.5 * delta * 60;
+
+                // Remover flocos que saíram da tela
+                if (snowflake.x > rightEdge || snowflake.y < bottomEdge) {
+                    iter.remove();
+                } else {
+                    batch.draw(snowflakeTexture, snowflake.x, snowflake.y, snowflake.width, snowflake.height);
+                }
+            }
+        }
+
         batch.end();
         stage.act(deltaTime);
         stage.draw();
@@ -145,6 +228,14 @@ public class TelaDeJogoMontanha implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
 
         popUp.setPosition(actorPlayer);
+    }
+
+    private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {
+        if (eventoClimatico.getTipoDeClima() == TipoClimatico.NEVASCA) {
+            climaNeveAtivo = true;
+        } else {
+            climaNeveAtivo = false;
+        }
     }
 
     @Override
@@ -177,6 +268,10 @@ public class TelaDeJogoMontanha implements Screen {
 
         if(hungerBar != null) {
             hungerBar.dispose();
+        }
+
+        if (snowflakeTexture != null) {
+            snowflakeTexture.dispose();
         }
     }
 

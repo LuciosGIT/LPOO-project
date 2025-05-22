@@ -10,8 +10,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.HungerBar;
 import org.example.Ui.Inventory;
@@ -20,16 +22,20 @@ import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.ambientes.AmbienteFloresta;
+import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
+import org.example.eventos.EventoClimatico;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class TelaDeJogoFloresta implements Screen {
 
@@ -64,6 +70,13 @@ public class TelaDeJogoFloresta implements Screen {
     Inventory inventory;
     HungerBar hungerBar;
 
+    // Variáveis para o efeito de chuva
+    private boolean climaChuvosoAtivo = false;
+    private Texture rainDropTexture;
+    private Array<Rectangle> raindrops;
+    private Random random;
+    private float timeSinceLastDrop;
+
     public TelaDeJogoFloresta(Game game, Personagem player) {
         this.game = game;
         this.player = player;
@@ -82,7 +95,6 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void show() {
-
         inicializarMundo = new InicializarMundo(actorPlayer, "imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
         this.camera = inicializarMundo.getCamera();
@@ -119,6 +131,17 @@ public class TelaDeJogoFloresta implements Screen {
 
         ambienteFloresta.explorar(player);
         instanciarPilhaDeItem();
+
+        // Inicializar componentes do efeito de chuva
+        rainDropTexture = new Texture(Gdx.files.internal("imagens/assets/particles/chuva.png"));
+        raindrops = new Array<Rectangle>();
+        random = new Random();
+        timeSinceLastDrop = 0;
+
+        Evento evento = ambienteFloresta.gerarEvento(player);
+        if (evento instanceof EventoClimatico) {
+            aplicarClimaNaTela((EventoClimatico) evento);
+        }
     }
 
     @Override
@@ -129,7 +152,6 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void render(float delta) {
-
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
         float darkness = time();
 
@@ -142,12 +164,52 @@ public class TelaDeJogoFloresta implements Screen {
         batch.setColor(0, 0, 0, darkness);
         batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
         batch.setColor(1, 1, 1, 1);
+
+        // Renderizar efeito de chuva
+        if (climaChuvosoAtivo) {
+            // Calcular a área visível da câmera
+            float leftEdge = camera.position.x - viewportWidth/2 * camera.zoom;
+            float rightEdge = camera.position.x + viewportWidth/2 * camera.zoom;
+            float topEdge = camera.position.y + viewportHeight/2 * camera.zoom;
+            float bottomEdge = camera.position.y - viewportHeight/2 * camera.zoom;
+
+            // Atualizar o tempo desde a última gota
+            timeSinceLastDrop += delta;
+
+            // Adicionar novas gotas
+            if (timeSinceLastDrop > 0.005f) { // Ajuste este valor para controlar a intensidade da chuva
+                timeSinceLastDrop = 0;
+
+                // Criar várias gotas por frame para uma chuva mais densa
+                for (int i = 0; i < 5; i++) {
+                    Rectangle raindrop = new Rectangle();
+                    raindrop.x = leftEdge + random.nextFloat() * (rightEdge - leftEdge);
+                    raindrop.y = topEdge;
+                    raindrop.width = 1 + random.nextFloat() * 2; // Largura variável
+                    raindrop.height = 10 + random.nextFloat() * 15; // Altura variável
+                    raindrops.add(raindrop);
+                }
+            }
+
+            // Atualizar e desenhar as gotas existentes
+            for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext(); ) {
+                Rectangle raindrop = iter.next();
+                raindrop.y -= (400 + random.nextFloat() * 200) * delta; // Velocidade variável
+
+                // Remover gotas que saíram da tela
+                if (raindrop.y < bottomEdge) {
+                    iter.remove();
+                } else {
+                    batch.draw(rainDropTexture, raindrop.x, raindrop.y, raindrop.width, raindrop.height);
+                }
+            }
+        }
+
         batch.end();
 
         stage.act(deltaTime);
         stage.draw();
 
-        // Atualizações
         movement(deltaTime);
         camera();
         lifeBar.setPosition(actorPlayer);
@@ -165,6 +227,14 @@ public class TelaDeJogoFloresta implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
     }
 
+    private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {
+        if (eventoClimatico.getTipoDeClima() == TipoClimatico.TEMPESTADE) {
+            climaChuvosoAtivo = true;
+        } else {
+            climaChuvosoAtivo = false;
+        }
+    }
+
     @Override
     public void pause() { }
 
@@ -176,7 +246,6 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
-
         if (pilhaDeItem != null) {
             pilhaDeItem.dispose();
         }
@@ -193,10 +262,13 @@ public class TelaDeJogoFloresta implements Screen {
 
         inventory.dispose();
         hungerBar.dispose();
+
+        if (rainDropTexture != null) {
+            rainDropTexture.dispose();
+        }
     }
 
     private void movement(float deltaTime) {
-
         float dx = 0, dy = 0;
         float moveSpeed = 200f;
 
@@ -238,13 +310,11 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void criarActorArvore() {
-
         float espacoMinimo = 250f;
         int maxTentativas = 30;
         int arvoresCriadas = 0;
 
         while (arvoresCriadas < 8 && maxTentativas > 0) {
-
             float posX = MathUtils.random(100, worldWidth - 100);
             float posY = MathUtils.random(100, worldHeight - 100);
 
