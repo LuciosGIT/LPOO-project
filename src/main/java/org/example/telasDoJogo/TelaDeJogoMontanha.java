@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
@@ -25,6 +26,7 @@ import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.eventos.EventoClimatico;
+import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
@@ -42,6 +44,7 @@ public class TelaDeJogoMontanha implements Screen {
     private actorCristal cristal;
     private final List<actorCristal> listaDeCristais = new ArrayList<>();
     private actorPilhaDeItem pilhaDeItem;
+    private boolean isPilhaDeItemInstanciada;
     private Texture backgroundMontanha;
     private Batch batch;
     private Stage stage;
@@ -101,6 +104,8 @@ public class TelaDeJogoMontanha implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
+        isPilhaDeItemInstanciada = false;
+
         hungerBar = new HungerBar(actorPlayer);
         stage.addActor(hungerBar.getHungerBar());
 
@@ -123,6 +128,8 @@ public class TelaDeJogoMontanha implements Screen {
         snowflakes = new Array<Rectangle>();
         random = new Random();
         timeSinceLastSnowflake = 0;
+
+        instanciarPilhaDeItem();
 
         ambienteMontanha.explorar(player);
 
@@ -278,6 +285,23 @@ public class TelaDeJogoMontanha implements Screen {
         if (snowflakeTexture != null) {
             snowflakeTexture.dispose();
         }
+    }
+
+    public void instanciarPilhaDeItem() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+
+                if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
+                    float posx = MathUtils.random(0, worldWidth - 100);
+                    float posy = MathUtils.random(0, worldHeight - 100);
+
+                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteMontanha);
+                    stage.addActor(pilhaDeItem);
+                    isPilhaDeItemInstanciada = true;
+                }
+            }
+        }, 0, 10);
     }
 
     private void movement(float deltaTime) {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.Ui.HungerBar;
@@ -21,6 +22,7 @@ import org.example.actor.actorEstatua;
 import org.example.ambientes.AmbienteRuinas;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
@@ -43,6 +45,7 @@ public class TelaDeJogoRuinas implements Screen {
     private Batch batch;
     private Stage stage;
     private OrthographicCamera camera;
+    private boolean isPilhaDeItemInstanciada;
 
     private float worldWidth; // Largura do mundo
     private float worldHeight; // Altura do mundo
@@ -110,6 +113,8 @@ public class TelaDeJogoRuinas implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
+        isPilhaDeItemInstanciada = false;
+
         hungerBar = new HungerBar(actorPlayer);
         stage.addActor(hungerBar.getHungerBar());
 
@@ -132,6 +137,8 @@ public class TelaDeJogoRuinas implements Screen {
         soundId = soundRuins.loop(0.5f);
 
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
+        instanciarPilhaDeItem();
 
         ambienteRuinas.explorar(player);
     }
@@ -209,6 +216,23 @@ public class TelaDeJogoRuinas implements Screen {
         actorEstatua.disposeTextures();
         inventory.dispose();
         hungerBar.dispose();
+    }
+
+    public void instanciarPilhaDeItem() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+
+                if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
+                    float posx = MathUtils.random(0, worldWidth - 100);
+                    float posy = MathUtils.random(0, worldHeight - 100);
+
+                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteRuinas);
+                    stage.addActor(pilhaDeItem);
+                    isPilhaDeItemInstanciada = true;
+                }
+            }
+        }, 0, 10);
     }
 
     private void movement(float deltaTime) {

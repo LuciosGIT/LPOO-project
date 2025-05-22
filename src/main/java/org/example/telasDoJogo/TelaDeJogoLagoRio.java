@@ -127,12 +127,15 @@ public class TelaDeJogoLagoRio implements Screen {
             @Override
             public void run() {
                 if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
-                    pilhaDeItem = new actorPilhaDeItem(100, 100, player, inventory, ambienteLagoRio);
+                    float posx = MathUtils.random(0, worldWidth - 100);
+                    float posy = MathUtils.random(0, worldHeight - 100);
+
+                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteLagoRio);
                     stage.addActor(pilhaDeItem);
                     isPilhaDeItemInstanciada = true;
                 }
             }
-        }, 0, 2);
+        }, 0, 10);
     }
 
     @Override
