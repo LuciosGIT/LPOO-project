@@ -73,7 +73,7 @@ Além disso, o jogador pode coletar e administrar recursos no **inventário**, o
 > # Menu de Seleção dos Personagens 
 > [![3LKB6I2.md.png](https://iili.io/3LKB6I2.md.png)](https://freeimage.host/i/3LKB6I2)
 >  # Preview de um dos ambientes (Lago-Rio)
-> [![3LKa7iG.md.png](https://iili.io/3LKa7iG.md.png)](https://freeimage.host/i/3LKa7iG)
+> [![3QSbPJR.md.png](https://iili.io/3QSbPJR.md.png)](https://freeimage.host/i/3QSbPJR)
 
 ---
 
