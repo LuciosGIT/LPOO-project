@@ -235,7 +235,7 @@ public class TelaDeJogoLagoRio implements Screen {
         float rioLargura = 500;
         float rioX = (worldWidth - rioLargura) / 2;
         float alturaPonte = 250;
-        float deslocamentoEsquerda = 20f;
+        float deslocamentoEsquerda = 2f;
         float ponteY = (worldHeight - alturaPonte) / 2;
         float ponteX = rioX - deslocamentoEsquerda;
 
