@@ -45,6 +45,7 @@ public class EventoClimatico extends Evento {
         //suponde que nos ambientes irá ter a lista de ambientes
         //não é necessario todos os passos anteriores já que n é preciso verificar qual irá ser os climas que estão presentes no ambiente
        efeitosDoClima(jogador, this, local);
+       System.out.println("Evento Climático acionado!");
 
     }
 

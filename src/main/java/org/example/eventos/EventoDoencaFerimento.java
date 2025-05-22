@@ -24,6 +24,7 @@ public class EventoDoencaFerimento extends Evento {
 
     @Override
     public void executar(Personagem jogador, Ambiente local) {
+        System.out.println("Um evento de doença ou ferimento foi acionado!");
        switch (tipoCondicao) {
 
            case INFECCAO -> {
