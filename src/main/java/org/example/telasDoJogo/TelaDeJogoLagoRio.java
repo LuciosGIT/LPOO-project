@@ -61,6 +61,10 @@ public class TelaDeJogoLagoRio implements Screen {
     private Sound soundRiver;
     private long soundId;
 
+    private Texture darkOverlay;
+    private float currentTime = 12f;
+    private float dayDuration = 300f;
+
     private AmbienteLagoRio ambienteLagoRio;
 
     InicializarMundo inicializarMundo;
@@ -113,6 +117,8 @@ public class TelaDeJogoLagoRio implements Screen {
         soundRiver = Gdx.audio.newSound(Gdx.files.internal("sons/soundLake.wav"));
         soundId = soundRiver.loop(0.5f);
 
+        darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
         ambienteLagoRio.explorar(player);
     }
 
@@ -132,14 +138,17 @@ public class TelaDeJogoLagoRio implements Screen {
     @Override
     public void render(float delta) {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+        float darkness = time();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        stage.getViewport().apply();
         batch.draw(backgroundLagoRio, 0, 0, worldWidth, worldHeight);
+        batch.setColor(0, 0, 0, darkness);
+        batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
+        batch.setColor(1, 1, 1, 1);
         batch.end();
 
         stage.act(deltaTime);
@@ -205,6 +214,29 @@ public class TelaDeJogoLagoRio implements Screen {
         camera.position.x = MathUtils.clamp(camera.position.x + (posX - camera.position.x) * lerp, minX, maxX);
         camera.position.y = MathUtils.clamp(camera.position.y + (posY - camera.position.y) * lerp, minY, maxY);
         camera.update();
+    }
+
+    private float time() {
+        currentTime += Gdx.graphics.getDeltaTime() * (24f / dayDuration);
+        if (currentTime >= 24f) {
+            currentTime = 0f;
+        }
+
+        float darkness;
+
+        if (currentTime >= 18f || currentTime < 6f) {
+            darkness = 0.5f;  // Maximum darkness changed to 0.5
+        } else if (currentTime >= 6f && currentTime < 7f) {
+            float t = (currentTime - 6f);
+            darkness = 0.5f - (0.3f * t);  // Changed from 0.8f and 0.6f
+        } else if (currentTime >= 17f && currentTime < 18f) {
+            float t = (currentTime - 17f);
+            darkness = 0.2f + (0.3f * t);  // Changed multiplier to 0.3f
+        } else {
+            darkness = 0.2f;  // Minimum darkness stays the same
+        }
+
+        return darkness;
     }
 
     private void sairDoCenario() {
@@ -286,14 +318,12 @@ public class TelaDeJogoLagoRio implements Screen {
         stage.getViewport().update(width, height, true);
         camera.update();
     }
-
     @Override
     public void pause() {}
     @Override
     public void resume() {}
     @Override
     public void hide() {}
-
     @Override
     public void dispose() {
         if (soundRiver != null) {

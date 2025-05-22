@@ -54,6 +54,10 @@ public class TelaDeJogoRuinas implements Screen {
     private Sound soundRuins;
     private long soundId;
 
+    private Texture darkOverlay;
+    private float currentTime = 12f;
+    private float dayDuration = 300f;
+
     private AmbienteRuinas ambienteRuinas;
 
     InicializarMundo inicializarMundo;
@@ -127,6 +131,8 @@ public class TelaDeJogoRuinas implements Screen {
         soundRuins = Gdx.audio.newSound(Gdx.files.internal("sons/soundRuin.wav"));
         soundId = soundRuins.loop(0.5f);
 
+        darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
         ambienteRuinas.explorar(player);
     }
 
@@ -139,20 +145,19 @@ public class TelaDeJogoRuinas implements Screen {
     @Override
     public void render(float delta) {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+        float darkness = time();
 
-        // Cor de fundo mais escura para ruínas
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        stage.getViewport().apply();
-
-        batch.draw(backgroundRuinas,
-                0, 0,
-                worldWidth, worldHeight
-        );
+        batch.draw(backgroundRuinas, 0, 0, worldWidth, worldHeight);
+        batch.setColor(0, 0, 0, darkness);
+        batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
+        batch.setColor(1, 1, 1, 1);
         batch.end();
+
         stage.act(deltaTime);
         stage.draw();
 
@@ -247,6 +252,28 @@ public class TelaDeJogoRuinas implements Screen {
         );
 
         camera.update();
+    }
+
+    private float time() {
+        currentTime += Gdx.graphics.getDeltaTime() * (24f / dayDuration);
+        if (currentTime >= 24f) {
+            currentTime = 0f;
+        }
+
+        float darkness;
+        if (currentTime >= 18f || currentTime < 6f) {
+            darkness = 0.8f;
+        } else if (currentTime >= 6f && currentTime < 7f) {
+            float t = (currentTime - 6f);
+            darkness = 0.8f - (0.6f * t);
+        } else if (currentTime >= 17f && currentTime < 18f) {
+            float t = (currentTime - 17f);
+            darkness = 0.2f + (0.6f * t);
+        } else {
+            darkness = 0.2f;
+        }
+
+        return darkness;
     }
 
     private void criarPilaresEEstatuas() {

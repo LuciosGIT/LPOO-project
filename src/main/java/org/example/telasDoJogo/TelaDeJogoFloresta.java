@@ -59,9 +59,11 @@ public class TelaDeJogoFloresta implements Screen {
     private Craft popUp;
     private Sound soundForest;
     private long soundId;
+
     private Texture darkOverlay;
     private float currentTime = 12f;
     private float dayDuration = 300f;
+
     private AmbienteFloresta ambienteFloresta;
 
     InicializarMundo inicializarMundo;
