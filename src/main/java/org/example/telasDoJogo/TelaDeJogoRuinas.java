@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
+import org.example.Ui.HungerBar;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorPilar;
@@ -58,6 +59,7 @@ public class TelaDeJogoRuinas implements Screen {
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
+    HungerBar hungerBar;
     Inventory inventory;
 
     // Constantes para limitar o número de objetos
@@ -80,7 +82,7 @@ public class TelaDeJogoRuinas implements Screen {
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
         try {
-            this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 0.8, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+            this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 5.5, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
         }
         catch (Exception e) {
             Gdx.app.error("TelaDeJogoRuinas", "Erro ao inicializar: " + e.getMessage());
@@ -104,9 +106,10 @@ public class TelaDeJogoRuinas implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
+        hungerBar = new HungerBar(actorPlayer);
+        stage.addActor(hungerBar.getHungerBar());
+
         inventory = new Inventory(stage, 5, actorPlayer);
-
-
 
         stage.addActor(actorPlayer);
 
@@ -125,9 +128,6 @@ public class TelaDeJogoRuinas implements Screen {
         soundId = soundRuins.loop(0.5f);
 
         ambienteRuinas.explorar(player);
-
-
-
     }
 
     @Override
@@ -161,6 +161,8 @@ public class TelaDeJogoRuinas implements Screen {
         camera();
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+        hungerBar.setPosition(actorPlayer);
+        hungerBar.setHungerValue(player.getFome());
         inventory.setPosition(camera);
 
         // Verifica colisão com pilares e estátuas
@@ -201,6 +203,7 @@ public class TelaDeJogoRuinas implements Screen {
         // Libera as texturas estáticas do actorEstatua
         actorEstatua.disposeTextures();
         inventory.dispose();
+        hungerBar.dispose();
     }
 
     private void movement(float deltaTime) {

@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.HungerBar;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorLago;
@@ -43,7 +43,7 @@ public class TelaDeJogoLagoRio implements Screen {
     private actorPilhaDeItem pilhaDeItem;
     private actorRio rioSuperior;
     private actorRio rioInferior;
-    private actorRio rioVisual; // Rio apenas visual, sem colisão
+    private actorRio rioVisual;
     private actorPonte ponte;
     private Texture backgroundLagoRio;
     private Batch batch;
@@ -66,13 +66,14 @@ public class TelaDeJogoLagoRio implements Screen {
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
+    HungerBar hungerBar; // <- NOVO
     Inventory inventory;
 
     public TelaDeJogoLagoRio(Game game, Personagem player) {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 0.5, Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 5.0, Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
     }
 
     @Override
@@ -95,11 +96,13 @@ public class TelaDeJogoLagoRio implements Screen {
         criarActorsLagosRioEPonte();
 
         stage.addActor(actorPlayer);
-
         inventory.updateInventory();
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        hungerBar = new HungerBar(actorPlayer); // <- NOVO
+        stage.addActor(hungerBar.getHungerBar()); // <- NOVO
 
         instanciarPilhaDeItem();
 
@@ -111,7 +114,6 @@ public class TelaDeJogoLagoRio implements Screen {
         soundId = soundRiver.loop(0.5f);
 
         ambienteLagoRio.explorar(player);
-
     }
 
     public void instanciarPilhaDeItem() {
@@ -148,6 +150,10 @@ public class TelaDeJogoLagoRio implements Screen {
 
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+
+        hungerBar.setPosition(actorPlayer); // <- NOVO
+        hungerBar.setHungerValue(player.getFome()); // <- NOVO
+
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeLagos);
@@ -156,11 +162,8 @@ public class TelaDeJogoLagoRio implements Screen {
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
-
         inputs.inputListener(actorPlayer, inventory, popUp);
-
         popUp.setPosition(actorPlayer);
-
     }
 
     private void verificarColisaoComRio(float deltaTime) {
@@ -229,65 +232,38 @@ public class TelaDeJogoLagoRio implements Screen {
         int maxTentativas = 50;
         int lagosCriados = 0;
 
-        // Dados do rio
         float rioLargura = 500;
-
-        // Posição X do rio (centralizado horizontalmente)
         float rioX = (worldWidth - rioLargura) / 2;
-
-        // Definir dimensões fixas para cada componente
         float alturaPonte = 250;
-
-        // Deslocamento para a esquerda (ajuste este valor conforme necessário)
-        float deslocamentoEsquerda = 20f; // 50 pixels para a esquerda
-
-        // Posicionar a ponte exatamente no centro vertical da tela, mas deslocada para a esquerda
+        float deslocamentoEsquerda = 20f;
         float ponteY = (worldHeight - alturaPonte) / 2;
-        float ponteX = rioX - deslocamentoEsquerda; // Deslocamento para a esquerda
+        float ponteX = rioX - deslocamentoEsquerda;
 
-        // Criar um rio visual contínuo para a aparência perfeita
         rioVisual = new actorRio(rioX, 0, rioLargura, worldHeight, player, inventory);
-
-        // Criar a ponte sobre o rio, deslocada para a esquerda
         ponte = new actorPonte(ponteX, ponteY, rioLargura, alturaPonte);
 
-        // Adicionar os atores visuais na ordem correta
         stage.addActor(rioVisual);
         stage.addActor(ponte);
 
-        // Agora criar os rios com colisão, mas não os adicionar ao stage (serão invisíveis)
-        // Rio superior - do topo da tela até o início da ponte
         rioSuperior = new actorRio(rioX, 0, rioLargura, ponteY, player, inventory);
-
-        // Rio inferior - do fim da ponte até o fim da tela
         float yRioInferior = ponteY + alturaPonte;
         float alturaRioInferior = worldHeight - yRioInferior;
         rioInferior = new actorRio(rioX, yRioInferior, rioLargura, alturaRioInferior, player, inventory);
 
-        // Adicionar logs para verificar as posições e dimensões
-        System.out.println("Rio Visual: y=" + rioVisual.getY() + ", altura=" + rioVisual.getHeight());
-        System.out.println("Ponte: x=" + ponte.getX() + ", y=" + ponte.getY() + ", altura=" + ponte.getHeight());
-        System.out.println("Rio Superior (colisão): y=" + rioSuperior.getY() + ", altura=" + rioSuperior.getHeight());
-        System.out.println("Rio Inferior (colisão): y=" + rioInferior.getY() + ", altura=" + rioInferior.getHeight());
-
-        // Criar lagos longe do rio
         while (lagosCriados < maxLagos && maxTentativas > 0) {
             float posX = MathUtils.random(100, worldWidth - 100);
             float posY = MathUtils.random(100, worldHeight - 100);
 
             boolean posicaoValida = true;
-
             for (actorLago lago : listaDeLagos) {
                 float dx = Math.abs(posX - lago.getX());
                 float dy = Math.abs(posY - lago.getY());
-
                 if (dx < espacoMinimo && dy < espacoMinimo) {
                     posicaoValida = false;
                     break;
                 }
             }
 
-            // Verificar distância mínima do rio
             if (posicaoValida) {
                 if (posX + 100 > rioX - 200 && posX < rioX + rioLargura + 200) {
                     posicaoValida = false;
@@ -320,7 +296,6 @@ public class TelaDeJogoLagoRio implements Screen {
 
     @Override
     public void dispose() {
-
         if (soundRiver != null) {
             soundRiver.stop();
             soundRiver.dispose();
@@ -334,6 +309,6 @@ public class TelaDeJogoLagoRio implements Screen {
         if (rioSuperior != null) rioSuperior.dispose();
         if (rioInferior != null) rioInferior.dispose();
         if (rioVisual != null) rioVisual.dispose();
-
+        if (hungerBar != null) hungerBar.dispose(); // <- NOVO
     }
 }

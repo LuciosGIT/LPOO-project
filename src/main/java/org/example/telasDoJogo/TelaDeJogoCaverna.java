@@ -9,26 +9,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.utils.Timer;
+
 import org.example.Ui.Craft;
+import org.example.Ui.HungerBar;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
-import org.example.actor.actorArvore;
 import org.example.actor.actorPersonagem;
 import org.example.ambientes.AmbienteCaverna;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-import com.badlogic.gdx.audio.Sound;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class TelaDeJogoCaverna implements Screen {
 
@@ -40,37 +35,34 @@ public class TelaDeJogoCaverna implements Screen {
     private Stage stage;
     private OrthographicCamera camera;
 
-    private float worldWidth; // Largura do mundo
-    private float worldHeight; // Altura do mundo
-    private float viewportWidth; // Largura visível da câmera
+    private float worldWidth;
+    private float worldHeight;
+    private float viewportWidth;
     private float viewportHeight;
 
     private Craft popUp;
-
     private Sound soundCavern;
     private long soundId;
-
     private AmbienteCaverna ambienteCaverna;
-
     private Texture darkOverlay;
     private Texture lightTexture;
 
-    InicializarMundo inicializarMundo;
-    Inputs inputs;
-    LifeBar lifeBar;
-    Inventory inventory;
+    private InicializarMundo inicializarMundo;
+    private Inputs inputs;
+    private LifeBar lifeBar;
+    private HungerBar hungerBar;
+    private Inventory inventory;
 
-
-    public TelaDeJogoCaverna(Game game, Personagem player){
+    public TelaDeJogoCaverna(Game game, Personagem player) {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteCaverna = new AmbienteCaverna("Caverna", "Um lugar escuro e misterioso", 0.5, Arrays.asList(TipoClimatico.CALOR), true, player);
+        this.ambienteCaverna = new AmbienteCaverna("Caverna", "Um lugar escuro e misterioso", 5.0, Arrays.asList(TipoClimatico.CALOR), true, player);
     }
 
     @Override
     public void show() {
-        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoCaverna.png");
+        inicializarMundo = new InicializarMundo(actorPlayer, "imagens/backgrounds/mapaTelaDeJogoCaverna.png");
 
         this.camera = inicializarMundo.getCamera();
         this.stage = inicializarMundo.getStage();
@@ -85,6 +77,9 @@ public class TelaDeJogoCaverna implements Screen {
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
+
+        hungerBar = new HungerBar(actorPlayer);
+        stage.addActor(hungerBar.getHungerBar());
 
         inventory = new Inventory(stage, 5, actorPlayer);
         stage.addActor(inventory.getInventoryTable());
@@ -101,7 +96,6 @@ public class TelaDeJogoCaverna implements Screen {
         lightTexture = new Texture(Gdx.files.internal("imagens/luz.png"));
 
         ambienteCaverna.explorar(player);
-
     }
 
     @Override
@@ -112,7 +106,6 @@ public class TelaDeJogoCaverna implements Screen {
 
     @Override
     public void render(float delta) {
-
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -120,55 +113,47 @@ public class TelaDeJogoCaverna implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        // Draw background
         batch.draw(backgroundFloresta, 0, 0, worldWidth, worldHeight);
-
-        // Draw dark overlay
         batch.setColor(0, 0, 0, 0.0f);
         batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
-
         batch.setColor(1, 1, 1, 1);
         batch.end();
 
         stage.act(deltaTime);
         stage.draw();
 
-        //métodos
         movement(deltaTime);
         camera();
 
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+
+        hungerBar.setPosition(actorPlayer);
+        hungerBar.setHungerValue(player.getFome());
+
         sairDoCenario();
 
         inventory.setPosition(camera);
 
         inputs.inputListener(actorPlayer, inventory, popUp);
-
         popUp.setPosition(actorPlayer);
-
     }
 
     @Override
-    public void pause() {
-        // Implement pause logic here
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-        // Implement resume logic here
-    }
+    public void resume() {}
 
     @Override
     public void hide() {
         if (soundCavern != null) {
-            soundCavern.stop(soundId); // Stop the specific sound instance
+            soundCavern.stop(soundId);
         }
     }
 
     @Override
     public void dispose() {
-
         if (darkOverlay != null) darkOverlay.dispose();
         if (lightTexture != null) lightTexture.dispose();
 
@@ -177,14 +162,14 @@ public class TelaDeJogoCaverna implements Screen {
             soundCavern.dispose();
         }
 
+        if (hungerBar != null) hungerBar.dispose();
+        if (lifeBar != null) lifeBar.dispose();
+
         inicializarMundo.dispose();
-
         inventory.dispose();
-
     }
 
     private void movement(float deltaTime) {
-
         float dx = 0, dy = 0;
         float moveSpeed = 200f;
 
@@ -194,16 +179,13 @@ public class TelaDeJogoCaverna implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * deltaTime;
 
         actorPlayer.moveBy(dx, dy);
-
     }
 
     private void camera() {
         float posX = actorPlayer.getX() + actorPlayer.getWidth() / 2;
         float posY = actorPlayer.getY() + actorPlayer.getHeight() / 2;
-
         float lerp = 0.1f;
 
-        // Ajusta viewport pelo zoom
         float adjustedViewportWidth = viewportWidth * camera.zoom;
         float adjustedViewportHeight = viewportHeight * camera.zoom;
 
@@ -212,8 +194,6 @@ public class TelaDeJogoCaverna implements Screen {
         float minY = adjustedViewportHeight / 2;
         float maxY = worldHeight - adjustedViewportHeight / 2;
 
-
-        // Aplica interpolação com limites
         camera.position.x = MathUtils.clamp(
                 camera.position.x + (posX - camera.position.x) * lerp,
                 minX,
@@ -229,15 +209,13 @@ public class TelaDeJogoCaverna implements Screen {
         camera.update();
     }
 
-
     private void sairDoCenario() {
         float playerX = actorPlayer.getX();
         float playerY = actorPlayer.getY();
         float playerWidth = actorPlayer.getWidth();
         float playerHeight = actorPlayer.getHeight();
-        float margin = 10f; // margem de tolerância
+        float margin = 10f;
 
-        // Verifica cada borda
         boolean naBoradaEsquerda = playerX <= margin;
         boolean naBordaDireita = playerX + playerWidth >= worldWidth - margin;
         boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
@@ -246,12 +224,8 @@ public class TelaDeJogoCaverna implements Screen {
         if (naBoradaEsquerda || naBordaDireita || naBordaInferior) {
             game.setScreen(new TelaDeJogoFloresta(game, player));
         }
-        if (naBordaSuperior)  {
+        if (naBordaSuperior) {
             game.setScreen(new TelaDeJogoMontanha(game, player));
         }
     }
-
-
 }
-
-

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
+import org.example.Ui.HungerBar;
 import org.example.actor.actorCristal;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
@@ -55,14 +56,14 @@ public class TelaDeJogoMontanha implements Screen {
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
+    HungerBar hungerBar;
     Inventory inventory;
 
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteMontanha = new AmbienteMontanha("Montanha", "Pico de um monte gelado",0.8, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.NEVASCA), true, false, player);
-
+        this.ambienteMontanha = new AmbienteMontanha("Montanha", "Pico de um monte gelado",5.5, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.NEVASCA), true, false, player);
     }
 
     @Override
@@ -83,6 +84,9 @@ public class TelaDeJogoMontanha implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
+        hungerBar = new HungerBar(actorPlayer);
+        stage.addActor(hungerBar.getHungerBar());
+
         inventory = new Inventory(stage, 5, actorPlayer);
 
         stage.addActor(actorPlayer);
@@ -96,7 +100,6 @@ public class TelaDeJogoMontanha implements Screen {
         soundId = soundMountain.loop(0.5f);
 
         ambienteMontanha.explorar(player);
-
     }
 
     @Override
@@ -124,12 +127,16 @@ public class TelaDeJogoMontanha implements Screen {
         stage.act(deltaTime);
         stage.draw();
 
-        //métodos
+        // métodos
         movement(deltaTime);
         camera();
 
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+
+        hungerBar.setPosition(actorPlayer);
+        hungerBar.setHungerValue(player.getFome());
+
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeCristais);
@@ -138,7 +145,6 @@ public class TelaDeJogoMontanha implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
 
         popUp.setPosition(actorPlayer);
-
     }
 
     @Override
@@ -158,18 +164,20 @@ public class TelaDeJogoMontanha implements Screen {
 
     @Override
     public void dispose() {
-
         if (soundMountain != null) {
             soundMountain.stop();
             soundMountain.dispose();
         }
-
 
         inicializarMundo.dispose();
         for(actorCristal cristal : listaDeCristais){
             cristal.dispose();
         }
         inventory.dispose();
+
+        if(hungerBar != null) {
+            hungerBar.dispose();
+        }
     }
 
     private void movement(float deltaTime) {

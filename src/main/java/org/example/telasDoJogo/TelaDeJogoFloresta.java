@@ -10,12 +10,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+import org.example.Ui.HungerBar;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorArvore;
@@ -23,14 +21,14 @@ import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.ambientes.AmbienteFloresta;
 import org.example.domain.Personagem;
+import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
-import org.example.enums.TipoClimatico;
-import java.util.Arrays;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TelaDeJogoFloresta implements Screen {
@@ -47,47 +45,45 @@ public class TelaDeJogoFloresta implements Screen {
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
 
-    private float worldWidth; // Largura do mundo
-    private float worldHeight; // Altura do mundo
-    private float viewportWidth; // Largura visível da câmera
-    private float viewportHeight; // Altura visível da câmera
+    private float worldWidth;
+    private float worldHeight;
+    private float viewportWidth;
+    private float viewportHeight;
 
     private Craft popUp;
-
     private Sound soundForest;
     private long soundId;
-
     private Texture darkOverlay;
-    private float currentTime = 12f; // Start at noon (12:00)
+    private float currentTime = 12f;
     private float dayDuration = 300f;
-
     private AmbienteFloresta ambienteFloresta;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
     LifeBar lifeBar;
     Inventory inventory;
+    HungerBar hungerBar;
 
-    public TelaDeJogoFloresta(Game game, Personagem player){
+    public TelaDeJogoFloresta(Game game, Personagem player) {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-            this.ambienteFloresta = new AmbienteFloresta(
-                    "Floresta",
-                    "Uma floresta densa e cheia de vida.",
-                    0.5,
-                    Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR),
-                    true,
-                    true,
-                    true,
-                    player
-            );
+        this.ambienteFloresta = new AmbienteFloresta(
+                "Floresta",
+                "Uma floresta densa e cheia de vida.",
+                5.0,
+                Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR),
+                true,
+                true,
+                true,
+                player
+        );
     }
 
     @Override
     public void show() {
 
-        inicializarMundo = new InicializarMundo(actorPlayer,"imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
+        inicializarMundo = new InicializarMundo(actorPlayer, "imagens/backgrounds/mapaTelaDeJogoFloresta2.png");
 
         this.camera = inicializarMundo.getCamera();
         this.stage = inicializarMundo.getStage();
@@ -101,10 +97,12 @@ public class TelaDeJogoFloresta implements Screen {
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
+        hungerBar = new HungerBar(actorPlayer);
+        stage.addActor(hungerBar.getHungerBar());
+
         this.isPilhaDeItemInstanciada = false;
 
         inventory = new Inventory(stage, 5, actorPlayer);
-
         stage.addActor(actorPlayer);
 
         criarActorArvore();
@@ -120,9 +118,7 @@ public class TelaDeJogoFloresta implements Screen {
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
 
         ambienteFloresta.explorar(player);
-
         instanciarPilhaDeItem();
-
     }
 
     @Override
@@ -135,61 +131,53 @@ public class TelaDeJogoFloresta implements Screen {
     public void render(float delta) {
 
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
-        float darkness = time(); // Get current darkness level
+        float darkness = time();
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        // Draw background
         batch.draw(backgroundFloresta, 0, 0, worldWidth, worldHeight);
-
-        // Draw dark overlay with current darkness level
         batch.setColor(0, 0, 0, darkness);
         batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
-
         batch.setColor(1, 1, 1, 1);
         batch.end();
 
         stage.act(deltaTime);
         stage.draw();
 
-        //métodos
+        // Atualizações
         movement(deltaTime);
         camera();
         lifeBar.setPosition(actorPlayer);
         lifeBar.setLifeBarValue(player.getVida());
+
+        hungerBar.setPosition(actorPlayer);
+        hungerBar.setHungerValue(player.getFome());
+
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeArvores);
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
-
-        inputs.inputListener(actorPlayer,inventory, popUp);
-
+        inputs.inputListener(actorPlayer, inventory, popUp);
     }
 
     @Override
-    public void pause() {
-        // Implement pause logic here
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-        // Implement resume logic here
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-        // Implement hide logic here
-    }
+    public void hide() { }
 
     @Override
     public void dispose() {
 
-        if(pilhaDeItem != null) {
+        if (pilhaDeItem != null) {
             pilhaDeItem.dispose();
         }
 
@@ -199,12 +187,12 @@ public class TelaDeJogoFloresta implements Screen {
         }
 
         inicializarMundo.dispose();
-        for(actorArvore arvore : listaDeArvores){
+        for (actorArvore arvore : listaDeArvores) {
             arvore.dispose();
         }
 
         inventory.dispose();
-
+        hungerBar.dispose();
     }
 
     private void movement(float deltaTime) {
@@ -218,7 +206,6 @@ public class TelaDeJogoFloresta implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * deltaTime;
 
         actorPlayer.moveBy(dx, dy);
-
     }
 
     private void camera() {
@@ -227,7 +214,6 @@ public class TelaDeJogoFloresta implements Screen {
 
         float lerp = 0.1f;
 
-        // Ajusta viewport pelo zoom
         float adjustedViewportWidth = viewportWidth * camera.zoom;
         float adjustedViewportHeight = viewportHeight * camera.zoom;
 
@@ -236,8 +222,6 @@ public class TelaDeJogoFloresta implements Screen {
         float minY = adjustedViewportHeight / 2;
         float maxY = worldHeight - adjustedViewportHeight / 2;
 
-
-        // Aplica interpolação com limites
         camera.position.x = MathUtils.clamp(
                 camera.position.x + (posX - camera.position.x) * lerp,
                 minX,
@@ -255,31 +239,28 @@ public class TelaDeJogoFloresta implements Screen {
 
     private void criarActorArvore() {
 
-        float espacoMinimo = 250f; // Espaço mínimo entre árvores
-        int maxTentativas = 30;    // Evita loop infinito
+        float espacoMinimo = 250f;
+        int maxTentativas = 30;
         int arvoresCriadas = 0;
 
-        while(arvoresCriadas < 8 && maxTentativas > 0) {
-            // Gera posição aleatória
+        while (arvoresCriadas < 8 && maxTentativas > 0) {
+
             float posX = MathUtils.random(100, worldWidth - 100);
             float posY = MathUtils.random(100, worldHeight - 100);
 
             boolean posicaoValida = true;
 
-            // Verifica distância com outras árvores
-            for(actorArvore outraArvore : listaDeArvores) {
+            for (actorArvore outraArvore : listaDeArvores) {
                 float distanciaX = Math.abs(posX - outraArvore.getX());
                 float distanciaY = Math.abs(posY - outraArvore.getY());
 
-                // Se estiver muito perto de outra árvore
-                if(distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
+                if (distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
                     posicaoValida = false;
                     break;
                 }
             }
 
-            // Se a posição for válida, cria a árvore
-            if(posicaoValida) {
+            if (posicaoValida) {
                 actorArvore novaArvore = new actorArvore(posX, posY, player, inventory);
                 listaDeArvores.add(novaArvore);
                 stage.addActor(novaArvore);
@@ -287,9 +268,7 @@ public class TelaDeJogoFloresta implements Screen {
             }
 
             maxTentativas--;
-
         }
-
     }
 
     private float time() {
@@ -298,17 +277,16 @@ public class TelaDeJogoFloresta implements Screen {
             currentTime = 0f;
         }
 
-        // Calculate darkness level based on time
         float darkness;
-        if (currentTime >= 18f || currentTime < 6f) { // Night
+        if (currentTime >= 18f || currentTime < 6f) {
             darkness = 0.8f;
-        } else if (currentTime >= 6f && currentTime < 7f) { // Dawn
+        } else if (currentTime >= 6f && currentTime < 7f) {
             float t = (currentTime - 6f);
             darkness = 0.8f - (0.6f * t);
-        } else if (currentTime >= 17f && currentTime < 18f) { // Dusk
+        } else if (currentTime >= 17f && currentTime < 18f) {
             float t = (currentTime - 17f);
             darkness = 0.2f + (0.6f * t);
-        } else { // Day
+        } else {
             darkness = 0.2f;
         }
 
@@ -320,13 +298,11 @@ public class TelaDeJogoFloresta implements Screen {
             @Override
             public void run() {
                 if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
-                    float posx =  MathUtils.random(0, worldWidth - 100);
-                    float posy =  MathUtils.random(0, worldHeight - 100);
-
+                    float posx = MathUtils.random(0, worldWidth - 100);
+                    float posy = MathUtils.random(0, worldHeight - 100);
 
                     pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteFloresta);
                     stage.addActor(pilhaDeItem);
-
                     isPilhaDeItemInstanciada = true;
                 }
             }
@@ -338,42 +314,29 @@ public class TelaDeJogoFloresta implements Screen {
         float playerY = actorPlayer.getY();
         float playerWidth = actorPlayer.getWidth();
         float playerHeight = actorPlayer.getHeight();
-        float margin = 10f; // margem de tolerância
+        float margin = 10f;
 
-        // Verifica cada borda
         boolean naBoradaEsquerda = playerX <= margin;
         boolean naBordaDireita = playerX + playerWidth >= worldWidth - margin;
         boolean naBordaSuperior = playerY + playerHeight >= worldHeight - margin;
         boolean naBordaInferior = playerY <= margin;
 
         if (naBoradaEsquerda || naBordaSuperior) {
-
             actorPlayer.addAction(Actions.fadeIn(0.1f));
-
             game.setScreen(new TelaDeJogoCaverna(game, player));
             dispose();
-
         }
 
-        if(naBordaDireita) {
+        if (naBordaDireita) {
             actorPlayer.addAction(Actions.fadeIn(0.1f));
-
             game.setScreen(new TelaDeJogoRuinas(game, player));
             dispose();
         }
 
         if (naBordaInferior) {
             actorPlayer.addAction(Actions.fadeIn(0.1f));
-
             game.setScreen(new TelaDeJogoLagoRio(game, player));
             dispose();
         }
-
     }
-
-
-
-
 }
-
-
