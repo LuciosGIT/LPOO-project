@@ -13,7 +13,6 @@ public class ExploracaoService {
 
     public static void explorar(Personagem jogador, Ambiente ambiente) {
         try {
-            ambiente.gerarEvento(jogador);
 
             // Caso o jogador ainda esteja vivo, buscar itens no ambiente
             if (jogador.getVida() > 0 && jogador.getInventario().temEspaco()) {
