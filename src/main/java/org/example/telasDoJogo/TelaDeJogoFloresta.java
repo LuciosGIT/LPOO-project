@@ -16,18 +16,22 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.*;
+import org.example.actor.actorAbrigo;
 import org.example.actor.actorArvore;
 import org.example.actor.actorMercador;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.ambientes.AmbienteFloresta;
 import org.example.domain.Evento;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.enums.TipoDescoberta;
+import org.example.eventos.EventoClimatico;
+import org.example.eventos.EventoDescoberta;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-import org.example.eventos.EventoClimatico;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,7 +64,6 @@ public class TelaDeJogoFloresta implements Screen {
     private long soundId;
     private Message message;
 
-
     private Texture darkOverlay;
     private float currentTime = 12f;
     private float dayDuration = 300f;
@@ -79,6 +82,12 @@ public class TelaDeJogoFloresta implements Screen {
     private Array<Rectangle> raindrops;
     private Random random;
     private float timeSinceLastDrop;
+
+    // Variáveis para o abrigo
+    private actorAbrigo abrigo;
+    private boolean abrigoVisivel = false;
+    private EventoDescoberta eventoDescoberta;
+    private boolean interacaoAbrigoOcorreu = false;
 
     public TelaDeJogoFloresta(Game game, Personagem player) {
         this.game = game;
@@ -147,10 +156,130 @@ public class TelaDeJogoFloresta implements Screen {
         random = new Random();
         timeSinceLastDrop = 0;
 
+        // Gerar evento aleatório
         Evento evento = ambienteFloresta.gerarEvento(player);
 
-        if (evento instanceof EventoClimatico) {
+        // Verificar o tipo de evento
+        if (evento instanceof EventoDescoberta) {
+            this.eventoDescoberta = (EventoDescoberta) evento;
+            if (eventoDescoberta.getTipoDescoberta() == TipoDescoberta.ABRIGO) {
+                // Se o abrigo foi spawnado, criar o actor
+                if (eventoDescoberta.isAbrigoSpawnado()) {
+                    // Posicionar o abrigo com espaçamento adequado
+                    posicionarAbrigo();
+                }
+            }
+        } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
+        }
+    }
+
+    // Método para posicionar o abrigo com espaçamento adequado
+    private void posicionarAbrigo() {
+        float espacoMinimoArvores = 300f; // Espaço mínimo entre abrigo e árvores
+        float espacoMinimoMercador = 400f; // Espaço mínimo entre abrigo e mercador
+        int maxTentativas = 50;
+        boolean posicaoValida = false;
+        float abrigoX = 0;
+        float abrigoY = 0;
+
+        // Tentar encontrar uma posição válida para o abrigo
+        while (!posicaoValida && maxTentativas > 0) {
+            abrigoX = MathUtils.random(200, worldWidth - 200);
+            abrigoY = MathUtils.random(200, worldHeight - 200);
+            posicaoValida = true;
+
+            // Verificar distância com árvores
+            for (actorArvore arvore : listaDeArvores) {
+                float distanciaX = Math.abs(abrigoX - arvore.getX());
+                float distanciaY = Math.abs(abrigoY - arvore.getY());
+
+                if (distanciaX < espacoMinimoArvores && distanciaY < espacoMinimoArvores) {
+                    posicaoValida = false;
+                    break;
+                }
+            }
+
+            // Verificar distância com o mercador
+            if (posicaoValida) {
+                float distanciaMercadorX = Math.abs(abrigoX - mercador.getX());
+                float distanciaMercadorY = Math.abs(abrigoY - mercador.getY());
+
+                if (distanciaMercadorX < espacoMinimoMercador && distanciaMercadorY < espacoMinimoMercador) {
+                    posicaoValida = false;
+                }
+            }
+
+            maxTentativas--;
+        }
+
+        // Se encontrou uma posição válida, criar o abrigo
+        if (posicaoValida) {
+            abrigo = new actorAbrigo(abrigoX, abrigoY);
+
+            // Definir a ação a ser executada quando o abrigo for clicado
+            abrigo.setOnClickAction(() -> {
+                if (eventoDescoberta != null && !interacaoAbrigoOcorreu) {
+                    // Jogador interage com o abrigo
+                    eventoDescoberta.interagirComAbrigo(player);
+
+                    // Marcar que a interação já ocorreu
+                    interacaoAbrigoOcorreu = true;
+
+                    // Remover abrigo após interação, se necessário
+                    if (!eventoDescoberta.isAbrigoSpawnado()) {
+                        abrigo.remove();
+                        abrigo.dispose();
+                        abrigo = null;
+                        abrigoVisivel = false;
+                    }
+
+                    // Atualizar inventário após coletar itens
+                    inventory.updateInventory();
+
+                    // Exibir mensagem de interação
+                    System.out.println("Você interagiu com o abrigo!");
+                }
+            });
+
+            stage.addActor(abrigo);
+            abrigoVisivel = true;
+
+            // Exibir mensagem de descoberta
+            System.out.println("Você encontrou um abrigo! Clique nele para interagir.");
+        } else {
+            // Se não encontrou posição válida após várias tentativas
+            System.out.println("Não foi possível posicionar o abrigo adequadamente.");
+            // Posicionar em um local padrão, se necessário
+            abrigo = new actorAbrigo(worldWidth / 2, worldHeight / 2);
+
+            // Definir a ação a ser executada quando o abrigo for clicado
+            abrigo.setOnClickAction(() -> {
+                if (eventoDescoberta != null && !interacaoAbrigoOcorreu) {
+                    // Jogador interage com o abrigo
+                    eventoDescoberta.interagirComAbrigo(player);
+
+                    // Marcar que a interação já ocorreu
+                    interacaoAbrigoOcorreu = true;
+
+                    // Remover abrigo após interação, se necessário
+                    if (!eventoDescoberta.isAbrigoSpawnado()) {
+                        abrigo.remove();
+                        abrigo.dispose();
+                        abrigo = null;
+                        abrigoVisivel = false;
+                    }
+
+                    // Atualizar inventário após coletar itens
+                    inventory.updateInventory();
+
+                    // Exibir mensagem de interação
+                    System.out.println("Você interagiu com o abrigo!");
+                }
+            });
+
+            stage.addActor(abrigo);
+            abrigoVisivel = true;
         }
     }
 
@@ -232,6 +361,9 @@ public class TelaDeJogoFloresta implements Screen {
 
         actorPlayer.checkCollision(listaDeArvores);
         actorPlayer.checkCollision(mercador);
+        if (abrigoVisivel && abrigo != null) {
+            actorPlayer.checkCollision(abrigo);
+        }
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
@@ -257,7 +389,6 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
-
         if(mercador != null) {
             mercador.dispose();
         }
@@ -269,6 +400,10 @@ public class TelaDeJogoFloresta implements Screen {
         if (soundForest != null) {
             soundForest.stop();
             soundForest.dispose();
+        }
+
+        if (abrigo != null) {
+            abrigo.dispose();
         }
 
         inicializarMundo.dispose();
@@ -328,6 +463,7 @@ public class TelaDeJogoFloresta implements Screen {
     private void criarActorArvore() {
         float espacoMinimo = 250f; // Espaço mínimo entre árvores
         float espacoMinimoMercador = 400f; // Espaço mínimo entre árvores e o mercador
+        float espacoMinimoAbrigo = 300f; // Espaço mínimo entre árvores e abrigo
         int maxTentativas = 30;
         int arvoresCriadas = 0;
 
@@ -354,6 +490,16 @@ public class TelaDeJogoFloresta implements Screen {
                 float distanciaMercadorY = Math.abs(posY - mercador.getY());
 
                 if (distanciaMercadorX < espacoMinimoMercador && distanciaMercadorY < espacoMinimoMercador) {
+                    posicaoValida = false;
+                }
+            }
+
+            // Verificar distância com o abrigo, se existir
+            if (posicaoValida && abrigoVisivel && abrigo != null) {
+                float distanciaAbrigoX = Math.abs(posX - abrigo.getX());
+                float distanciaAbrigoY = Math.abs(posY - abrigo.getY());
+
+                if (distanciaAbrigoX < espacoMinimoAbrigo && distanciaAbrigoY < espacoMinimoAbrigo) {
                     posicaoValida = false;
                 }
             }
@@ -399,9 +545,22 @@ public class TelaDeJogoFloresta implements Screen {
                     float posx = MathUtils.random(0, worldWidth - 100);
                     float posy = MathUtils.random(0, worldHeight - 100);
 
-                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteFloresta);
-                    stage.addActor(pilhaDeItem);
-                    isPilhaDeItemInstanciada = true;
+                    // Verificar distância com o abrigo, se existir
+                    boolean posicaoValida = true;
+                    if (abrigoVisivel && abrigo != null) {
+                        float distanciaAbrigoX = Math.abs(posx - abrigo.getX());
+                        float distanciaAbrigoY = Math.abs(posy - abrigo.getY());
+
+                        if (distanciaAbrigoX < 300f && distanciaAbrigoY < 300f) {
+                            posicaoValida = false;
+                        }
+                    }
+
+                    if (posicaoValida) {
+                        pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteFloresta);
+                        stage.addActor(pilhaDeItem);
+                        isPilhaDeItemInstanciada = true;
+                    }
                 }
             }
         }, 0, 10);
