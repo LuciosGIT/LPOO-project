@@ -18,6 +18,7 @@ import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.Ui.HungerBar;
+import org.example.actor.actorCaverna;
 import org.example.actor.actorCristal;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
@@ -25,7 +26,10 @@ import org.example.ambientes.AmbienteMontanha;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.enums.TipoDescoberta;
 import org.example.eventos.EventoClimatico;
+import org.example.eventos.EventoDescoberta;
+import org.example.personagens.Sobrevivente;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
@@ -78,6 +82,12 @@ public class TelaDeJogoMontanha implements Screen {
     private Array<Rectangle> snowflakes;
     private Random random;
     private float timeSinceLastSnowflake;
+
+    // Variáveis para a caverna
+    private actorCaverna caverna;
+    private boolean cavernaVisivel = false;
+    private EventoDescoberta eventoDescoberta;
+    private boolean interacaoCavernaOcorreu = false;
 
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
@@ -133,10 +143,126 @@ public class TelaDeJogoMontanha implements Screen {
 
         ambienteMontanha.explorar(player);
 
-        // Verificar se há evento climático e aplicar
+        // Gerar evento aleatório
         Evento evento = ambienteMontanha.gerarEvento(player);
-        if (evento instanceof EventoClimatico) {
+
+        // Verificar o tipo de evento
+        if (evento instanceof EventoDescoberta) {
+            this.eventoDescoberta = (EventoDescoberta) evento;
+            if (eventoDescoberta.getTipoDescoberta() == TipoDescoberta.CAVERNA) {
+                // Executar o evento de descoberta (apenas a parte de descoberta, não a interação)
+                //eventoDescoberta.executar(player, ambienteMontanha);
+
+                // Se a caverna foi spawnada, criar o actor
+                if (eventoDescoberta.isCavernaSpawnada()) {
+                    // Posicionar a caverna com espaçamento adequado
+                    posicionarCaverna();
+                }
+            }
+        } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
+        }
+    }
+
+    // Método para posicionar a caverna com espaçamento adequado
+    private void posicionarCaverna() {
+        float espacoMinimoCristais = 300f; // Espaço mínimo entre caverna e cristais
+        int maxTentativas = 50;
+        boolean posicaoValida = false;
+        float cavernaX = 0;
+        float cavernaY = 0;
+
+        // Tentar encontrar uma posição válida para a caverna
+        while (!posicaoValida && maxTentativas > 0) {
+            cavernaX = MathUtils.random(200, worldWidth - 200);
+            cavernaY = MathUtils.random(200, worldHeight - 200);
+            posicaoValida = true;
+
+            // Verificar distância com cristais
+            for (actorCristal cristal : listaDeCristais) {
+                float distanciaX = Math.abs(cavernaX - cristal.getX());
+                float distanciaY = Math.abs(cavernaY - cristal.getY());
+
+                if (distanciaX < espacoMinimoCristais && distanciaY < espacoMinimoCristais) {
+                    posicaoValida = false;
+                    break;
+                }
+            }
+
+            // Verificar distância com a pilha de item, se existir
+            if (posicaoValida && isPilhaDeItemInstanciada && pilhaDeItem != null) {
+                float distanciaPilhaX = Math.abs(cavernaX - pilhaDeItem.getX());
+                float distanciaPilhaY = Math.abs(cavernaY - pilhaDeItem.getY());
+
+                if (distanciaPilhaX < espacoMinimoCristais && distanciaPilhaY < espacoMinimoCristais) {
+                    posicaoValida = false;
+                }
+            }
+
+            maxTentativas--;
+        }
+
+        // Se encontrou uma posição válida, criar a caverna
+        if (posicaoValida) {
+            caverna = new actorCaverna(cavernaX, cavernaY);
+
+            // Definir a ação a ser executada quando a caverna for clicada
+            caverna.setOnClickAction(() -> {
+                if (eventoDescoberta != null && !interacaoCavernaOcorreu) {
+                    // Verificar se o jogador é um Sobrevivente
+                    if (player instanceof Sobrevivente) {
+                        // Tentar interagir com a caverna
+                        boolean podeExplorar = eventoDescoberta.interagirComCaverna(player);
+
+                        if (podeExplorar) {
+                            // Marcar que a interação já ocorreu
+                            interacaoCavernaOcorreu = true;
+
+                            // Abrir a tela de exploração da caverna
+                            game.setScreen(new TelaDeJogoCavernaEvento(game, player, eventoDescoberta.getRecursosEncontrados()));
+                        }
+                    } else {
+                        // Jogador não é um Sobrevivente
+                        System.out.println("Você não tem as habilidades necessárias para explorar esta caverna.");
+                    }
+                }
+            });
+
+            stage.addActor(caverna);
+            cavernaVisivel = true;
+
+            // Exibir mensagem de descoberta
+            System.out.println("Você encontrou uma caverna! Clique nela para explorar.");
+        } else {
+            // Se não encontrou posição válida após várias tentativas
+            System.out.println("Não foi possível posicionar a caverna adequadamente.");
+            // Posicionar em um local padrão, se necessário
+            caverna = new actorCaverna(worldWidth / 2, worldHeight / 2);
+
+            // Definir a ação a ser executada quando a caverna for clicada
+            caverna.setOnClickAction(() -> {
+                if (eventoDescoberta != null && !interacaoCavernaOcorreu) {
+                    // Verificar se o jogador é um Sobrevivente
+                    if (player instanceof Sobrevivente) {
+                        // Tentar interagir com a caverna
+                        boolean podeExplorar = eventoDescoberta.interagirComCaverna(player);
+
+                        if (podeExplorar) {
+                            // Marcar que a interação já ocorreu
+                            interacaoCavernaOcorreu = true;
+
+                            // Abrir a tela de exploração da caverna
+                            game.setScreen(new TelaDeJogoCavernaEvento(game, player, eventoDescoberta.getRecursosEncontrados()));
+                        }
+                    } else {
+                        // Jogador não é um Sobrevivente
+                        System.out.println("Você não tem as habilidades necessárias para explorar esta caverna.");
+                    }
+                }
+            });
+
+            stage.addActor(caverna);
+            cavernaVisivel = true;
         }
     }
 
@@ -235,6 +361,9 @@ public class TelaDeJogoMontanha implements Screen {
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeCristais);
+        if (cavernaVisivel && caverna != null) {
+            actorPlayer.checkCollision(caverna);
+        }
         sairDoCenario();
 
         inputs.inputListener(actorPlayer, inventory, popUp);
@@ -276,6 +405,11 @@ public class TelaDeJogoMontanha implements Screen {
         for(actorCristal cristal : listaDeCristais){
             cristal.dispose();
         }
+
+        if (caverna != null) {
+            caverna.dispose();
+        }
+
         inventory.dispose();
 
         if(hungerBar != null) {
@@ -291,14 +425,26 @@ public class TelaDeJogoMontanha implements Screen {
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-
                 if (!isPilhaDeItemInstanciada && Utilitario.getValorAleatorio() < 0.1f) {
                     float posx = MathUtils.random(0, worldWidth - 100);
                     float posy = MathUtils.random(0, worldHeight - 100);
 
-                    pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteMontanha);
-                    stage.addActor(pilhaDeItem);
-                    isPilhaDeItemInstanciada = true;
+                    // Verificar distância com a caverna, se existir
+                    boolean posicaoValida = true;
+                    if (cavernaVisivel && caverna != null) {
+                        float distanciaCavernaX = Math.abs(posx - caverna.getX());
+                        float distanciaCavernaY = Math.abs(posy - caverna.getY());
+
+                        if (distanciaCavernaX < 300f && distanciaCavernaY < 300f) {
+                            posicaoValida = false;
+                        }
+                    }
+
+                    if (posicaoValida) {
+                        pilhaDeItem = new actorPilhaDeItem(posx, posy, player, inventory, ambienteMontanha);
+                        stage.addActor(pilhaDeItem);
+                        isPilhaDeItemInstanciada = true;
+                    }
                 }
             }
         }, 0, 10);
@@ -429,10 +575,6 @@ public class TelaDeJogoMontanha implements Screen {
         // As outras bordas podem levar a outras áreas (se existirem)
         if (naBordaEsquerda || naBordaDireita || naBordaSuperior) {
             // Aqui você pode adicionar transições para outras telas
-            // Por exemplo:
-            // game.setScreen(new TelaDeJogoOutraArea(game, player));
-            // dispose();
-
             // Por enquanto, apenas reposiciona o jogador para evitar que saia da tela
             if (naBordaEsquerda) actorPlayer.setX(margin + 1);
             if (naBordaDireita) actorPlayer.setX(worldWidth - playerWidth - margin - 1);
