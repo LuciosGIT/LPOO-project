@@ -44,6 +44,7 @@ public class  Alimentos extends Item {
         System.out.println("Consumindo alimento: " + this.getTipoAlimento().getValue());
         try {
             consumir();
+            System.out.println(getPersonagem().getFome());
         }catch (Exception e) {
             System.out.println("Erro ao consumir o alimento: " + e.getMessage());
         }
@@ -56,7 +57,7 @@ public class  Alimentos extends Item {
             if(this.getPersonagem() instanceof Sobrevivente) {
                 this.getPersonagem().habilidade();
             }
-            this.getPersonagem().diminuirFome(valorNutricional);
+            this.getPersonagem().aumentarFome(valorNutricional);
 
 
 
