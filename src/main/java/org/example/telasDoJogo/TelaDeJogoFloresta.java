@@ -15,10 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import org.example.Ui.HungerBar;
-import org.example.Ui.Inventory;
-import org.example.Ui.LifeBar;
+import org.example.Ui.*;
 import org.example.actor.actorArvore;
+import org.example.actor.actorMercador;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.ambientes.AmbienteFloresta;
@@ -28,7 +27,6 @@ import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-import org.example.Ui.Craft;
 import org.example.eventos.EventoClimatico;
 
 import java.util.ArrayList;
@@ -50,6 +48,7 @@ public class TelaDeJogoFloresta implements Screen {
     private Stage stage;
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
+    private actorMercador mercador;
 
     private float worldWidth;
     private float worldHeight;
@@ -59,6 +58,8 @@ public class TelaDeJogoFloresta implements Screen {
     private Craft popUp;
     private Sound soundForest;
     private long soundId;
+    private Message message;
+
 
     private Texture darkOverlay;
     private float currentTime = 12f;
@@ -141,6 +142,11 @@ public class TelaDeJogoFloresta implements Screen {
         timeSinceLastDrop = 0;
 
         Evento evento = ambienteFloresta.gerarEvento(player);
+
+        this.mercador = new actorMercador("Mercador", stage);
+
+
+
         if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
         }
@@ -248,6 +254,11 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
+
+        if(mercador != null) {
+            mercador.dispose();
+        }
+
         if (pilhaDeItem != null) {
             pilhaDeItem.dispose();
         }
