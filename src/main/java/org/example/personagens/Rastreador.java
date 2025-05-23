@@ -4,11 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
+import org.example.enums.TipoAlimento;
 import org.example.enums.TipoFerramenta;
 import org.example.enums.TipoMaterial;
+import org.example.itens.Alimentos;
 import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +28,13 @@ public class Rastreador extends Personagem {
                 0.4,
                 15.0,
                 TipoMaterial.PEDRA));
+        this.getInventario().adicionarItem(new Alimentos("carne",
+                this,
+                7.0,
+                90.0,
+                0.4,
+                TipoAlimento.CARNE,
+                OffsetDateTime.now().plusDays(5)));
 
         this.getInventario().adicionarItem(new Ferramentas("Lanterna Solar",
                 this,
