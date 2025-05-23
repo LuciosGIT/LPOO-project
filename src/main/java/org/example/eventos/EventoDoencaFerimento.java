@@ -49,14 +49,14 @@ public class EventoDoencaFerimento extends Evento {
 
            }
            case DESIDRATACAO ->  {
-               jogador.diminuirEnergia(25.0);
-               jogador.aumentarSede(25.0);
+               jogador.diminuirEnergia(15.0);
+               jogador.diminuirSede(15.0);
 
                // Segunda vez após 4 segundos
                new Thread(() -> {
                    try {
                        Thread.sleep(4000);
-                       jogador.aumentarSede(15.0);
+                       jogador.diminuirSede(15.0);
                    } catch (InterruptedException e) {
                        e.printStackTrace();
                    }
