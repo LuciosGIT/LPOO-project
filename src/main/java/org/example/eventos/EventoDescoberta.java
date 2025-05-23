@@ -16,6 +16,8 @@ public class EventoDescoberta extends Evento {
     private TipoDescoberta tipoDescoberta;
     private List<Item> recursosEncontrados;
     private boolean abrigoSpawnado = false;
+    private boolean cavernaSpawnada = false;
+    private boolean interacaoCavernaRealizada = false;
 
     public EventoDescoberta(boolean ativavel, String impacto, String nome, Double probabilidadeOcorrencia,
                             String descricao, TipoDescoberta tipoDescoberta, List<Item> recursosEncontrados) {
@@ -37,14 +39,8 @@ public class EventoDescoberta extends Evento {
 
             case CAVERNA -> {
                 System.out.println("Você encontrou uma caverna!");
-                if (Utilitario.spawnarMorcego(jogador)) {
-                    System.out.println("Mas um bando de morcegos protege os recursos!");
-                } else if (jogador instanceof Sobrevivente) {
-                    System.out.println("Você tem as habilidades para explorar e coletar os recursos.");
-                    pegarItensEncontrados(jogador);
-                } else {
-                    System.out.println("Mas você não tem habilidade suficiente para explorá-la.");
-                }
+                // Apenas marca que a caverna foi encontrada; a interface cuida de mostrar o actor
+                cavernaSpawnada = true;
             }
 
             case RUINAS_MISTERIOSAS -> {
@@ -76,6 +72,25 @@ public class EventoDescoberta extends Evento {
         abrigoSpawnado = false; // impede múltiplas interações
     }
 
+    public boolean interagirComCaverna(Personagem jogador) {
+        if (!cavernaSpawnada || interacaoCavernaRealizada) return false;
+
+        if (Utilitario.spawnarMorcego(jogador)) {
+            System.out.println("Um bando de morcegos protege a entrada da caverna!");
+            interacaoCavernaRealizada = true;
+            return false;
+        } else if (jogador instanceof Sobrevivente) {
+            System.out.println("Você tem as habilidades para explorar a caverna.");
+            // Não coletamos os recursos aqui, pois isso será feito na TelaDeJogoCavernaEvento
+            interacaoCavernaRealizada = true;
+            return true; // Retorna true para indicar que deve abrir a TelaDeJogoCavernaEvento
+        } else {
+            System.out.println("Você não tem habilidade suficiente para explorar a caverna.");
+            interacaoCavernaRealizada = true;
+            return false;
+        }
+    }
+
     private void pegarItensEncontrados(Personagem jogador) {
         for (Item item : recursosEncontrados) {
             jogador.getInventario().adicionarItem(item);
@@ -88,5 +103,25 @@ public class EventoDescoberta extends Evento {
 
     public boolean isAbrigoSpawnado() {
         return abrigoSpawnado;
+    }
+
+    public boolean isCavernaSpawnada() {
+        return cavernaSpawnada;
+    }
+
+    public void setCavernaSpawnada(boolean cavernaSpawnada) {
+        this.cavernaSpawnada = cavernaSpawnada;
+    }
+
+    public boolean isInteracaoCavernaRealizada() {
+        return interacaoCavernaRealizada;
+    }
+
+    public void setInteracaoCavernaRealizada(boolean interacaoCavernaRealizada) {
+        this.interacaoCavernaRealizada = interacaoCavernaRealizada;
+    }
+
+    public List<Item> getRecursosEncontrados() {
+        return recursosEncontrados;
     }
 }
