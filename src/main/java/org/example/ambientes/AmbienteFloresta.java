@@ -7,9 +7,11 @@ import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
+import org.example.enums.TipoDescoberta;
 import org.example.enums.TipoMaterial;
 import org.example.eventos.EventoClimatico;
 import org.example.eventos.EventoCriatura;
+import org.example.eventos.EventoDescoberta;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
@@ -45,6 +47,8 @@ public class AmbienteFloresta extends Ambiente {
         this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
+        this.getEventos().add(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,"Você pode encontrar Sobrevivente",
+                TipoDescoberta.ABRIGO, List.of(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA))));
         this.getEventos().add(new EventoClimatico(true, "Evento de Chuva acionado", "Afeta a visibilidade", "Evento de Chuva" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
                 getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(0).getNivelDePerigo()));
@@ -60,8 +64,6 @@ public class AmbienteFloresta extends Ambiente {
     public void explorar(Personagem jogador) {
 
         System.out.println(jogador.getFome());
-
-        this.gerarEvento(jogador);
 
         // ExploracaoService.explorar(jogador, this);
 
