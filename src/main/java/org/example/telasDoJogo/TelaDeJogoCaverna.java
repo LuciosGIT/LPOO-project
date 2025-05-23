@@ -19,12 +19,16 @@ import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
+import org.example.actor.actorRocha;
 import org.example.ambientes.AmbienteCaverna;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import java.util.Arrays;
 
@@ -33,6 +37,9 @@ public class TelaDeJogoCaverna implements Screen {
     private Game game;
     private Personagem player;
     private actorPersonagem actorPlayer;
+    private actorRocha actorRocha;
+    private List<actorRocha> listaDeRochas = new ArrayList<>();
+
     private Texture backgroundFloresta;
     private actorPilhaDeItem pilhaDeItem;
     private Batch batch;
@@ -104,7 +111,12 @@ public class TelaDeJogoCaverna implements Screen {
 
         instanciarPilhaDeItem();
 
+        instanciarRocha();
+
         ambienteCaverna.explorar(player);
+
+
+
     }
 
     @Override
@@ -146,6 +158,12 @@ public class TelaDeJogoCaverna implements Screen {
 
         inputs.inputListener(actorPlayer, inventory, popUp);
         popUp.setPosition(actorPlayer);
+
+        instanciarRocha();
+        //checkCollisonPlayer
+        actorPlayer.checkCollision(listaDeRochas);
+
+
     }
 
     @Override
@@ -193,6 +211,23 @@ public class TelaDeJogoCaverna implements Screen {
                 }
             }
         }, 0, 10);
+    }
+
+    public void instanciarRocha(){
+
+        int limiteRocha = 5;
+        while (listaDeRochas.size() < limiteRocha) {
+            float posx = MathUtils.random(0, worldWidth - 100);
+            float posy = MathUtils.random(0, worldHeight - 100);
+
+            actorRocha novaRocha = new actorRocha(posx, posy, player, inventory);
+
+            if (!novaRocha.checkCollision(listaDeRochas)) {
+                stage.addActor(novaRocha);
+                listaDeRochas.add(novaRocha);
+            }
+        }
+
     }
 
     private void movement(float deltaTime) {
