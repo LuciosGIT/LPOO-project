@@ -120,6 +120,12 @@ public class TelaDeJogoFloresta implements Screen {
         inventory = new Inventory(stage, 5, actorPlayer);
         stage.addActor(actorPlayer);
 
+        // Posicionar o mercador antes de criar as árvores
+        float mercadorX = MathUtils.random(200, worldWidth - 200);
+        float mercadorY = MathUtils.random(200, worldHeight - 200);
+        this.mercador = new actorMercador("Mercador", stage);
+        mercador.setPosition(mercadorX, mercadorY);
+
         criarActorArvore();
         inventory.updateInventory();
 
@@ -142,10 +148,6 @@ public class TelaDeJogoFloresta implements Screen {
         timeSinceLastDrop = 0;
 
         Evento evento = ambienteFloresta.gerarEvento(player);
-
-        this.mercador = new actorMercador("Mercador", stage);
-
-
 
         if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
@@ -229,6 +231,7 @@ public class TelaDeJogoFloresta implements Screen {
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeArvores);
+        actorPlayer.checkCollision(mercador);
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
@@ -323,7 +326,8 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void criarActorArvore() {
-        float espacoMinimo = 250f;
+        float espacoMinimo = 250f; // Espaço mínimo entre árvores
+        float espacoMinimoMercador = 400f; // Espaço mínimo entre árvores e o mercador
         int maxTentativas = 30;
         int arvoresCriadas = 0;
 
@@ -333,6 +337,7 @@ public class TelaDeJogoFloresta implements Screen {
 
             boolean posicaoValida = true;
 
+            // Verificar distância com outras árvores
             for (actorArvore outraArvore : listaDeArvores) {
                 float distanciaX = Math.abs(posX - outraArvore.getX());
                 float distanciaY = Math.abs(posY - outraArvore.getY());
@@ -340,6 +345,16 @@ public class TelaDeJogoFloresta implements Screen {
                 if (distanciaX < espacoMinimo && distanciaY < espacoMinimo) {
                     posicaoValida = false;
                     break;
+                }
+            }
+
+            // Verificar distância com o mercador
+            if (posicaoValida) {
+                float distanciaMercadorX = Math.abs(posX - mercador.getX());
+                float distanciaMercadorY = Math.abs(posY - mercador.getY());
+
+                if (distanciaMercadorX < espacoMinimoMercador && distanciaMercadorY < espacoMinimoMercador) {
+                    posicaoValida = false;
                 }
             }
 
