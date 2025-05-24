@@ -20,7 +20,7 @@ public class ConfiguracaoDoMundo {
     public static List<Criatura> getCriaturasPadrao() {
         return List.of(
                 new Cobra("Cobra Venenosa", 7.0, 4.0, 12.0),
-                new Morcego("Morcego Espantoso", 7.0, 2.0, 7.0),
+                new Morcego("Morcego Espantoso", 7.0, 2.0, 25.0),
                 new Lobo("Lobo Nômade", 7.0, 4.5, 20.0),
                 new Corvo("Corvo Atordoante", 7.0, 2.0, 7.0),
                 new Crocodilo("Crocodilo Feroz", 7.0, 4.0, 15.0),
