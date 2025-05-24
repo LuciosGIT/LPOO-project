@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.Ui.Inventory;
 import org.example.criatura.Corvo;
@@ -24,11 +25,13 @@ public class actorLobo extends Actor implements Collidable {
     private Polygon collider;
     private Personagem player;
     private Inventory inventory;
-    private double velocidade = 100; // velocidade do morcego
+    private double velocidade = 250; // velocidade do lobo
 
     public actorLobo(Personagem player, Inventory inventory, Lobo lobo) {
 
         this.lobo = lobo;
+        this.player = player;
+        this.inventory = inventory;
         vida = lobo.getVida();
         dano = lobo.getDanoDeAtaque();
 
@@ -46,10 +49,10 @@ public class actorLobo extends Actor implements Collidable {
 
         setOrigin(getWidth()/2, getHeight()/2);
 
-        float baseWidth = getWidth() * 0.5f;    // 70% da largura
-        float baseHeight = getHeight() * 0.2f;   // 30% da altura
-        float baseX = getWidth() * -0.1f;        // 15% da esquerda
-        float baseY = getHeight() * 0.2f;
+        float baseWidth = getWidth() * 0.5f;    // 50% da largura
+        float baseHeight = getHeight() * 0.2f;   // 20% da altura
+        float baseX = getWidth() * -0.1f;        // posição X
+        float baseY = getWidth() * 0.2f;        // posição Y
 
         float[] vertices = new float[] {
                 baseX, baseY,
@@ -75,6 +78,10 @@ public class actorLobo extends Actor implements Collidable {
     @Override
     public void act(float delta) {
         super.act(delta);
+        // Atualizar posição do collider
+        if (collider != null) {
+            collider.setPosition(getX(), getY());
+        }
     }
 
     @Override
@@ -83,29 +90,211 @@ public class actorLobo extends Actor implements Collidable {
     }
 
     public void ataque(actorPersonagem player) {
-        //seguir o jogador
-
-        double distancia =  Math.sqrt(Math.pow(player.getX()-getX(),2) + Math.pow(player.getY()-getY(),2));
-
-        //tempo = distancia / velocidade
-
+        // Seguir o jogador
+        double distancia = Math.sqrt(Math.pow(player.getX()-getX(),2) + Math.pow(player.getY()-getY(),2));
         float tempo = (float) (distancia / velocidade);
 
         if(distancia < 50) {
+            // Parar movimento quando estiver perto
             clearActions();
-            float posX = MathUtils.random(0, Gdx.graphics.getWidth()-100);
-            float posY = MathUtils.random(0, Gdx.graphics.getHeight()-100);
 
-            addAction(Actions.moveTo(posX, posY, tempo*1.5f));
-
+            // Executar ataque
             lobo.ataque(player.getPlayer());
 
-        }else{
-            addAction(Actions.moveTo(player.getX(), player.getY(), tempo));
-        }
+            // OPÇÃO 1: Ficar grudado no personagem (comentar as linhas abaixo)
+            // Não adiciona nenhuma ação de movimento
 
+            // OPÇÃO 2: Fugir após atacar (descomente se quiser o comportamento original)
+            /*
+            float posX = MathUtils.random(0, Gdx.graphics.getWidth()-100);
+            float posY = MathUtils.random(0, Gdx.graphics.getHeight()-100);
+            addAction(Actions.moveTo(posX, posY, tempo*1.5f));
+            */
+
+        } else {
+            // Only add new movement if not already moving to avoid stacking actions
+            if (getActions().size == 0) {
+                addAction(Actions.moveTo(player.getX(), player.getY(), tempo));
+            }
+        }
     }
 
+    // MÉTODO PRINCIPAL PARA COLISÕES COM OBSTÁCULOS
+    // Este método deve ser chamado no game loop para obstáculos que IMPEDEM movimento
+    public void checkObstacleCollisions(List<actorArvore> arvores, actorMercador mercador, actorAbrigo abrigo) {
+        // Verificar colisões com árvores
+        if (arvores != null) {
+            checkCollisionWithTrees(arvores);
+        }
 
+        // Verificar colisão com mercador
+        if (mercador != null) {
+            checkCollisionWithMercador(mercador);
+        }
 
+        // Verificar colisão com abrigo
+        if (abrigo != null) {
+            checkCollisionWithAbrigo(abrigo);
+        }
+    }
+
+    // MÉTODO SEPARADO PARA INTERAÇÃO COM PERSONAGEM
+    // Este método deve ser chamado separadamente e NÃO impede movimento
+    public boolean isNearPlayer(actorPersonagem playerActor) {
+        if (playerActor == null) return false;
+
+        double distancia = Math.sqrt(Math.pow(playerActor.getX()-getX(),2) + Math.pow(playerActor.getY()-getY(),2));
+        return distancia < 60; // Range de interação com o personagem
+    }
+
+    // Collision detection with trees - RANGE REDUZIDO
+    public void checkCollisionWithTrees(List<actorArvore> arvores) {
+        float colliderReduction = 0.8f;
+        float wolfColliderWidth = getWidth() * colliderReduction;
+        float wolfColliderHeight = getHeight() * colliderReduction;
+        float wolfColliderX = getX() + (getWidth() - wolfColliderWidth) / 2;
+        float wolfColliderY = getY() + (getHeight() - wolfColliderHeight) / 2;
+
+        Rectangle wolfBounds = new Rectangle(wolfColliderX, wolfColliderY, wolfColliderWidth, wolfColliderHeight);
+
+        for (actorArvore arvore : arvores) {
+            float treeColliderReduction = 0.7f;
+            float treeColliderWidth = arvore.getWidth() * treeColliderReduction;
+            float treeColliderHeight = arvore.getHeight() * treeColliderReduction;
+            float treeColliderX = arvore.getX() + (arvore.getWidth() - treeColliderWidth) / 2;
+            float treeColliderY = arvore.getY() + (arvore.getHeight() - treeColliderHeight) / 2;
+
+            Rectangle treeBounds = new Rectangle(treeColliderX, treeColliderY,
+                    treeColliderWidth, treeColliderHeight);
+
+            if (wolfBounds.overlaps(treeBounds)) {
+                handleTreeCollision(arvore);
+                break; // Sair do loop após primeira colisão
+            }
+        }
+    }
+
+    // Collision detection with mercador - RANGE REDUZIDO
+    public void checkCollisionWithMercador(actorMercador mercador) {
+        float colliderReduction = 0.8f;
+        float wolfColliderWidth = getWidth() * colliderReduction;
+        float wolfColliderHeight = getHeight() * colliderReduction;
+        float wolfColliderX = getX() + (getWidth() - wolfColliderWidth) / 2;
+        float wolfColliderY = getY() + (getHeight() - wolfColliderHeight) / 2;
+
+        Rectangle wolfBounds = new Rectangle(wolfColliderX, wolfColliderY, wolfColliderWidth, wolfColliderHeight);
+
+        float mercadorColliderReduction = 0.75f;
+        float mercadorColliderWidth = mercador.getWidth() * mercadorColliderReduction;
+        float mercadorColliderHeight = mercador.getHeight() * mercadorColliderReduction;
+        float mercadorColliderX = mercador.getX() + (mercador.getWidth() - mercadorColliderWidth) / 2;
+        float mercadorColliderY = mercador.getY() + (mercador.getHeight() - mercadorColliderHeight) / 2;
+
+        Rectangle mercadorBounds = new Rectangle(mercadorColliderX, mercadorColliderY,
+                mercadorColliderWidth, mercadorColliderHeight);
+
+        if (wolfBounds.overlaps(mercadorBounds)) {
+            handleMercadorCollision(mercador);
+        }
+    }
+
+    // Collision detection with abrigo - RANGE REDUZIDO
+    public void checkCollisionWithAbrigo(actorAbrigo abrigo) {
+        float colliderReduction = 0.8f;
+        float wolfColliderWidth = getWidth() * colliderReduction;
+        float wolfColliderHeight = getHeight() * colliderReduction;
+        float wolfColliderX = getX() + (getWidth() - wolfColliderWidth) / 2;
+        float wolfColliderY = getY() + (getHeight() - wolfColliderHeight) / 2;
+
+        Rectangle wolfBounds = new Rectangle(wolfColliderX, wolfColliderY, wolfColliderWidth, wolfColliderHeight);
+
+        float abrigoColliderReduction = 0.7f;
+        float abrigoColliderWidth = abrigo.getWidth() * abrigoColliderReduction;
+        float abrigoColliderHeight = abrigo.getHeight() * abrigoColliderReduction;
+        float abrigoColliderX = abrigo.getX() + (abrigo.getWidth() - abrigoColliderWidth) / 2;
+        float abrigoColliderY = abrigo.getY() + (abrigo.getHeight() - abrigoColliderHeight) / 2;
+
+        Rectangle abrigoBounds = new Rectangle(abrigoColliderX, abrigoColliderY,
+                abrigoColliderWidth, abrigoColliderHeight);
+
+        if (wolfBounds.overlaps(abrigoBounds)) {
+            handleAbrigoCollision(abrigo);
+        }
+    }
+
+    // Handle collision with tree
+    private void handleTreeCollision(actorArvore arvore) {
+        clearActions();
+
+        float treeX = arvore.getX() + arvore.getWidth()/2;
+        float treeY = arvore.getY() + arvore.getHeight()/2;
+        float wolfX = getX() + getWidth()/2;
+        float wolfY = getY() + getHeight()/2;
+
+        float dirX = wolfX - treeX;
+        float dirY = wolfY - treeY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = wolfX + dirX * 30;
+            float newY = wolfY + dirY * 30;
+            setPosition(newX - getWidth()/2, newY - getHeight()/2);
+        }
+    }
+
+    // Handle collision with mercador
+    private void handleMercadorCollision(actorMercador mercador) {
+        clearActions();
+
+        float mercadorX = mercador.getX() + mercador.getWidth()/2;
+        float mercadorY = mercador.getY() + mercador.getHeight()/2;
+        float wolfX = getX() + getWidth()/2;
+        float wolfY = getY() + getHeight()/2;
+
+        float dirX = wolfX - mercadorX;
+        float dirY = wolfY - mercadorY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = wolfX + dirX * 30;
+            float newY = wolfY + dirY * 30;
+            setPosition(newX - getWidth()/2, newY - getHeight()/2);
+        }
+    }
+
+    // Handle collision with abrigo
+    private void handleAbrigoCollision(actorAbrigo abrigo) {
+        clearActions();
+
+        float abrigoX = abrigo.getX() + abrigo.getWidth()/2;
+        float abrigoY = abrigo.getY() + abrigo.getHeight()/2;
+        float wolfX = getX() + getWidth()/2;
+        float wolfY = getY() + getHeight()/2;
+
+        float dirX = wolfX - abrigoX;
+        float dirY = wolfY - abrigoY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = wolfX + dirX * 30;
+            float newY = wolfY + dirY * 30;
+            setPosition(newX - getWidth()/2, newY - getHeight()/2);
+        }
+    }
+
+    // Método para limpar recursos quando não precisar mais do lobo
+    public void dispose() {
+        if (texturaCriatura != null) {
+            texturaCriatura.dispose();
+        }
+    }
 }
