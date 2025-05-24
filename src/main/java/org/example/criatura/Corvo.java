@@ -11,6 +11,7 @@ public class Corvo extends Criatura {
 
     @Override
     public void ataque(Personagem jogador) {
-
+        jogador.diminuirSanidade(getDanoDeAtaque()*0.3);
+        jogador.diminuirVida(getDanoDeAtaque());
     }
 }
