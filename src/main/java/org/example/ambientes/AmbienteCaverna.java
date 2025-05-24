@@ -40,7 +40,7 @@ public class AmbienteCaverna extends Ambiente {
         this.getRecursosDisponiveis().add(new Materiais("Diamante Vermelho", player, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais("Metal Firme", player, 8.0, 40.0, 0.2, 20.0, TipoMaterial.METAL));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(1).getNivelDePerigo()));
+                getCriaturasAmbientes().get(1) , getCriaturasAmbientes().get(1).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
                 getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(3).getNivelDePerigo()));
         this.poucaLuminosidade = poucaLuminosidade;
