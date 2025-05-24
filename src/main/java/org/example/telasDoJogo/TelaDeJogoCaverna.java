@@ -65,6 +65,17 @@ public class TelaDeJogoCaverna implements Screen {
     private HungerBar hungerBar;
     private Inventory inventory;
 
+    private boolean isEventoRuinasAtivo = false;
+    private float tempoEventoRuinas = 0;
+    private final float DURACAO_EVENTO_RUINAS = 10f;
+    private float tempoEntreEventos = 20f;
+    private float tempoDesdeUltimoEvento = 0f;
+    private float intensidadeTremor = 3.0f;
+    private float offsetX = 0;
+    private float offsetY = 0;
+    private Sound somTremor;
+    private long somTremorId;
+
     public TelaDeJogoCaverna(Game game, Personagem player) {
         this.game = game;
         this.player = player;
@@ -104,19 +115,82 @@ public class TelaDeJogoCaverna implements Screen {
         this.popUp = new Craft(stage, "Criar Item", "craftando", actorPlayer, inventory);
 
         this.soundCavern = Gdx.audio.newSound(Gdx.files.internal("sons/soudCavern.wav"));
+        this.somTremor = Gdx.audio.newSound(Gdx.files.internal("sons/tremor.wav"));
         soundId = soundCavern.loop(0.6f);
 
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
         lightTexture = new Texture(Gdx.files.internal("imagens/luz.png"));
 
         instanciarPilhaDeItem();
-
         instanciarRocha();
-
+        iniciarEventosAleatorios();
         ambienteCaverna.explorar(player);
+    }
 
+    private void iniciarEventosAleatorios() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (!isEventoRuinasAtivo &&
+                        tempoDesdeUltimoEvento >= tempoEntreEventos &&
+                        MathUtils.random() < 0.8f) {
+                    Gdx.app.log("TelaDeJogoCaverna", "Tentando iniciar evento de ruínas...");
+                    iniciarEventoRuinas();
+                }
+            }
+        }, 10, 10);
+    }
 
+    private void iniciarEventoRuinas() {
+        isEventoRuinasAtivo = true;
+        tempoEventoRuinas = 0;
+        tempoDesdeUltimoEvento = 0;
 
+        Gdx.app.log("TelaDeJogoCaverna", "Evento de ruínas iniciado! Duração: " + DURACAO_EVENTO_RUINAS + " segundos");
+
+        if (somTremor != null) {
+            somTremorId = somTremor.loop(0.7f);
+            somTremor.setPitch(somTremorId, 0.8f);
+        }
+    }
+
+    private void atualizarEventoRuinas(float deltaTime) {
+        tempoDesdeUltimoEvento += deltaTime;
+
+        if (!isEventoRuinasAtivo) {
+            offsetX = 0;
+            offsetY = 0;
+            return;
+        }
+
+        tempoEventoRuinas += deltaTime;
+
+        // Tremor com padrão senoidal
+        float progress = tempoEventoRuinas / DURACAO_EVENTO_RUINAS;
+        float intensidadeAtual = intensidadeTremor * (1 - progress);
+
+        offsetX = MathUtils.sin(tempoEventoRuinas * 30) * intensidadeAtual;
+        offsetY = MathUtils.cos(tempoEventoRuinas * 25) * intensidadeAtual;
+
+        // Ajustar volume do som
+        if (somTremor != null) {
+            somTremor.setPan(somTremorId, offsetX / intensidadeTremor, 1 - progress);
+        }
+
+        if (tempoEventoRuinas >= DURACAO_EVENTO_RUINAS) {
+            finalizarEventoRuinas();
+        }
+    }
+
+    private void finalizarEventoRuinas() {
+        isEventoRuinasAtivo = false;
+        Gdx.app.log("TelaDeJogoCaverna", "Evento de ruínas finalizado!");
+
+        if (somTremor != null) {
+            somTremor.stop(somTremorId);
+        }
+        offsetX = 0;
+        offsetY = 0;
     }
 
     @Override
@@ -128,6 +202,12 @@ public class TelaDeJogoCaverna implements Screen {
     @Override
     public void render(float delta) {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1 / 60f);
+
+        atualizarEventoRuinas(deltaTime);
+
+        if (isEventoRuinasAtivo) {
+            camera.translate(offsetX, offsetY);
+        }
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -155,15 +235,15 @@ public class TelaDeJogoCaverna implements Screen {
         sairDoCenario();
 
         inventory.setPosition(camera);
-
         inputs.inputListener(actorPlayer, inventory, popUp);
         popUp.setPosition(actorPlayer);
 
         instanciarRocha();
-        //checkCollisonPlayer
         actorPlayer.checkCollision(listaDeRochas);
 
-
+        if (isEventoRuinasAtivo) {
+            camera.translate(-offsetX, -offsetY);
+        }
     }
 
     @Override
@@ -177,21 +257,25 @@ public class TelaDeJogoCaverna implements Screen {
         if (soundCavern != null) {
             soundCavern.stop(soundId);
         }
+        if (somTremor != null) {
+            somTremor.stop(somTremorId);
+        }
     }
 
     @Override
     public void dispose() {
         if (darkOverlay != null) darkOverlay.dispose();
         if (lightTexture != null) lightTexture.dispose();
-
         if (soundCavern != null) {
             soundCavern.stop();
             soundCavern.dispose();
         }
-
+        if (somTremor != null) {
+            somTremor.stop();
+            somTremor.dispose();
+        }
         if (hungerBar != null) hungerBar.dispose();
         if (lifeBar != null) lifeBar.dispose();
-
         inicializarMundo.dispose();
         inventory.dispose();
     }
@@ -271,6 +355,9 @@ public class TelaDeJogoCaverna implements Screen {
     }
 
     private void sairDoCenario() {
+        // Se evento estiver ativo, bloqueia saída
+        if (isEventoRuinasAtivo) return;
+
         float playerX = actorPlayer.getX();
         float playerY = actorPlayer.getY();
         float playerWidth = actorPlayer.getWidth();
