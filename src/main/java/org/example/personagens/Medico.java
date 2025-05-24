@@ -1,5 +1,6 @@
 package org.example.personagens;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.domain.Personagem;
 import org.example.enums.TipoEfeito;
@@ -11,6 +12,7 @@ import org.example.itens.Materiais;
 import org.example.itens.Remedios;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Medico extends Personagem {
 
@@ -40,7 +42,11 @@ public class Medico extends Personagem {
         ));
 
         this.alterarNomePersonagem(nome);
-        //to do: criar o hashmap passando os endereçoes das texturas
+
+        sprites = new HashMap<>( Map.of(
+                "parado", new TextureRegion(new Texture("imagens/sprites/medico.png"))
+        ));
+
     }
 
     @Override

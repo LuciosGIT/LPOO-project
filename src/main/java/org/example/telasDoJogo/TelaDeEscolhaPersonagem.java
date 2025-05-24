@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.domain.Personagem;
 import org.example.personagens.Mecanico;
+import org.example.personagens.Medico;
 import org.example.personagens.Rastreador;
 import org.example.personagens.Sobrevivente;
 
@@ -253,7 +254,7 @@ public class TelaDeEscolhaPersonagem implements Screen {
                 game.setScreen(new TelaDeJogoFloresta(game, mecanico));
             }
             case "Médico" ->{
-                Personagem medico = new Mecanico("Médico");
+                Personagem medico = new Medico("Médico");
                 game.setScreen(new TelaDeJogoFloresta(game, medico));
             }
             case "Rastreador" ->{
