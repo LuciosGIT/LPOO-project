@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.*;
 import org.example.actor.*;
 import org.example.ambientes.AmbienteFloresta;
+import org.example.criatura.Corvo;
 import org.example.criatura.Morcego;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
@@ -161,6 +162,7 @@ public class TelaDeJogoFloresta implements Screen {
         // Gerar evento aleatório
         Evento evento = ambienteFloresta.gerarEvento(player);
 
+
         // Verificar o tipo de evento
         if (evento instanceof EventoDescoberta) {
             this.eventoDescoberta = (EventoDescoberta) evento;
@@ -175,11 +177,14 @@ public class TelaDeJogoFloresta implements Screen {
             aplicarClimaNaTela((EventoClimatico) evento);
         } else if (evento instanceof EventoCriatura) {
             this.eventoCriatura = (EventoCriatura) evento;
-            if(eventoCriatura.getCriatura() instanceof Morcego){
+            //caso tenha mais de uma criatura, adicionar a aqui. ATENÇÂO NÂO ESQUECER A CRIATURA NO RENDER
+            if(eventoCriatura.getCriatura() instanceof Corvo){
                 // Criar o ator da criatura
-                actorMorcego morcego = new actorMorcego( player, inventory, (Morcego) eventoCriatura.getCriatura());
-                stage.addActor(morcego);
-                listaDeCriaturas.add(morcego);
+
+
+                actorCorvo corvo = new actorCorvo( player, inventory, (Corvo) eventoCriatura.getCriatura());
+                listaDeCriaturas.add(corvo);
+
             }
 
             // adicionar outra criaturas aqui
@@ -383,10 +388,9 @@ public class TelaDeJogoFloresta implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
 
         for(Actor criatura : listaDeCriaturas){
-
-            if(criatura instanceof actorMorcego) {
+            if(criatura instanceof actorCorvo) {
                 stage.addActor(criatura);
-                ((actorMorcego) criatura).ataque(actorPlayer);
+                ((actorCorvo) criatura).ataque(actorPlayer);
             }
         }
 
