@@ -22,6 +22,7 @@ import org.example.ambientes.AmbienteFloresta;
 import org.example.criatura.Corvo;
 import org.example.criatura.Lobo;
 import org.example.criatura.Morcego;
+import org.example.criatura.Urso;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
@@ -161,9 +162,9 @@ public class TelaDeJogoFloresta implements Screen {
         timeSinceLastDrop = 0;
 
         // Gerar evento aleatório
-        //Evento evento = ambienteFloresta.gerarEvento(player);
+        Evento evento = ambienteFloresta.gerarEvento(player);
 
-        Evento evento = new EventoCriatura(true,"Corvo","",0.5, new Lobo("1",10.0,0.2,0.1), 1.0);
+        //Evento evento = new EventoCriatura(true,"Corvo","",0.5, new Lobo("1",10.0,0.2,0.1), 1.0);
 
         // Verificar o tipo de evento
         if (evento instanceof EventoDescoberta) {
@@ -189,6 +190,10 @@ public class TelaDeJogoFloresta implements Screen {
                 actorLobo lobo = new actorLobo(player, inventory, (Lobo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(lobo);
 
+            }
+            else if(eventoCriatura.getCriatura() instanceof Urso) {
+                actorUrso urso = new actorUrso(player, inventory, (Urso) eventoCriatura.getCriatura());
+                listaDeCriaturas.add(urso);
             }
         }
 
@@ -396,12 +401,36 @@ public class TelaDeJogoFloresta implements Screen {
             }
             else if(criatura instanceof actorLobo) {
                 stage.addActor(criatura);
-                List<Actor> listaDeArvoresEmActor;
 
-                listaDeArvoresEmActor = new ArrayList<>(listaDeArvores);
+                // Add collision detection for the wolf with trees
+                actorLobo lobo = (actorLobo) criatura;
 
-                ((actorLobo) criatura).ataque(actorPlayer);
+                // Check collision with trees (assuming your actorLobo has a checkCollision method)
+                lobo.checkCollisionWithTrees(listaDeArvores);
 
+                // Also check collision with other obstacles
+                lobo.checkCollisionWithMercador(mercador);
+                if (abrigoVisivel && abrigo != null) {
+                    lobo.checkCollisionWithAbrigo(abrigo);
+                }
+
+                // Then perform the attack
+                lobo.ataque(actorPlayer);
+            }
+
+            else if (criatura instanceof actorUrso) {
+                stage.addActor(criatura);
+
+                actorUrso urso = (actorUrso) criatura;
+
+                // Colisão com obstáculos
+                urso.checkCollisionWithTrees(listaDeArvores);
+                urso.checkCollisionWithMercador(mercador);
+                if (abrigoVisivel && abrigo != null) {
+                    urso.checkCollisionWithAbrigo(abrigo);
+                }
+
+                urso.ataque(actorPlayer);
             }
         }
 
@@ -498,7 +527,7 @@ public class TelaDeJogoFloresta implements Screen {
     }
 
     private void criarActorArvore() {
-        float espacoMinimo = 250f; // Espaço mínimo entre árvores
+        float espacoMinimo = 300f; // Espaço mínimo entre árvores
         float espacoMinimoMercador = 400f; // Espaço mínimo entre árvores e o mercador
         float espacoMinimoAbrigo = 300f; // Espaço mínimo entre árvores e abrigo
         int maxTentativas = 30;
