@@ -20,6 +20,7 @@ import org.example.Ui.*;
 import org.example.actor.*;
 import org.example.ambientes.AmbienteFloresta;
 import org.example.criatura.Corvo;
+import org.example.criatura.Lobo;
 import org.example.criatura.Morcego;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
@@ -44,7 +45,7 @@ public class TelaDeJogoFloresta implements Screen {
     private final Personagem player;
     private final actorPersonagem actorPlayer;
     private actorArvore arvore;
-    private final List<actorArvore> listaDeArvores = new ArrayList<>();
+    private List<actorArvore> listaDeArvores = new ArrayList<>();
     private actorPilhaDeItem pilhaDeItem;
     private Texture backgroundFloresta;
     private Batch batch;
@@ -160,8 +161,9 @@ public class TelaDeJogoFloresta implements Screen {
         timeSinceLastDrop = 0;
 
         // Gerar evento aleatório
-        Evento evento = ambienteFloresta.gerarEvento(player);
+        //Evento evento = ambienteFloresta.gerarEvento(player);
 
+        Evento evento = new EventoCriatura(true,"Corvo","",0.5, new Lobo("1",10.0,0.2,0.1), 1.0);
 
         // Verificar o tipo de evento
         if (evento instanceof EventoDescoberta) {
@@ -173,21 +175,21 @@ public class TelaDeJogoFloresta implements Screen {
                     posicionarAbrigo();
                 }
             }
-        } else if (evento instanceof EventoClimatico) {
+        }else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
-        } else if (evento instanceof EventoCriatura) {
+        }else if (evento instanceof EventoCriatura) {
+
             this.eventoCriatura = (EventoCriatura) evento;
-            //caso tenha mais de uma criatura, adicionar a aqui. ATENÇÂO NÂO ESQUECER A CRIATURA NO RENDER
+
             if(eventoCriatura.getCriatura() instanceof Corvo){
-                // Criar o ator da criatura
-
-
                 actorCorvo corvo = new actorCorvo( player, inventory, (Corvo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(corvo);
 
-            }
+            }else if(eventoCriatura.getCriatura() instanceof Lobo) {
+                actorLobo lobo = new actorLobo(player, inventory, (Lobo) eventoCriatura.getCriatura());
+                listaDeCriaturas.add(lobo);
 
-            // adicionar outra criaturas aqui
+            }
         }
 
     }
@@ -391,6 +393,15 @@ public class TelaDeJogoFloresta implements Screen {
             if(criatura instanceof actorCorvo) {
                 stage.addActor(criatura);
                 ((actorCorvo) criatura).ataque(actorPlayer);
+            }
+            else if(criatura instanceof actorLobo) {
+                stage.addActor(criatura);
+                List<Actor> listaDeArvoresEmActor;
+
+                listaDeArvoresEmActor = new ArrayList<>(listaDeArvores);
+
+                ((actorLobo) criatura).ataque(actorPlayer);
+
             }
         }
 
