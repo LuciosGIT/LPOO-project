@@ -11,23 +11,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.*;
-import org.example.actor.actorAbrigo;
-import org.example.actor.actorArvore;
-import org.example.actor.actorMercador;
-import org.example.actor.actorPersonagem;
-import org.example.actor.actorPilhaDeItem;
+import org.example.actor.*;
 import org.example.ambientes.AmbienteFloresta;
+import org.example.criatura.Morcego;
 import org.example.domain.Evento;
-import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.enums.TipoDescoberta;
 import org.example.eventos.EventoClimatico;
+import org.example.eventos.EventoCriatura;
 import org.example.eventos.EventoDescoberta;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
@@ -44,7 +42,7 @@ public class TelaDeJogoFloresta implements Screen {
     private final Game game;
     private final Personagem player;
     private final actorPersonagem actorPlayer;
-    actorArvore arvore;
+    private actorArvore arvore;
     private final List<actorArvore> listaDeArvores = new ArrayList<>();
     private actorPilhaDeItem pilhaDeItem;
     private Texture backgroundFloresta;
@@ -53,6 +51,8 @@ public class TelaDeJogoFloresta implements Screen {
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
     private actorMercador mercador;
+    private List<Actor> listaDeCriaturas = new ArrayList<>();
+
 
     private float worldWidth;
     private float worldHeight;
@@ -68,7 +68,7 @@ public class TelaDeJogoFloresta implements Screen {
     private float currentTime = 12f;
     private float dayDuration = 300f;
 
-    private AmbienteFloresta ambienteFloresta;
+    private final AmbienteFloresta ambienteFloresta;
 
     InicializarMundo inicializarMundo;
     Inputs inputs;
@@ -88,6 +88,8 @@ public class TelaDeJogoFloresta implements Screen {
     private boolean abrigoVisivel = false;
     private EventoDescoberta eventoDescoberta;
     private boolean interacaoAbrigoOcorreu = false;
+
+    private EventoCriatura eventoCriatura;
 
     public TelaDeJogoFloresta(Game game, Personagem player) {
         this.game = game;
@@ -171,7 +173,18 @@ public class TelaDeJogoFloresta implements Screen {
             }
         } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
+        } else if (evento instanceof EventoCriatura) {
+            this.eventoCriatura = (EventoCriatura) evento;
+            if(eventoCriatura.getCriatura() instanceof Morcego){
+                // Criar o ator da criatura
+                actorMorcego morcego = new actorMorcego( player, inventory, (Morcego) eventoCriatura.getCriatura());
+                stage.addActor(morcego);
+                listaDeCriaturas.add(morcego);
+            }
+
+            // adicionar outra criaturas aqui
         }
+
     }
 
     // Método para posicionar o abrigo com espaçamento adequado
@@ -368,6 +381,15 @@ public class TelaDeJogoFloresta implements Screen {
 
         popUp.setPosition(actorPlayer);
         inputs.inputListener(actorPlayer, inventory, popUp);
+
+        for(Actor criatura : listaDeCriaturas){
+
+            if(criatura instanceof actorMorcego) {
+                stage.addActor(criatura);
+                ((actorMorcego) criatura).ataque(actorPlayer);
+            }
+        }
+
     }
 
     private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {
