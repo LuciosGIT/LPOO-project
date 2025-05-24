@@ -50,12 +50,12 @@ public class AmbienteFloresta extends Ambiente {
 
 
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(3).getNivelDePerigo()));
+                getCriaturasAmbientes().get(2) , getCriaturasAmbientes().get(2).getNivelDePerigo()));
         this.getEventos().add(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,"Você pode encontrar Sobrevivente",
                 TipoDescoberta.ABRIGO, List.of(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA))));
         this.getEventos().add(new EventoClimatico(true, "Evento de Chuva acionado", "Afeta a visibilidade", "Evento de Chuva" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(0).getNivelDePerigo()));
+                getCriaturasAmbientes().get(5), getCriaturasAmbientes().get(5).getNivelDePerigo()));
 
     }
 
