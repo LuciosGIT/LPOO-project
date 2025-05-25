@@ -274,7 +274,6 @@ public class TelaDeJogoCaverna implements Screen {
                 actorCorvo corvo = (actorCorvo) actor;
                 stage.addActor(corvo);
                 corvo.ataque(actorPlayer);
-                System.out.print("OIIIIIIIIIIIIIIIIIIIIII");
             }
 
         }

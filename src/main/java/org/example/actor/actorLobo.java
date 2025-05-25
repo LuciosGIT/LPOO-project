@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Ui.Inventory;
 import org.example.criatura.Corvo;
 import org.example.criatura.Lobo;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import org.example.itens.Armas;
 
 import java.util.List;
 
@@ -70,7 +72,7 @@ public class actorLobo extends Actor implements Collidable {
         addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                atingido();
+                atingido(player);
             }
         });
 
@@ -302,14 +304,24 @@ public class actorLobo extends Actor implements Collidable {
         }
     }
 
-    public void atingido(){
-        vida -= 10;
+    public void atingido(Personagem player){
+
+        double dano = 5;
+
+        for(Item item : player.getInventario().getListaDeItems()){
+            if(item instanceof Armas arma){
+                dano = arma.getDano();
+            }
+        }
+
+        vida -= dano;
+
+        System.out.printf("\nDano: %f", dano);
+
         if (vida <= 0) {
             // Lógica para o lobo morrer
             System.out.println("Lobo morreu!");
             collider = null;
-            dispose();
-            this.remove();
             this.isMorto = true;
         }
     }

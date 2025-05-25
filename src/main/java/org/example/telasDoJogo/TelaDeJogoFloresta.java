@@ -415,6 +415,9 @@ public class TelaDeJogoFloresta implements Screen {
                 }
 
                 if(lobo.getIsMorto()){
+                    lobo.dispose();
+                    System.out.print("oii");
+                    lobo.remove();
                     listaDeCriaturas.remove(criatura);
                     return;
                 }
