@@ -19,12 +19,12 @@ public class ConfiguracaoDoMundo {
     //lista de animais
     public static List<Criatura> getCriaturasPadrao() {
         return List.of(
-                new Cobra("Cobra Venenosa", 7.0, 4.0, 7.5),
-                new Morcego("Morcego Espantoso", 7.0, 2.0, 5.0),
-                new Lobo("Lobo Nômade", 7.0, 4.5, 0.5),
-                new Corvo("Corvo Atordoante", 7.0, 2.0, 5.0),
-                new Crocodilo("Crocodilo Feroz", 7.0, 4.0, 10.0),
-                new Urso("Urso Raivoso", 7.0, 5.0, 0.9)
+                new Cobra("Cobra Venenosa", 100.0, 4.0, 7.5),
+                new Morcego("Morcego Espantoso", 100.0, 2.0, 5.0),
+                new Lobo("Lobo Nômade", 100.0, 4.5, 0.5),
+                new Corvo("Corvo Atordoante", 100.0, 2.0, 5.0),
+                new Crocodilo("Crocodilo Feroz", 100.0, 4.0, 10.0),
+                new Urso("Urso Raivoso", 100.0, 5.0, 0.9)
         );
     }
 
