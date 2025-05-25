@@ -17,9 +17,10 @@ import java.util.List;
 public class Inputs {
 
     private Personagem player;
-    private int keySelect;
+    private int keySelect = -1;
 
     public void inputListener(actorPersonagem actorplayer, Inventory inventory, Craft popUp) {
+        inputsInventario(inventory);
 
         player = actorplayer.getPlayer();
 
@@ -59,6 +60,7 @@ public class Inputs {
 
     private void inputsInventario(Inventory inventory) {
         Table inventoryTable = inventory.getInventoryTable();
+        List<Item> itensInventario = inventory.getItensInventario();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
             if (inventoryTable.getChildren().size > 0) {
@@ -67,6 +69,75 @@ public class Inputs {
                 if (slotContainer.getChildren().size > 0) {
                     slotContainer.getChildren().get(0).setColor(Color.GRAY);
                     keySelect = 1;
+                    if (itensInventario.size() > 0) {
+                        inventory.setItemSelecionado(itensInventario.get(0));
+                    } else {
+                        inventory.setItemSelecionado(null);
+                    }
+                }
+            }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            if (inventoryTable.getChildren().size > 1) {
+                clearColor(inventoryTable);
+                Table slotContainer = (Table) inventoryTable.getChildren().get(1);
+                if (slotContainer.getChildren().size > 0) {
+                    slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 2;
+                    if (itensInventario.size() > 1) {
+                        inventory.setItemSelecionado(itensInventario.get(1));
+                    } else {
+                        inventory.setItemSelecionado(null);
+                    }
+                }
+            }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            if (inventoryTable.getChildren().size > 2) {
+                clearColor(inventoryTable);
+                Table slotContainer = (Table) inventoryTable.getChildren().get(2);
+                if (slotContainer.getChildren().size > 0) {
+                    slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 3;
+                    if (itensInventario.size() > 2) {
+                        inventory.setItemSelecionado(itensInventario.get(2));
+                    } else {
+                        inventory.setItemSelecionado(null);
+                    }
+                }
+            }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            if (inventoryTable.getChildren().size > 3) {
+                clearColor(inventoryTable);
+                Table slotContainer = (Table) inventoryTable.getChildren().get(3);
+                if (slotContainer.getChildren().size > 0) {
+                    slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 4;
+                    if (itensInventario.size() > 3) {
+                        inventory.setItemSelecionado(itensInventario.get(3));
+                    } else {
+                        inventory.setItemSelecionado(null);
+                    }
+                }
+            }
+        }
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            if (inventoryTable.getChildren().size > 4) {
+                clearColor(inventoryTable);
+                Table slotContainer = (Table) inventoryTable.getChildren().get(4);
+                if (slotContainer.getChildren().size > 0) {
+                    slotContainer.getChildren().get(0).setColor(Color.GRAY);
+                    keySelect = 5;
+                    if (itensInventario.size() > 4) {
+                        inventory.setItemSelecionado(itensInventario.get(4));
+                    } else {
+                        inventory.setItemSelecionado(null);
+                    }
                 }
             }
         }
