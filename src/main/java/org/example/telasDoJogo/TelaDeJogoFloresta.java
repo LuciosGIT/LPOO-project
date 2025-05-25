@@ -187,7 +187,7 @@ public class TelaDeJogoFloresta implements Screen {
                 listaDeCriaturas.add(corvo);
 
             }else if(eventoCriatura.getCriatura() instanceof Lobo) {
-                actorLobo lobo = new actorLobo(player, inventory, (Lobo) eventoCriatura.getCriatura());
+                actorLobo lobo = new actorLobo(player, actorPlayer, inventory, (Lobo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(lobo);
 
             }
@@ -423,7 +423,7 @@ public class TelaDeJogoFloresta implements Screen {
                 }
 
                 // Then perform the attack
-                lobo.ataque(actorPlayer);
+                lobo.ataque();
                 inventory.updateInventory();
 
 
