@@ -192,7 +192,7 @@ public class TelaDeJogoFloresta implements Screen {
 
             }
             else if(eventoCriatura.getCriatura() instanceof Urso) {
-                actorUrso urso = new actorUrso(player, inventory, (Urso) eventoCriatura.getCriatura());
+                actorUrso urso = new actorUrso(player, actorPlayer, inventory, (Urso) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(urso);
             }
         }
@@ -441,7 +441,16 @@ public class TelaDeJogoFloresta implements Screen {
                     urso.checkCollisionWithAbrigo(abrigo);
                 }
 
-                urso.ataque(actorPlayer);
+                if(urso.getIsMorto()){
+                    urso.dispose();
+                    System.out.print("oii");
+                    urso.remove();
+                    listaDeCriaturas.remove(criatura);
+                    return;
+                }
+
+
+                urso.ataque();
             }
         }
 
