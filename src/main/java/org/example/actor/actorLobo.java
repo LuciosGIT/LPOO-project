@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Ui.Inventory;
 import org.example.criatura.Corvo;
 import org.example.criatura.Lobo;
@@ -25,7 +27,8 @@ public class actorLobo extends Actor implements Collidable {
     private Polygon collider;
     private Personagem player;
     private Inventory inventory;
-    private double velocidade = 250; // velocidade do lobo
+    private double velocidade = 250;// velocidade do lobo
+    private boolean isMorto = false;
 
     public actorLobo(Personagem player, Inventory inventory, Lobo lobo) {
 
@@ -63,6 +66,14 @@ public class actorLobo extends Actor implements Collidable {
 
         collider = new Polygon(vertices);
         collider.setPosition(getX(), getY());
+
+        addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                atingido();
+            }
+        });
+
     }
 
     @Override
@@ -289,6 +300,22 @@ public class actorLobo extends Actor implements Collidable {
             float newY = wolfY + dirY * 30;
             setPosition(newX - getWidth()/2, newY - getHeight()/2);
         }
+    }
+
+    public void atingido(){
+        vida -= 10;
+        if (vida <= 0) {
+            // Lógica para o lobo morrer
+            System.out.println("Lobo morreu!");
+            collider = null;
+            dispose();
+            this.remove();
+            this.isMorto = true;
+        }
+    }
+
+    public boolean getIsMorto(){
+        return isMorto;
     }
 
     // Método para limpar recursos quando não precisar mais do lobo

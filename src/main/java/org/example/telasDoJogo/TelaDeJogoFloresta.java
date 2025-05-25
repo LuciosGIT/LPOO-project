@@ -414,9 +414,16 @@ public class TelaDeJogoFloresta implements Screen {
                     lobo.checkCollisionWithAbrigo(abrigo);
                 }
 
+                if(lobo.getIsMorto()){
+                    listaDeCriaturas.remove(criatura);
+                    return;
+                }
+
                 // Then perform the attack
                 lobo.ataque(actorPlayer);
                 inventory.updateInventory();
+
+
             }
 
             else if (criatura instanceof actorUrso) {

@@ -127,4 +127,5 @@ public class actorPersonagem extends Actor implements Collidable{
     public Polygon getCollider() {
         return collider; // Corrigido para retornar o collider em vez de null
     }
+
 }
