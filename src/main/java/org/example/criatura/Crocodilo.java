@@ -10,6 +10,6 @@ public class Crocodilo extends Criatura {
     }
     @Override
     public void ataque(Personagem jogador) {
-
+        jogador.diminuirVida(getDanoDeAtaque());
     }
 }
