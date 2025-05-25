@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
@@ -22,13 +23,21 @@ import org.example.actor.actorRio;
 import org.example.actor.actorPonte;
 import org.example.ambientes.AmbienteFloresta;
 import org.example.ambientes.AmbienteLagoRio;
+import org.example.criatura.Crocodilo;
+import org.example.criatura.Morcego;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.eventos.EventoCriatura;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
 import com.badlogic.gdx.audio.Sound;
+import org.example.actor.actorCrocodilo;
+import org.example.domain.Evento;
+import org.example.eventos.EventoCriatura;
+import org.example.criatura.Corvo;
+import org.example.actor.actorCorvo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +59,7 @@ public class TelaDeJogoLagoRio implements Screen {
     private Stage stage;
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
+    private List<Actor> listaDeCriaturas = new ArrayList<>();
 
     private float worldWidth;
     private float worldHeight;
@@ -121,7 +131,24 @@ public class TelaDeJogoLagoRio implements Screen {
 
         ambienteLagoRio.explorar(player);
 
-        //to do: adicionar evento
+        //to do: adicionar evento do crocodilo
+
+        Evento evento = ambienteLagoRio.gerarEvento(player);
+
+        if(evento instanceof EventoCriatura){
+
+            EventoCriatura eventoCriatura = (EventoCriatura) evento;
+            if(eventoCriatura.getCriatura() instanceof Crocodilo){
+                actorCrocodilo crocodilo = new actorCrocodilo(player, inventory, (Crocodilo) eventoCriatura.getCriatura());
+                stage.addActor(crocodilo);
+                listaDeCriaturas.add(crocodilo);
+            } else if (eventoCriatura.getCriatura() instanceof Corvo ) {
+                actorCorvo corvo = new actorCorvo(player, inventory, (Corvo) eventoCriatura.getCriatura());
+                stage.addActor(corvo);
+                listaDeCriaturas.add(corvo);
+            }
+
+        }
 
     }
 
@@ -179,6 +206,17 @@ public class TelaDeJogoLagoRio implements Screen {
         popUp.setPosition(actorPlayer);
         inputs.inputListener(actorPlayer, inventory, popUp);
         popUp.setPosition(actorPlayer);
+
+        for(Actor actor : listaDeCriaturas){
+            if(actor instanceof actorCrocodilo){
+                actorCrocodilo crocodilo = (actorCrocodilo) actor;
+                crocodilo.ataque(actorPlayer);
+            } else if (actor instanceof actorCorvo) {
+                actorCorvo corvo = (actorCorvo) actor;
+                corvo.ataque(actorPlayer);
+            }
+        }
+
     }
 
     private void verificarColisaoComRio(float deltaTime) {
