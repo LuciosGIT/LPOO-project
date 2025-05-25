@@ -120,6 +120,9 @@ public class TelaDeJogoLagoRio implements Screen {
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
 
         ambienteLagoRio.explorar(player);
+
+        //to do: adicionar evento
+
     }
 
     public void instanciarPilhaDeItem() {

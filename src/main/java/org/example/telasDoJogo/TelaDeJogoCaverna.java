@@ -11,21 +11,24 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import org.example.actor.*;
 
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Craft;
 import org.example.Ui.HungerBar;
 import org.example.Ui.Inventory;
 import org.example.Ui.LifeBar;
-import org.example.actor.actorPersonagem;
-import org.example.actor.actorPilhaDeItem;
-import org.example.actor.actorRocha;
 import org.example.ambientes.AmbienteCaverna;
+import org.example.criatura.Morcego;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import org.example.domain.Evento;
+import org.example.eventos.EventoCriatura;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import org.example.criatura.Corvo;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -64,6 +67,7 @@ public class TelaDeJogoCaverna implements Screen {
     private LifeBar lifeBar;
     private HungerBar hungerBar;
     private Inventory inventory;
+    private List<Actor> listaDeCriaturas = new ArrayList<>();
 
     private boolean isEventoRuinasAtivo = false;
     private float tempoEventoRuinas = 0;
@@ -125,6 +129,22 @@ public class TelaDeJogoCaverna implements Screen {
         instanciarRocha();
         iniciarEventosAleatorios();
         ambienteCaverna.explorar(player);
+
+        Evento evento = ambienteCaverna.gerarEvento(player);
+
+        if(evento instanceof EventoCriatura) {
+            EventoCriatura eventoCriatura = (EventoCriatura) evento;
+
+            if(eventoCriatura.getCriatura() instanceof Morcego){
+                actorMorcego morcego = new actorMorcego(player, inventory, (Morcego) eventoCriatura.getCriatura());
+                listaDeCriaturas.add(morcego);
+            } else if (eventoCriatura.getCriatura() instanceof Corvo) {
+                actorCorvo corvo = new actorCorvo(player, inventory, (Corvo) eventoCriatura.getCriatura());
+                listaDeCriaturas.add(corvo);
+            }
+
+        }
+
     }
 
     private void iniciarEventosAleatorios() {
@@ -244,6 +264,21 @@ public class TelaDeJogoCaverna implements Screen {
         if (isEventoRuinasAtivo) {
             camera.translate(-offsetX, -offsetY);
         }
+
+        for(Actor actor : listaDeCriaturas){
+            if(actor instanceof actorMorcego){
+                actorMorcego morcego = (actorMorcego) actor;
+                stage.addActor(morcego);
+                morcego.ataque(actorPlayer);
+            } else if (actor instanceof actorCorvo) {
+                actorCorvo corvo = (actorCorvo) actor;
+                stage.addActor(corvo);
+                corvo.ataque(actorPlayer);
+                System.out.print("OIIIIIIIIIIIIIIIIIIIIII");
+            }
+
+        }
+
     }
 
     @Override
