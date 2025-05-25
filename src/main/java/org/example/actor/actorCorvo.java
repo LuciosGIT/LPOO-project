@@ -107,5 +107,10 @@ public class actorCorvo extends Actor implements Collidable {
 
     }
 
+    public void dispose() {
+        if (texturaCriatura != null) {
+            texturaCriatura.dispose();
+        }
+    }
 
 }

@@ -106,4 +106,10 @@ public class actorMorcego extends Actor implements Collidable {
 
     }
 
+    public void dispose() {
+        if (texturaCriatura != null) {
+            texturaCriatura.dispose();
+        }
+    }
+
 }

@@ -161,6 +161,8 @@ public class actorRocha extends Actor implements Collidable {
         public Polygon getCollider() {
             return collider;
         }
+
+
 }
 
 
