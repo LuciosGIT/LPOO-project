@@ -60,7 +60,7 @@ public class Mecanico extends Personagem {
                 TipoFerramenta.ISQUEIRO));
 
         this.getInventario().adicionarItem(
-                new Armas("MACHADO", 10.0,this,0.1,0.5,12.0,0.1, TipoArma.CORPO)
+                new Armas("MACHADO", 20.0,this,0.1,0.5,12.0,0.1, TipoArma.CORPO)
         );
 
         sprites = new HashMap<>( Map.of(
