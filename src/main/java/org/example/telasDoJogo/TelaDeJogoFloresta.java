@@ -416,6 +416,7 @@ public class TelaDeJogoFloresta implements Screen {
 
                 // Then perform the attack
                 lobo.ataque(actorPlayer);
+                inventory.updateInventory();
             }
 
             else if (criatura instanceof actorUrso) {
@@ -455,6 +456,9 @@ public class TelaDeJogoFloresta implements Screen {
 
     @Override
     public void dispose() {
+
+        popUp.dispose();
+
         if(mercador != null) {
             mercador.dispose();
         }
@@ -470,6 +474,18 @@ public class TelaDeJogoFloresta implements Screen {
 
         if (abrigo != null) {
             abrigo.dispose();
+        }
+
+        if(listaDeCriaturas != null) {
+            for (Actor criatura : listaDeCriaturas) {
+                if (criatura instanceof actorCorvo) {
+                    ((actorCorvo) criatura).dispose();
+                } else if (criatura instanceof actorLobo) {
+                    ((actorLobo) criatura).dispose();
+                } else if (criatura instanceof actorUrso) {
+                    ((actorUrso) criatura).dispose();
+                }
+            }
         }
 
         inicializarMundo.dispose();
