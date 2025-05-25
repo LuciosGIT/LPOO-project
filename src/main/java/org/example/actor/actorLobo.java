@@ -15,6 +15,7 @@ import org.example.criatura.Lobo;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import org.example.enums.TipoArma;
 import org.example.itens.Armas;
 
 import java.util.List;
@@ -29,37 +30,37 @@ public class actorLobo extends Actor implements Collidable {
     private Polygon collider;
     private Personagem player;
     private Inventory inventory;
+    private actorPersonagem playerActor;
     private double velocidade = 250;// velocidade do lobo
     private boolean isMorto = false;
 
-    public actorLobo(Personagem player, Inventory inventory, Lobo lobo) {
-
-        this.lobo = lobo;
+    public actorLobo(Personagem player, actorPersonagem playerActor, Inventory inventory, Lobo lobo) {
         this.player = player;
+        this.playerActor = playerActor;
         this.inventory = inventory;
-        vida = lobo.getVida();
-        dano = lobo.getDanoDeAtaque();
+        this.lobo = lobo;
+
+        this.vida = lobo.getVida();
+        this.dano = lobo.getDanoDeAtaque();
 
         texturaCriatura = new Texture(Gdx.files.internal("imagens/sprites/lobo.png"));
 
-        float x = MathUtils.random(0, Gdx.graphics.getWidth()-100);
-        float y = MathUtils.random(0, Gdx.graphics.getHeight()-100);
+        float x = MathUtils.random(0, Gdx.graphics.getWidth() - 100);
+        float y = MathUtils.random(0, Gdx.graphics.getHeight() - 100);
 
-        setBounds(x, y, texturaCriatura.getWidth()*0.5f, texturaCriatura.getHeight()*0.5f);
+        setBounds(x, y, texturaCriatura.getWidth() * 0.5f, texturaCriatura.getHeight() * 0.5f);
         setPosition(x, y);
 
         setZIndex(10);
-
         setSize(0.3f * texturaCriatura.getWidth(), 0.3f * texturaCriatura.getHeight());
+        setOrigin(getWidth() / 2, getHeight() / 2);
 
-        setOrigin(getWidth()/2, getHeight()/2);
+        float baseWidth = getWidth() * 0.5f;
+        float baseHeight = getHeight() * 0.2f;
+        float baseX = getWidth() * -0.1f;
+        float baseY = getWidth() * 0.2f;
 
-        float baseWidth = getWidth() * 0.5f;    // 50% da largura
-        float baseHeight = getHeight() * 0.2f;   // 20% da altura
-        float baseX = getWidth() * -0.1f;        // posição X
-        float baseY = getWidth() * 0.2f;        // posição Y
-
-        float[] vertices = new float[] {
+        float[] vertices = new float[]{
                 baseX, baseY,
                 baseX + baseWidth, baseY,
                 baseX + baseWidth, baseY + baseHeight,
@@ -69,13 +70,17 @@ public class actorLobo extends Actor implements Collidable {
         collider = new Polygon(vertices);
         collider.setPosition(getX(), getY());
 
-        addListener(new ClickListener(){
+        addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                atingido(player);
+                if (podeAtacar()) {
+                    diminuirVida();
+                    System.out.println("Lobo atacado! Vida restante: " + vida);
+                } else {
+                    System.out.println("Você não pode atacar o lobo agora.");
+                }
             }
         });
-
     }
 
     @Override
@@ -91,7 +96,6 @@ public class actorLobo extends Actor implements Collidable {
     @Override
     public void act(float delta) {
         super.act(delta);
-        // Atualizar posição do collider
         if (collider != null) {
             collider.setPosition(getX(), getY());
         }
@@ -102,34 +106,27 @@ public class actorLobo extends Actor implements Collidable {
         return collider;
     }
 
-    public void ataque(actorPersonagem player) {
-        // Seguir o jogador
-        double distancia = Math.sqrt(Math.pow(player.getX()-getX(),2) + Math.pow(player.getY()-getY(),2));
+    public void ataque() {
+        if (playerActor == null) return;
+
+        double distancia = Math.sqrt(Math.pow(playerActor.getX() - getX(), 2) + Math.pow(playerActor.getY() - getY(), 2));
         float tempo = (float) (distancia / velocidade);
 
-        if(distancia < 50) {
-            // Parar movimento quando estiver perto
+        if (distancia < 50) {
             clearActions();
-
-            // Executar ataque
-            lobo.ataque(player.getPlayer());
-
-            // OPÇÃO 1: Ficar grudado no personagem (comentar as linhas abaixo)
-            // Não adiciona nenhuma ação de movimento
-
-            // OPÇÃO 2: Fugir após atacar (descomente se quiser o comportamento original)
-            /*
-            float posX = MathUtils.random(0, Gdx.graphics.getWidth()-100);
-            float posY = MathUtils.random(0, Gdx.graphics.getHeight()-100);
-            addAction(Actions.moveTo(posX, posY, tempo*1.5f));
-            */
-
+            lobo.ataque(player); // lógica do personagem
         } else {
-            // Only add new movement if not already moving to avoid stacking actions
             if (getActions().size == 0) {
-                addAction(Actions.moveTo(player.getX(), player.getY(), tempo));
+                addAction(Actions.moveTo(playerActor.getX(), playerActor.getY(), tempo));
             }
         }
+    }
+
+    public boolean isNearPlayer() {
+        if (playerActor == null) return false;
+
+        double distancia = Math.sqrt(Math.pow(playerActor.getX() - getX(), 2) + Math.pow(playerActor.getY() - getY(), 2));
+        return distancia < 60;
     }
 
     // MÉTODO PRINCIPAL PARA COLISÕES COM OBSTÁCULOS
@@ -304,33 +301,71 @@ public class actorLobo extends Actor implements Collidable {
         }
     }
 
-    public void atingido(Personagem player){
-
+    public void atingido() {
         double dano = 5;
 
-        for(Item item : player.getInventario().getListaDeItems()){
-            if(item instanceof Armas arma){
+        for (Item item : player.getInventario().getListaDeItems()) {
+            if (item instanceof Armas arma) {
                 dano = arma.getDano();
             }
         }
 
         vida -= dano;
-
         System.out.printf("\nDano: %f", dano);
 
         if (vida <= 0) {
-            // Lógica para o lobo morrer
             System.out.println("Lobo morreu!");
             collider = null;
             this.isMorto = true;
         }
     }
 
-    public boolean getIsMorto(){
+
+    private boolean podeAtacar() {
+        Item itemSelecionado = inventory.getItemSelecionado();
+
+        float dx = playerActor.getX() - getX();
+        float dy = playerActor.getY() - getY();
+        float distancia = (float) Math.sqrt(dx * dx + dy * dy);
+
+        if (itemSelecionado == null) {
+            return distancia <= 50f;
+        }
+
+        if (!(itemSelecionado instanceof Armas)) {
+            return false;
+        }
+
+        if (((Armas) itemSelecionado).getTipoArma() == TipoArma.DISTANCIA) {
+            return true;
+        }
+
+        return distancia <= 50f;
+    }
+
+    public void diminuirVida() {
+        Double dano = 5.0; // Dano padrão caso não tenha arma selecionada
+
+        Item itemSelecionado = inventory.getItemSelecionado();
+
+        if (itemSelecionado instanceof Armas arma) {
+            dano = arma.getDano();
+        }
+
+        vida -= dano;
+
+        if (vida <= 0) {
+            vida = 0;
+            isMorto = true;
+            remove(); // Remove o lobo da cena
+            System.out.println("Lobo derrotado!");
+        }
+    }
+
+    public boolean getIsMorto() {
         return isMorto;
     }
 
-    // Método para limpar recursos quando não precisar mais do lobo
     public void dispose() {
         if (texturaCriatura != null) {
             texturaCriatura.dispose();
