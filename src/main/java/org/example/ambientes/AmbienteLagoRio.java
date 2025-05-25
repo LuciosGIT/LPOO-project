@@ -31,10 +31,12 @@ public class AmbienteLagoRio extends Ambiente {
         this.getRecursosDisponiveis().add(new Agua("Água Contaminada", player, 5.0, 20.0, 0.5, Pureza.CONTAMINADA ,10.0));
         this.getRecursosDisponiveis().add(new Materiais("Pedra", player, 8.0, 20.0, 0.6, 10.0, TipoMaterial.PEDRA));
         this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.9, 5.0, TipoMaterial.MADEIRA));
+
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(0).getNivelDePerigo()));
+                getCriaturasAmbientes().get(3) , getCriaturasAmbientes().get(3).getNivelDePerigo()));
         this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(4).getNivelDePerigo()));
+                getCriaturasAmbientes().get(4), getCriaturasAmbientes().get(4).getNivelDePerigo()));
+
         this.getRecursosDisponiveis().add(new Alimentos("Peixe", player, 0.5, 5.0, 0.4, TipoAlimento.PEIXE, OffsetDateTime.now().plusDays(5)));
         this.getRecursosDisponiveis().add(new Alimentos("Alga Doce", player, 0.5, 5.0, 0.4, TipoAlimento.ENLATADO, OffsetDateTime.now().plusDays(5)));
         this.getEventos().add(new EventoClimatico(true, "Evento de Temepestade acionado", "Afeta a visibilidade", "Evento de Tempestade" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
