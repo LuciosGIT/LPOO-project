@@ -1,8 +1,10 @@
 package org.example.actor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,6 +25,7 @@ import java.util.List;
 public class actorLobo extends Actor implements Collidable {
 
     private double vida;
+    private double vidaMaxima; // Para calcular a porcentagem da barra de vida
     private double dano;
     private Lobo lobo;
 
@@ -34,6 +37,15 @@ public class actorLobo extends Actor implements Collidable {
     private double velocidade = 250;// velocidade do lobo
     private boolean isMorto = false;
 
+    // Componentes da lifebar
+    private ShapeRenderer shapeRenderer;
+    private static final float LIFEBAR_WIDTH = 60f;
+    private static final float LIFEBAR_HEIGHT = 8f;
+    private static final float LIFEBAR_OFFSET_Y = 10f; // Distância acima do lobo
+    private boolean showLifebar = false;
+    private float lifebarTimer = 0f;
+    private static final float LIFEBAR_DISPLAY_TIME = 3f; // Tempo para mostrar a barra após dano
+
     public actorLobo(Personagem player, actorPersonagem playerActor, Inventory inventory, Lobo lobo) {
         this.player = player;
         this.playerActor = playerActor;
@@ -41,7 +53,11 @@ public class actorLobo extends Actor implements Collidable {
         this.lobo = lobo;
 
         this.vida = lobo.getVida();
+        this.vidaMaxima = lobo.getVida(); // Armazena a vida máxima
         this.dano = lobo.getDanoDeAtaque();
+
+        // Inicializa o ShapeRenderer para desenhar a barra de vida
+        this.shapeRenderer = new ShapeRenderer();
 
         texturaCriatura = new Texture(Gdx.files.internal("imagens/sprites/lobo.png"));
 
@@ -85,12 +101,59 @@ public class actorLobo extends Actor implements Collidable {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        // Desenha o sprite do lobo
         if (texturaCriatura != null) {
             batch.draw(texturaCriatura,
                     getX(), getY(),
                     getWidth(), getHeight()
             );
         }
+
+        // Desenha a barra de vida se necessário
+        if (showLifebar && vida > 0) {
+            drawLifebar(batch);
+        }
+    }
+
+    private void drawLifebar(Batch batch) {
+        // Finaliza o batch para usar o ShapeRenderer
+        batch.end();
+
+        // Calcula a posição da barra de vida
+        float barX = getX() + (getWidth() - LIFEBAR_WIDTH) / 2;
+        float barY = getY() + getHeight() + LIFEBAR_OFFSET_Y;
+
+        // Calcula a porcentagem de vida
+        float healthPercentage = (float) (vida / vidaMaxima);
+
+        // Configura o ShapeRenderer
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        // Desenha o fundo da barra (vermelho escuro)
+        shapeRenderer.setColor(0.3f, 0.1f, 0.1f, 0.8f);
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH, LIFEBAR_HEIGHT);
+
+        // Desenha a barra de vida atual
+        if (healthPercentage > 0.6f) {
+            shapeRenderer.setColor(0.2f, 0.8f, 0.2f, 0.9f); // Verde
+        } else if (healthPercentage > 0.3f) {
+            shapeRenderer.setColor(0.9f, 0.9f, 0.2f, 0.9f); // Amarelo
+        } else {
+            shapeRenderer.setColor(0.9f, 0.2f, 0.2f, 0.9f); // Vermelho
+        }
+
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH * healthPercentage, LIFEBAR_HEIGHT);
+
+        // Desenha a borda da barra
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1f);
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH, LIFEBAR_HEIGHT);
+        shapeRenderer.end();
+
+        // Reinicia o batch
+        batch.begin();
     }
 
     @Override
@@ -98,6 +161,20 @@ public class actorLobo extends Actor implements Collidable {
         super.act(delta);
         if (collider != null) {
             collider.setPosition(getX(), getY());
+        }
+
+        // Atualiza o timer da lifebar
+        if (showLifebar) {
+            lifebarTimer -= delta;
+            if (lifebarTimer <= 0) {
+                showLifebar = false;
+            }
+        }
+
+        // Mostra a lifebar quando o lobo está próximo do jogador
+        if (isNearPlayer()) {
+            showLifebar = true;
+            lifebarTimer = LIFEBAR_DISPLAY_TIME;
         }
     }
 
@@ -301,26 +378,6 @@ public class actorLobo extends Actor implements Collidable {
         }
     }
 
-    public void atingido() {
-        double dano = 5;
-
-        for (Item item : player.getInventario().getListaDeItems()) {
-            if (item instanceof Armas arma) {
-                dano = arma.getDano();
-            }
-        }
-
-        vida -= dano;
-        System.out.printf("\nDano: %f", dano);
-
-        if (vida <= 0) {
-            System.out.println("Lobo morreu!");
-            collider = null;
-            this.isMorto = true;
-        }
-    }
-
-
     private boolean podeAtacar() {
         Item itemSelecionado = inventory.getItemSelecionado();
 
@@ -328,19 +385,18 @@ public class actorLobo extends Actor implements Collidable {
         float dy = playerActor.getY() - getY();
         float distancia = (float) Math.sqrt(dx * dx + dy * dy);
 
-        if (itemSelecionado == null) {
+        // Permite ataque se estiver perto, mesmo sem item ou com item que não é arma
+        if (itemSelecionado == null || !(itemSelecionado instanceof Armas)) {
             return distancia <= 50f;
         }
 
-        if (!(itemSelecionado instanceof Armas)) {
-            return false;
+        Armas arma = (Armas) itemSelecionado;
+
+        if (arma.getTipoArma() == TipoArma.DISTANCIA) {
+            return true; // ataque à distância não depende da distância do personagem
         }
 
-        if (((Armas) itemSelecionado).getTipoArma() == TipoArma.DISTANCIA) {
-            return true;
-        }
-
-        return distancia <= 50f;
+        return distancia <= 50f; // arma corpo a corpo depende da distância
     }
 
     public void diminuirVida() {
@@ -354,6 +410,10 @@ public class actorLobo extends Actor implements Collidable {
 
         vida -= dano;
 
+        // Mostra a lifebar quando o lobo recebe dano
+        showLifebar = true;
+        lifebarTimer = LIFEBAR_DISPLAY_TIME;
+
         if (vida <= 0) {
             vida = 0;
             isMorto = true;
@@ -366,9 +426,31 @@ public class actorLobo extends Actor implements Collidable {
         return isMorto;
     }
 
+    // Método para forçar mostrar a lifebar (útil para debug ou situações específicas)
+    public void showLifebar() {
+        showLifebar = true;
+        lifebarTimer = LIFEBAR_DISPLAY_TIME;
+    }
+
+    // Getters para a vida (útil para outras classes)
+    public double getVida() {
+        return vida;
+    }
+
+    public double getVidaMaxima() {
+        return vidaMaxima;
+    }
+
+    public float getHealthPercentage() {
+        return (float) (vida / vidaMaxima);
+    }
+
     public void dispose() {
         if (texturaCriatura != null) {
             texturaCriatura.dispose();
+        }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
         }
     }
 }
