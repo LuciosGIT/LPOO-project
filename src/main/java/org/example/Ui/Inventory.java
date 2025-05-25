@@ -24,6 +24,8 @@ public class Inventory {
 
     private List<Texture> textureToDispose = new ArrayList<>();
 
+    private Item itemSelecionado = null;  // Item atualmente selecionado
+
     public Inventory(Stage stage, int cols, actorPersonagem actorPlayer) {
         inventoryTable = new Table();
         stage.addActor(inventoryTable);
@@ -53,10 +55,14 @@ public class Inventory {
         inventoryTable.toFront();
     }
 
-    private Drawable createSlotDrawable() {
+    private Drawable createSlotDrawable(boolean isSelected) {
         // Create a pixmap for the slot background
         Pixmap pixmap = new Pixmap(64, 64, Pixmap.Format.RGBA8888);
-        pixmap.setColor(new Color(0.3f, 0.3f, 0.3f, 0.7f)); // Semi-transparent dark gray
+        if (isSelected) {
+            pixmap.setColor(new Color(0.8f, 0.6f, 0.2f, 0.9f)); // Destaque dourado para selecionado
+        } else {
+            pixmap.setColor(new Color(0.3f, 0.3f, 0.3f, 0.7f)); // Semi-transparent dark gray
+        }
         pixmap.fill();
         pixmap.setColor(new Color(0.4f, 0.4f, 0.4f, 1f)); // Lighter gray for border
         pixmap.drawRectangle(0, 0, 64, 64);
@@ -78,11 +84,14 @@ public class Inventory {
         for (int i = 0; i < itensInventario.size(); i++) {
             Item item = itensInventario.get(i);
 
+            // Verifica se este slot está selecionado
+            boolean isSelected = (itemSelecionado != null && itemSelecionado.equals(item));
+
             // Create a container for each slot
             Table slotContainer = new Table();
 
-            // Add slot background
-            Drawable slotDrawable = createSlotDrawable();
+            // Add slot background com destaque se selecionado
+            Drawable slotDrawable = createSlotDrawable(isSelected);
             Image slotImage = new Image(slotDrawable);
             slotContainer.add(slotImage).size(64, 64);
 
@@ -123,6 +132,15 @@ public class Inventory {
         return inventoryTable;
     }
 
+    public Item getItemSelecionado() {
+        return itemSelecionado;
+    }
 
+    public void setItemSelecionado(Item item) {
+        this.itemSelecionado = item;
+    }
 
+    public List<Item> getItensInventario() {
+        return itensInventario;
+    }
 }
