@@ -142,16 +142,17 @@ public class TelaDeJogoLagoRio implements Screen {
 
             EventoCriatura eventoCriatura = (EventoCriatura) evento;
             if(eventoCriatura.getCriatura() instanceof Crocodilo){
-                actorCrocodilo crocodilo = new actorCrocodilo(player, inventory, (Crocodilo) eventoCriatura.getCriatura());
+                actorCrocodilo crocodilo = new actorCrocodilo(player,actorPlayer, inventory, (Crocodilo) eventoCriatura.getCriatura());
                 stage.addActor(crocodilo);
                 listaDeCriaturas.add(crocodilo);
             } else if (eventoCriatura.getCriatura() instanceof Corvo ) {
-                actorCorvo corvo = new actorCorvo(player, inventory, (Corvo) eventoCriatura.getCriatura());
+                actorCorvo corvo = new actorCorvo(player, actorPlayer, inventory, (Corvo) eventoCriatura.getCriatura());
                 stage.addActor(corvo);
                 listaDeCriaturas.add(corvo);
             }
 
         }
+
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
@@ -212,15 +213,28 @@ public class TelaDeJogoLagoRio implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
         popUp.setPosition(actorPlayer);
 
-        for(Actor actor : listaDeCriaturas){
-            if(actor instanceof actorCrocodilo){
-                actorCrocodilo crocodilo = (actorCrocodilo) actor;
-                crocodilo.ataque(actorPlayer);
-            } else if (actor instanceof actorCorvo) {
-                actorCorvo corvo = (actorCorvo) actor;
-                corvo.ataque(actorPlayer);
+        for (int i = listaDeCriaturas.size() - 1; i >= 0; i--) {
+            Actor actor = listaDeCriaturas.get(i);
+
+            if (actor instanceof actorCrocodilo crocodilo) {
+                if (crocodilo.getIsMorto()) {
+                    crocodilo.dispose();
+                    crocodilo.remove();
+                    listaDeCriaturas.remove(i);
+                    continue;
+                }
+                crocodilo.ataque();
+            } else if (actor instanceof actorCorvo corvo) {
+                if (corvo.getIsMorto()) {
+                    corvo.dispose();
+                    corvo.remove();
+                    listaDeCriaturas.remove(i);
+                    continue;
+                }
+                corvo.ataque();
             }
         }
+
 
         try {
 
