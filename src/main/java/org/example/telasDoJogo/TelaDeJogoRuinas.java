@@ -12,9 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
-import org.example.Ui.Inventory;
-import org.example.Ui.LifeBar;
-import org.example.Ui.HungerBar;
+import org.example.Ui.*;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorPilar;
@@ -25,7 +23,6 @@ import org.example.enums.TipoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-import org.example.Ui.Craft;
 import com.badlogic.gdx.audio.Sound;
 import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
@@ -45,6 +42,7 @@ public class TelaDeJogoRuinas implements Screen {
     private Texture backgroundRuinas;
     private Batch batch;
     private Stage stage;
+    private Stage hudStage;  // Stage separado para HUD/interface fixa
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
 
@@ -87,6 +85,8 @@ public class TelaDeJogoRuinas implements Screen {
     // Distâncias reduzidas para posicionamento de emergência
     private static final float DISTANCIA_EMERGENCIA = 300f;
 
+    private Message message;  // Mensagem do evento
+
     public TelaDeJogoRuinas(Game game, Personagem player){
         this.game = game;
         this.player = player;
@@ -112,6 +112,8 @@ public class TelaDeJogoRuinas implements Screen {
         this.worldHeight = inicializarMundo.getWorldHeight();
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
+
+        hudStage = new Stage();
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
@@ -145,6 +147,13 @@ public class TelaDeJogoRuinas implements Screen {
 
         ambienteRuinas.explorar(player);
 
+        // Mensagem padrão para o evento
+        String mensagemEvento = "Você entrou nas ruínas antigas.";
+
+        // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
+        message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
+        message.show();
+
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
     }
@@ -173,6 +182,10 @@ public class TelaDeJogoRuinas implements Screen {
 
         stage.act(deltaTime);
         stage.draw();
+
+        // Desenha o HUD (interface fixa) após o stage do jogo
+        hudStage.act(deltaTime);
+        hudStage.draw();
 
         //métodos
         movement(deltaTime);
@@ -237,6 +250,11 @@ public class TelaDeJogoRuinas implements Screen {
         actorEstatua.disposeTextures();
         inventory.dispose();
         hungerBar.dispose();
+
+        if (hudStage != null) {
+            hudStage.dispose();
+        }
+
     }
 
     public void instanciarPilhaDeItem() {
