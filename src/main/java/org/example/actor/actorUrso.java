@@ -186,7 +186,7 @@ public class actorUrso extends Actor implements Collidable {
         float tempo = (float) (distancia / velocidade);
 
         if (distancia < 60) { // Urso tem alcance maior
-            clearActions();
+
             urso.ataque(player); // lógica do personagem
         } else {
             if (getActions().size == 0) {

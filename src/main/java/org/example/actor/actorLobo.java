@@ -190,7 +190,7 @@ public class actorLobo extends Actor implements Collidable {
         float tempo = (float) (distancia / velocidade);
 
         if (distancia < 50) {
-            clearActions();
+
             lobo.ataque(player); // lógica do personagem
         } else {
             if (getActions().size == 0) {
