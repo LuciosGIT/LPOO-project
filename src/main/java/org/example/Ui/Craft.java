@@ -14,6 +14,7 @@ import org.example.actor.actorPersonagem;
 import org.example.domain.Item;
 import org.example.itens.Materiais;
 import org.example.enums.TipoMaterial;
+import org.example.personagens.Mecanico;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,34 +41,78 @@ public class Craft {
         stage.addActor(this.dialog);
 
         // Create and add multiple image buttons
-        String[] imagePaths = {
-                "imagens/assets/itens/materiais/blocoDePedra.png",
-                "imagens/assets/itens/materiais/placaDeMetalReforçada.png",
-                "imagens/assets/itens/materiais/tábuaReforçada.png"
 
-        };
+        if(actorPlayer.getPlayer() instanceof Mecanico){
 
-        for (int i = 0; i < imagePaths.length; i++) {
-            Texture buttonTexture = new Texture(Gdx.files.internal(imagePaths[i]));
-            ImageButton imageButton = new ImageButton(new TextureRegionDrawable(buttonTexture));
-            final int index = i; // Needed for use in the listener
+            String[] imagePaths = {
+                    "imagens/assets/itens/materiais/blocoDePedra.png",
+                    "imagens/assets/itens/materiais/placaDeMetalReforçada.png",
+                    "imagens/assets/itens/materiais/tábuaReforçada.png",
+                    "imagens/assets/itens/armas/arco.png",
+                    "imagens/assets/itens/armas/lancaEterea.png",
+                    "imagens/assets/itens/armas/machadoArma.png",
+                    "imagens/assets/itens/armas/espada.png"
 
-            imageButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    switch (index) {
-                        case 0 -> metodoBlocoDePedra();
-                        case 1 -> metodoPlacaDeMetal();
-                        case 2 -> metodoTabuaReforcada();
+            };
+
+            for (int i = 0; i < imagePaths.length; i++) {
+                Texture buttonTexture = new Texture(Gdx.files.internal(imagePaths[i]));
+                ImageButton imageButton = new ImageButton(new TextureRegionDrawable(buttonTexture));
+                final int index = i; // Needed for use in the listener
+
+                imageButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        switch (index) {
+                            case 0 -> metodoBlocoDePedra();
+                            case 1 -> metodoPlacaDeMetal();
+                            case 2 -> metodoTabuaReforcada();
+                            case 3 -> metodoArco();
+                            case 4 -> metodoLancaEterea();
+                            case 5 -> metodoMachado();
+                            case 6 -> metodoEspada();
+
+                        }
                     }
-                }
-            });
+                });
 
-            buttons.add(imageButton);
-            dialog.getButtonTable().add(imageButton).size(50, 50).pad(5);
+                buttons.add(imageButton);
+                dialog.getButtonTable().add(imageButton).size(50, 50).pad(5);
+
+                dialog.setSize(480, 80);
+
+            }
+
+        }else{
+            String[] imagePaths = {
+                    "imagens/assets/itens/materiais/blocoDePedra.png",
+                    "imagens/assets/itens/materiais/placaDeMetalReforçada.png",
+                    "imagens/assets/itens/materiais/tábuaReforçada.png"
+
+            };
+
+            for (int i = 0; i < imagePaths.length; i++) {
+                Texture buttonTexture = new Texture(Gdx.files.internal(imagePaths[i]));
+                ImageButton imageButton = new ImageButton(new TextureRegionDrawable(buttonTexture));
+                final int index = i; // Needed for use in the listener
+
+                imageButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        switch (index) {
+                            case 0 -> metodoBlocoDePedra();
+                            case 1 -> metodoPlacaDeMetal();
+                            case 2 -> metodoTabuaReforcada();
+                        }
+                    }
+                });
+
+                buttons.add(imageButton);
+                dialog.getButtonTable().add(imageButton).size(50, 50).pad(5);
+            }
+            dialog.setSize(200, 80);
         }
 
-        dialog.setSize(200, 80);
         dialog.setModal(true);
     }
 
@@ -170,6 +215,160 @@ public class Craft {
         } else {
             System.out.println("Materiais insuficientes!");
         }
+    }
+
+    private void metodoArco() {
+
+        Materiais madeira = null;
+        Materiais metal = null;
+        int encontrados = 0;
+
+        for (Item item : actorPlayer.getPlayer().getInventario().getListaDeItems()) {
+            if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.MADEIRA) {
+                if (madeira == null) {
+                    madeira = materiais;
+                    encontrados++;
+                }
+            }
+            else if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.METAL) {
+                if (metal == null) {
+                    metal = materiais;
+                    encontrados++;
+                }
+            }
+            if( encontrados == 2) break;
+        }
+
+        if (encontrados == 2) {
+            try {
+                Mecanico mecanico = (Mecanico) actorPlayer.getPlayer();
+                mecanico.criarNovaArma(madeira.getTipoMaterial(), metal.getTipoMaterial());
+                inventory.updateInventory();
+                System.out.println("Arco craftado!");
+            } catch (Exception e) {
+                System.out.println("Erro ao combinar: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Materiais insuficientes!");
+        }
+
+    }
+
+    private void metodoLancaEterea() {
+
+        Materiais metal = null;
+        Materiais metal2 = null;
+        int encontrados = 0;
+
+        for (Item item : actorPlayer.getPlayer().getInventario().getListaDeItems()) {
+                if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.METAL) {
+                    if (metal == null) {
+                        metal = materiais;
+                        encontrados++;
+                    }
+                }
+                if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.METAL) {
+                    if (metal2 == null) {
+                        metal2 = materiais;
+                        encontrados++;
+                    }
+                }
+                if (encontrados == 2) break;
+        }
+
+        System.out.println(encontrados+ " materiais encontrados para craftar a lança etérea.");
+
+        if (encontrados == 2) {
+            try {
+                Mecanico mecanico = (Mecanico) actorPlayer.getPlayer();
+                mecanico.criarNovaArma(metal.getTipoMaterial(), metal2.getTipoMaterial());
+                inventory.updateInventory();
+                System.out.println("Lança Etérea craftada!");
+            } catch (Exception e) {
+                System.out.println("Erro ao combinar: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Materiais insuficientes!");
+        }
+
+    }
+
+    private void metodoMachado() {
+
+        Materiais pedra = null;
+        Materiais pedra2 = null;
+        int encontrados = 0;
+
+        for (Item item : actorPlayer.getPlayer().getInventario().getListaDeItems()) {
+            if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.PEDRA) {
+                if (pedra == null) {
+                    pedra = materiais;
+                    encontrados++;
+                }
+            }
+            if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.PEDRA) {
+                if (pedra2 == null) {
+                    pedra2 = materiais;
+                    encontrados++;
+                }
+            }
+            if( encontrados == 2) break;
+        }
+
+        System.out.println("Itens encontrados " + encontrados);
+
+        if (encontrados == 2) {
+            try {
+                Mecanico mecanico = (Mecanico) actorPlayer.getPlayer();
+                mecanico.criarNovaArma(pedra2.getTipoMaterial(), pedra.getTipoMaterial());
+                inventory.updateInventory();
+                System.out.println("Machado craftado!");
+            } catch (Exception e) {
+                System.out.println("Erro ao combinar: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Materiais insuficientes!");
+        }
+
+    }
+
+    private void metodoEspada() {
+
+        Materiais pedra = null;
+        Materiais metal = null;
+        int encontrados = 0;
+
+        for (Item item : actorPlayer.getPlayer().getInventario().getListaDeItems()) {
+            if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.PEDRA) {
+                if (pedra == null) {
+                    pedra = materiais;
+                    encontrados++;
+                }
+            }
+            if (item instanceof Materiais materiais && materiais.getTipoMaterial() == TipoMaterial.METAL) {
+                if (metal == null) {
+                    metal = materiais;
+                    encontrados++;
+                }
+            }
+            if( encontrados == 2) break;
+        }
+
+        System.out.println(encontrados+ " materiais encontrados para craftar a espada.");
+
+        if (encontrados == 2) {
+            try {
+                Mecanico mecanico = (Mecanico) actorPlayer.getPlayer();
+                mecanico.criarNovaArma(pedra.getTipoMaterial(), metal.getTipoMaterial());
+                inventory.updateInventory();
+                System.out.println("Espada craftada!");
+            } catch (Exception e) {
+                System.out.println("Erro ao combinar: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Materiais insuficientes!");
+        }
+
     }
 
     public boolean isVisible() {
