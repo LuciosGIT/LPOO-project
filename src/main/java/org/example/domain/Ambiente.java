@@ -15,7 +15,7 @@ public abstract class Ambiente implements AmbienteInterface {
     //atributos
     private String nome;
     private String descricao;
-    private volatile Double dificuldadeExploracao;
+    private Double dificuldadeExploracao;
     private List<Item> recursosDisponiveis = new ArrayList<>();
     private Map<Evento, Double> probabilidadeEventos;
     private List<Evento> eventosPossiveis = new ArrayList<>();
@@ -61,6 +61,16 @@ public abstract class Ambiente implements AmbienteInterface {
             throw new IllegalArgumentException("Você passou um parâmetro inválido");
         }
         this.dificuldadeExploracao = dificuldadeExploracao;
+    }
+
+    protected void adicionarRecurso(Item item) {
+        if (item == null) throw new IllegalArgumentException("Recurso não pode ser nulo");
+        this.recursosDisponiveis.add(item);
+    }
+
+    protected void adicionarEvento(Evento evento) {
+        if (evento == null) throw new IllegalArgumentException("Evento não pode ser nulo");
+        this.eventosPossiveis.add(evento);
     }
 
     public Map<Evento, Double> getProbabilidadeEventos() {
