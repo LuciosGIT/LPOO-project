@@ -17,6 +17,7 @@ import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
 import org.example.personagens.Rastreador;
 import org.example.personagens.Sobrevivente;
+import org.example.utilitarios.ConfiguracaoDoMundo;
 import org.example.utilitarios.Utilitario;
 
 import java.time.OffsetDateTime;
@@ -47,7 +48,7 @@ public class AmbienteFloresta extends Ambiente {
         this.adicionarRecurso(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(2), getCriaturasAmbientes().get(2).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(2), ConfiguracaoDoMundo.getCriaturasPadrao().get(2).getNivelDePerigo()));
 
         this.adicionarEvento(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,
                 "Você pode encontrar Sobrevivente", TipoDescoberta.ABRIGO,
@@ -58,7 +59,7 @@ public class AmbienteFloresta extends Ambiente {
                 "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(5), getCriaturasAmbientes().get(5).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(5), ConfiguracaoDoMundo.getCriaturasPadrao().get(5).getNivelDePerigo()));
 
     }
 
