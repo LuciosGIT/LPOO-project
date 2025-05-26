@@ -51,14 +51,6 @@ public class Mecanico extends Personagem {
                 15.0,
                 TipoMaterial.MADEIRA));
 
-        this.getInventario().adicionarItem(new Ferramentas("Madeira",
-                this,
-                2.5,
-                70.0,
-                0.3,
-                15.0,
-                TipoFerramenta.ISQUEIRO));
-
         this.getInventario().adicionarItem(
                 new Armas("MACHADO", 20.0,this,0.1,0.5,12.0,0.1, TipoArma.CORPO)
         );

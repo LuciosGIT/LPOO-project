@@ -50,7 +50,7 @@ public class Rastreador extends Personagem {
                 75.0,
                 0.5,
                 TipoAlimento.FRUTA,
-                OffsetDateTime.now().plusDays(5)));
+                OffsetDateTime.now().minusDays(5)));
 
         this.alterarNomePersonagem(nome);
         //to do: criar o hashmap passando os endereçoes das texturas
