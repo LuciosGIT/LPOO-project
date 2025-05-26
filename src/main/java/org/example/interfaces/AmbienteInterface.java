@@ -9,6 +9,5 @@ public interface AmbienteInterface {
 
     public Evento gerarEvento(Personagem jogador);
 
-    public void modificarClima();
 
 }
