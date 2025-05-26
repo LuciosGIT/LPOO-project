@@ -95,10 +95,9 @@ public class Mecanico extends Personagem {
 
             if (arma != null) {
                 System.out.println("Criando arma: " + arma.getNomeItem());
-                this.getInventario().adicionarItem(arma);
                 this.getInventario().removerItem(encontrado1.get().getNomeItem());
                 this.getInventario().removerItem(encontrado2.get().getNomeItem());
-
+                this.getInventario().adicionarItem(arma);
             } else {
                 System.out.println("Nenhuma arma pode ser criada com essa combinação de materiais.");
             }
