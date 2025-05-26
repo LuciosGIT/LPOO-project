@@ -186,7 +186,7 @@ public class TelaDeJogoFloresta implements Screen {
             this.eventoCriatura = (EventoCriatura) evento;
 
             if(eventoCriatura.getCriatura() instanceof Corvo){
-                actorCorvo corvo = new actorCorvo( player, inventory, (Corvo) eventoCriatura.getCriatura());
+                actorCorvo corvo = new actorCorvo( player,actorPlayer, inventory, (Corvo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(corvo);
 
             }else if(eventoCriatura.getCriatura() instanceof Lobo) {
@@ -199,6 +199,7 @@ public class TelaDeJogoFloresta implements Screen {
                 listaDeCriaturas.add(urso);
             }
         }
+
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
     }
@@ -401,7 +402,7 @@ public class TelaDeJogoFloresta implements Screen {
         for(Actor criatura : listaDeCriaturas){
             if(criatura instanceof actorCorvo) {
                 stage.addActor(criatura);
-                ((actorCorvo) criatura).ataque(actorPlayer);
+                ((actorCorvo) criatura).ataque();
             }
             else if(criatura instanceof actorLobo) {
                 stage.addActor(criatura);
@@ -457,6 +458,7 @@ public class TelaDeJogoFloresta implements Screen {
                 urso.ataque();
             }
         }
+
 
         try {
 
