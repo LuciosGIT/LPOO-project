@@ -52,6 +52,7 @@ public class TelaDeJogoFloresta implements Screen {
     private Texture backgroundFloresta;
     private Batch batch;
     private Stage stage;
+    private Stage hudStage;  // Stage separado para HUD/interface fixa
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
     private actorMercador mercador;
@@ -126,6 +127,8 @@ public class TelaDeJogoFloresta implements Screen {
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
+        hudStage = new Stage();
+
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
 
@@ -167,42 +170,41 @@ public class TelaDeJogoFloresta implements Screen {
         // Gerar evento aleatório
         Evento evento = ambienteFloresta.gerarEvento(player);
 
-        //Evento evento = new EventoCriatura(true,"Corvo","",0.5, new Lobo("1",10.0,0.2,0.1), 1.0);
-
         // Verificar o tipo de evento
+        String mensagemEvento = "Você adentrou a floresta sombria...";
         if (evento instanceof EventoDescoberta) {
             this.eventoDescoberta = (EventoDescoberta) evento;
             if (eventoDescoberta.getTipoDescoberta() == TipoDescoberta.ABRIGO) {
-                // Se o abrigo foi spawnado, criar o actor
                 if (eventoDescoberta.isAbrigoSpawnado()) {
-                    // Posicionar o abrigo com espaçamento adequado
                     posicionarAbrigo();
                 }
             }
-        }else if (evento instanceof EventoClimatico) {
+            mensagemEvento = "Você encontrou algo interessante na floresta...";
+        } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
-        }else if (evento instanceof EventoCriatura) {
-
+            mensagemEvento = "O clima mudou: " + ((EventoClimatico) evento).getTipoDeClima().name().toLowerCase();
+        } else if (evento instanceof EventoCriatura) {
             this.eventoCriatura = (EventoCriatura) evento;
-
-            if(eventoCriatura.getCriatura() instanceof Corvo){
-                actorCorvo corvo = new actorCorvo( player,actorPlayer, inventory, (Corvo) eventoCriatura.getCriatura());
+            if (eventoCriatura.getCriatura() instanceof Corvo) {
+                actorCorvo corvo = new actorCorvo(player, actorPlayer, inventory, (Corvo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(corvo);
-
-            }else if(eventoCriatura.getCriatura() instanceof Lobo) {
+            } else if (eventoCriatura.getCriatura() instanceof Lobo) {
                 actorLobo lobo = new actorLobo(player, actorPlayer, inventory, (Lobo) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(lobo);
-
-            }
-            else if(eventoCriatura.getCriatura() instanceof Urso) {
+            } else if (eventoCriatura.getCriatura() instanceof Urso) {
                 actorUrso urso = new actorUrso(player, actorPlayer, inventory, (Urso) eventoCriatura.getCriatura());
                 listaDeCriaturas.add(urso);
             }
+            mensagemEvento = "Uma criatura apareceu: " + eventoCriatura.getCriatura().getNome();
         }
 
+        // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
+        message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
+        message.show();
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
     }
+
 
     // Método para posicionar o abrigo com espaçamento adequado
     private void posicionarAbrigo() {
@@ -379,6 +381,9 @@ public class TelaDeJogoFloresta implements Screen {
         stage.act(deltaTime);
         stage.draw();
 
+        hudStage.act(deltaTime);
+        hudStage.draw();
+
         movement(deltaTime);
         camera();
         lifeBar.setPosition(actorPlayer);
@@ -541,6 +546,10 @@ public class TelaDeJogoFloresta implements Screen {
 
         if (rainDropTexture != null) {
             rainDropTexture.dispose();
+        }
+
+        if (hudStage != null) {
+            hudStage.dispose();
         }
     }
 
