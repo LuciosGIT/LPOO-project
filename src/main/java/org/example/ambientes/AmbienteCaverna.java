@@ -8,6 +8,7 @@ import org.example.eventos.EventoCriatura;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
+import org.example.utilitarios.ConfiguracaoDoMundo;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -17,7 +18,6 @@ public class AmbienteCaverna extends Ambiente {
     private boolean poucaLuminosidade;
     private boolean temCriaturas;
     private boolean fonteAgua;
-    private boolean utilizandoLanterna;
 
     // Construtor
     public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao,
@@ -26,7 +26,6 @@ public class AmbienteCaverna extends Ambiente {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
 
         this.poucaLuminosidade = poucaLuminosidade;
-        this.utilizandoLanterna = false;
 
         // Adiciona recursos usando o método da superclasse
         this.adicionarRecurso(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5,
@@ -40,17 +39,17 @@ public class AmbienteCaverna extends Ambiente {
 
         // Adiciona eventos de criaturas usando o método da superclasse
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3), getCriaturasAmbientes().get(3).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(3), ConfiguracaoDoMundo.getCriaturasPadrao().get(3).getNivelDePerigo()));
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(1), getCriaturasAmbientes().get(1).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(1), ConfiguracaoDoMundo.getCriaturasPadrao().get(1).getNivelDePerigo()));
     }
 
     public AmbienteCaverna() { }
 
     @Override
     public void explorar(Personagem jogador) {
-        if (this.poucaLuminosidade && !utilizandoLanterna) {
+        if (this.poucaLuminosidade) {
             System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao() * 1.25);
             jogador.diminuirFome(1.0 * getDificuldadeExploracao() * 1.25);
@@ -62,9 +61,6 @@ public class AmbienteCaverna extends Ambiente {
             jogador.diminuirFome(1.0 * getDificuldadeExploracao());
         }
 
-        if (this.temCriaturas) {
-            this.getEventos().get(1).setProbabilidadeOcorrencia(1.0);
-        }
     }
 
     @Override
@@ -74,10 +70,6 @@ public class AmbienteCaverna extends Ambiente {
         return eventoSorteado;
     }
 
-
-    public void ativarLanterna() {
-        this.utilizandoLanterna = true;
-    }
 }
 
 
