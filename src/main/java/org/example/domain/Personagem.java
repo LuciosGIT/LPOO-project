@@ -49,10 +49,6 @@ public abstract class Personagem implements PersonagemInterface{
 
     public Personagem() { }
 
-    public Double atacarCriatura(Criatura criatura) {
-        criatura.diminuirVida(this.danoDeAtaque);
-        return danoDeAtaque;
-    }
 
     public void aplicarEfeitosDoTurno() {
         // Aumenta fome e sede com o tempo
