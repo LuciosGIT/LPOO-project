@@ -1,6 +1,5 @@
 package org.example.domain;
 
-import org.example.enums.TipoItem;
 import org.example.interfaces.ItemInterface;
 
 public abstract class Item implements ItemInterface {
