@@ -13,9 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
-import org.example.Ui.HungerBar;
-import org.example.Ui.Inventory;
-import org.example.Ui.LifeBar;
+import org.example.Ui.*;
 import org.example.actor.actorLago;
 import org.example.actor.actorPersonagem;
 import org.example.actor.actorPilhaDeItem;
@@ -31,7 +29,6 @@ import org.example.eventos.EventoCriatura;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
-import org.example.Ui.Craft;
 import com.badlogic.gdx.audio.Sound;
 import org.example.actor.actorCrocodilo;
 import org.example.domain.Evento;
@@ -58,6 +55,7 @@ public class TelaDeJogoLagoRio implements Screen {
     private Texture backgroundLagoRio;
     private Batch batch;
     private Stage stage;
+    private Stage hudStage;
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
     private List<Actor> listaDeCriaturas = new ArrayList<>();
@@ -86,6 +84,8 @@ public class TelaDeJogoLagoRio implements Screen {
 
     private VerificarStatusPlayer verificarStatusPlayer;
 
+    private Message message;
+
     public TelaDeJogoLagoRio(Game game, Personagem player) {
         this.game = game;
         this.player = player;
@@ -105,6 +105,9 @@ public class TelaDeJogoLagoRio implements Screen {
         this.worldHeight = inicializarMundo.getWorldHeight();
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
+
+        // Cria o stage para HUD/interface fixa
+        hudStage = new Stage();
 
         this.isPilhaDeItemInstanciada = false;
 
@@ -138,21 +141,24 @@ public class TelaDeJogoLagoRio implements Screen {
 
         Evento evento = ambienteLagoRio.gerarEvento(player);
 
-        if(evento instanceof EventoCriatura){
-
-            EventoCriatura eventoCriatura = (EventoCriatura) evento;
-            if(eventoCriatura.getCriatura() instanceof Crocodilo){
-                actorCrocodilo crocodilo = new actorCrocodilo(player,actorPlayer, inventory, (Crocodilo) eventoCriatura.getCriatura());
+        String mensagemEvento = "Bem-vindo ao lago e rio!";
+        if (evento instanceof EventoCriatura eventoCriatura) {
+            if (eventoCriatura.getCriatura() instanceof Crocodilo) {
+                actorCrocodilo crocodilo = new actorCrocodilo(player, actorPlayer, inventory, (Crocodilo) eventoCriatura.getCriatura());
                 stage.addActor(crocodilo);
                 listaDeCriaturas.add(crocodilo);
-            } else if (eventoCriatura.getCriatura() instanceof Corvo ) {
+                mensagemEvento = "Um crocodilo apareceu!";
+            } else if (eventoCriatura.getCriatura() instanceof Corvo) {
                 actorCorvo corvo = new actorCorvo(player, actorPlayer, inventory, (Corvo) eventoCriatura.getCriatura());
                 stage.addActor(corvo);
                 listaDeCriaturas.add(corvo);
+                mensagemEvento = "Um corvo apareceu!";
             }
-
         }
 
+        // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
+        message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
+        message.show();
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
@@ -192,6 +198,9 @@ public class TelaDeJogoLagoRio implements Screen {
 
         stage.act(deltaTime);
         stage.draw();
+
+        hudStage.act(deltaTime);
+        hudStage.draw();
 
         movement(deltaTime);
         camera();
@@ -419,5 +428,9 @@ public class TelaDeJogoLagoRio implements Screen {
         if (rioInferior != null) rioInferior.dispose();
         if (rioVisual != null) rioVisual.dispose();
         if (hungerBar != null) hungerBar.dispose(); // <- NOVO
+
+        if (hudStage != null) {
+            hudStage.dispose();
+        }
     }
 }
