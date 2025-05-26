@@ -18,8 +18,10 @@ import org.example.actor.actorPilhaDeItem;
 import org.example.actor.actorPilar;
 import org.example.actor.actorEstatua;
 import org.example.ambientes.AmbienteRuinas;
+import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.TipoClimatico;
+import org.example.eventos.EventoClimatico;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
@@ -82,6 +84,9 @@ public class TelaDeJogoRuinas implements Screen {
 
     private VerificarStatusPlayer verificarStatusPlayer;
 
+    private boolean climaCalorAtivo = false; // Variável para controlar efeito de calor
+    private Texture orangeOverlay;
+
     // Distâncias reduzidas para posicionamento de emergência
     private static final float DISTANCIA_EMERGENCIA = 300f;
 
@@ -143,12 +148,23 @@ public class TelaDeJogoRuinas implements Screen {
 
         darkOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
 
+        orangeOverlay = new Texture(Gdx.files.internal("imagens/pixel.png"));
+
         instanciarPilhaDeItem();
 
-        ambienteRuinas.explorar(player);
+        Evento evento = ambienteRuinas.gerarEvento(player);
 
-        // Mensagem padrão para o evento
         String mensagemEvento = "Você entrou nas ruínas antigas.";
+
+        if (evento instanceof EventoClimatico) {
+            EventoClimatico eventoClimatico = (EventoClimatico) evento;
+            if (eventoClimatico.getTipoDeClima() == TipoClimatico.CALOR) {
+                aplicarCalorNaTela();
+                mensagemEvento = "O clima está quente: sensação de calor intenso!";
+            } else if (eventoClimatico.getTipoDeClima() == TipoClimatico.TEMPESTADE) {
+                // Pode aplicar outro efeito se desejar
+            }
+        }
 
         // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
         message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
@@ -156,6 +172,10 @@ public class TelaDeJogoRuinas implements Screen {
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
+    }
+
+    private void aplicarCalorNaTela() {
+        climaCalorAtivo = true;
     }
 
     @Override
@@ -177,6 +197,12 @@ public class TelaDeJogoRuinas implements Screen {
         batch.draw(backgroundRuinas, 0, 0, worldWidth, worldHeight);
         batch.setColor(0, 0, 0, darkness);
         batch.draw(darkOverlay, 0, 0, worldWidth, worldHeight);
+        // Se o clima de calor estiver ativo, desenha overlay alaranjado com transparência
+        if (climaCalorAtivo) {
+            batch.setColor(1f, 0.5f, 0f, 0.3f); // Alaranjado com alpha 0.3
+            batch.draw(orangeOverlay, 0, 0, worldWidth, worldHeight);
+        }
+
         batch.setColor(1, 1, 1, 1);
         batch.end();
 
@@ -253,6 +279,9 @@ public class TelaDeJogoRuinas implements Screen {
 
         if (hudStage != null) {
             hudStage.dispose();
+        }
+        if (orangeOverlay != null) {
+            orangeOverlay.dispose();
         }
 
     }
