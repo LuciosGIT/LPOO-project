@@ -14,10 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
-import org.example.Ui.Craft;
-import org.example.Ui.Inventory;
-import org.example.Ui.LifeBar;
-import org.example.Ui.HungerBar;
+import org.example.Ui.*;
 import org.example.actor.actorCaverna;
 import org.example.actor.actorCristal;
 import org.example.actor.actorPersonagem;
@@ -53,6 +50,7 @@ public class TelaDeJogoMontanha implements Screen {
     private Texture backgroundMontanha;
     private Batch batch;
     private Stage stage;
+    private Stage hudStage;
     private OrthographicCamera camera;
 
     private Craft popUp;
@@ -92,6 +90,8 @@ public class TelaDeJogoMontanha implements Screen {
 
     private VerificarStatusPlayer verificarStatusPlayer;
 
+    private Message message;
+
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
         this.player = player;
@@ -113,6 +113,9 @@ public class TelaDeJogoMontanha implements Screen {
         this.viewportHeight = inicializarMundo.getViewportHeight();
 
         inputs = new Inputs();
+
+        // Cria o stage para HUD/interface fixa
+        hudStage = new Stage();
 
         lifeBar = new LifeBar(actorPlayer);
         stage.addActor(lifeBar.getLifeBar());
@@ -149,22 +152,24 @@ public class TelaDeJogoMontanha implements Screen {
         // Gerar evento aleatório
         Evento evento = ambienteMontanha.gerarEvento(player);
 
+        String mensagemEvento = "Bem-vindo à montanha gelada!";
         // Verificar o tipo de evento
         if (evento instanceof EventoDescoberta) {
             this.eventoDescoberta = (EventoDescoberta) evento;
             if (eventoDescoberta.getTipoDescoberta() == TipoDescoberta.CAVERNA) {
-                // Executar o evento de descoberta (apenas a parte de descoberta, não a interação)
-                //eventoDescoberta.executar(player, ambienteMontanha);
-
-                // Se a caverna foi spawnada, criar o actor
                 if (eventoDescoberta.isCavernaSpawnada()) {
-                    // Posicionar a caverna com espaçamento adequado
                     posicionarCaverna();
                 }
+                mensagemEvento = "Você encontrou uma caverna!";
             }
         } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
+            mensagemEvento = "O clima mudou: " + ((EventoClimatico) evento).getTipoDeClima().name().toLowerCase();
         }
+
+        // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
+        message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
+        message.show();
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
@@ -354,6 +359,9 @@ public class TelaDeJogoMontanha implements Screen {
         stage.act(deltaTime);
         stage.draw();
 
+        hudStage.act(deltaTime);
+        hudStage.draw();
+
         // métodos
         movement(deltaTime);
         camera();
@@ -439,6 +447,10 @@ public class TelaDeJogoMontanha implements Screen {
 
         if (snowflakeTexture != null) {
             snowflakeTexture.dispose();
+        }
+
+        if (hudStage != null) {
+            hudStage.dispose();
         }
     }
 
