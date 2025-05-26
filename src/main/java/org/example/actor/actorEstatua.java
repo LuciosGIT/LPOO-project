@@ -14,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Ui.Inventory;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
+import org.example.enums.TipoArma;
 import org.example.enums.TipoFerramenta;
+import org.example.itens.Armas;
 import org.example.itens.Ferramentas;
 
 import java.util.HashMap;
@@ -278,10 +280,10 @@ public class actorEstatua extends Actor implements Collidable {
 
                 switch (tipoEstatua) {
                     case "Guerreiro":
-                        item = new Ferramentas("Isqueiro do Último Rei", player, 0.5, 100.0, 0.2, 0.5, TipoFerramenta.ISQUEIRO);
+                        item = new Armas("Lança Etérea", 15.0, player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
                         break;
                     case "Sabio":
-                        item = new Ferramentas("Punhal dos Sussurros", player, 0.5, 100.0, 0.2, 0.5, TipoFerramenta.FACA);
+                        item = new Armas("Punhal dos Sussurros", 20.0,player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
                         break;
                     case "Guardiao":
                         item = new Ferramentas("Lanterna Guardiã", player, 0.5, 100.0, 0.2, 0.5, TipoFerramenta.LANTERNA);
