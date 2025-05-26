@@ -3,18 +3,27 @@ package org.example.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Ui.Inventory;
 import org.example.criatura.Corvo;
+import org.example.domain.Item;
 import org.example.domain.Personagem;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import org.example.enums.TipoArma;
+import org.example.itens.Armas;
+
+import java.util.List;
 
 public class actorCorvo extends Actor implements Collidable {
 
-
     private double vida;
+    private double vidaMaxima; // Para calcular a porcentagem da barra de vida
     private double dano;
     private Corvo corvo;
 
@@ -22,37 +31,49 @@ public class actorCorvo extends Actor implements Collidable {
     private Polygon collider;
     private Personagem player;
     private Inventory inventory;
-    private double velocidade = 300; // velocidade do morcego
+    private actorPersonagem playerActor;
+    private double velocidade = 300; // velocidade do corvo
+    private boolean isMorto = false;
 
+    // Componentes da lifebar
+    private ShapeRenderer shapeRenderer;
+    private static final float LIFEBAR_WIDTH = 60f;
+    private static final float LIFEBAR_HEIGHT = 8f;
+    private static final float LIFEBAR_OFFSET_Y = 10f; // Distância acima do corvo
+    private boolean showLifebar = false;
+    private float lifebarTimer = 0f;
+    private static final float LIFEBAR_DISPLAY_TIME = 3f; // Tempo para mostrar a barra após dano
 
-    public actorCorvo(Personagem player, Inventory inventory, Corvo corvo) {
-
+    public actorCorvo(Personagem player, actorPersonagem playerActor, Inventory inventory, Corvo corvo) {
+        this.player = player;
+        this.playerActor = playerActor;
+        this.inventory = inventory;
         this.corvo = corvo;
-        vida = corvo.getVida();
-        dano = corvo.getDanoDeAtaque();
+
+        this.vida = corvo.getVida();
+        this.vidaMaxima = corvo.getVida(); // Armazena a vida máxima
+        this.dano = corvo.getDanoDeAtaque();
+
+        this.shapeRenderer = new ShapeRenderer();
 
         texturaCriatura = new Texture(Gdx.files.internal("imagens/sprites/corvo.png"));
 
-        float x = MathUtils.random(0, Gdx.graphics.getWidth()-100);
-        float y = MathUtils.random(0, Gdx.graphics.getHeight()-100);
+        float x = MathUtils.random(0, Gdx.graphics.getWidth() - 100);
+        float y = MathUtils.random(0, Gdx.graphics.getHeight() - 100);
 
-        setBounds(x, y, texturaCriatura.getWidth()*0.5f, texturaCriatura.getHeight()*0.5f);
+        setBounds(x, y, texturaCriatura.getWidth() * 0.5f, texturaCriatura.getHeight() * 0.5f);
         setPosition(x, y);
 
         setZIndex(10);
-
         setSize(0.3f * texturaCriatura.getWidth(), 0.3f * texturaCriatura.getHeight());
+        setOrigin(getWidth() / 2, getHeight() / 2);
 
-
-
-        setOrigin(getWidth()/2, getHeight()/2);
-
-        float baseWidth = getWidth() * 0.5f;    // 70% da largura
-        float baseHeight = getHeight() * 0.2f;   // 30% da altura
-        float baseX = getWidth() * -0.1f;        // 15% da esquerda
+        float baseWidth = getWidth() * 0.5f;
+        float baseHeight = getHeight() * 0.2f;
+        float baseX = getWidth() * -0.1f;
         float baseY = getHeight() * 0.2f;
 
-        float[] vertices = new float[] {
+        float[] vertices = new float[]{
                 baseX, baseY,
                 baseX + baseWidth, baseY,
                 baseX + baseWidth, baseY + baseHeight,
@@ -61,6 +82,18 @@ public class actorCorvo extends Actor implements Collidable {
 
         collider = new Polygon(vertices);
         collider.setPosition(getX(), getY());
+
+        addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (podeAtacar()) {
+                    diminuirVida();
+                    System.out.println("Corvo atacado! Vida restante: " + vida);
+                } else {
+                    System.out.println("Você precisa de uma arma à distância para atacar o corvo!");
+                }
+            }
+        });
     }
 
     @Override
@@ -71,11 +104,63 @@ public class actorCorvo extends Actor implements Collidable {
                     getWidth(), getHeight()
             );
         }
+
+        if (showLifebar && vida > 0) {
+            drawLifebar(batch);
+        }
+    }
+
+    private void drawLifebar(Batch batch) {
+        batch.end();
+
+        float barX = getX() + (getWidth() - LIFEBAR_WIDTH) / 2;
+        float barY = getY() + getHeight() + LIFEBAR_OFFSET_Y;
+
+        float healthPercentage = (float) (vida / vidaMaxima);
+
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapeRenderer.setColor(0.3f, 0.1f, 0.1f, 0.8f);
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH, LIFEBAR_HEIGHT);
+
+        if (healthPercentage > 0.6f) {
+            shapeRenderer.setColor(0.2f, 0.8f, 0.2f, 0.9f);
+        } else if (healthPercentage > 0.3f) {
+            shapeRenderer.setColor(0.9f, 0.9f, 0.2f, 0.9f);
+        } else {
+            shapeRenderer.setColor(0.9f, 0.2f, 0.2f, 0.9f);
+        }
+
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH * healthPercentage, LIFEBAR_HEIGHT);
+
+        shapeRenderer.end();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0.2f, 0.2f, 0.2f, 1f);
+        shapeRenderer.rect(barX, barY, LIFEBAR_WIDTH, LIFEBAR_HEIGHT);
+        shapeRenderer.end();
+
+        batch.begin();
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
+        if (collider != null) {
+            collider.setPosition(getX(), getY());
+        }
+
+        if (showLifebar) {
+            lifebarTimer -= delta;
+            if (lifebarTimer <= 0) {
+                showLifebar = false;
+            }
+        }
+
+        if (isNearPlayer()) {
+            showLifebar = true;
+            lifebarTimer = LIFEBAR_DISPLAY_TIME;
+        }
     }
 
     @Override
@@ -83,34 +168,265 @@ public class actorCorvo extends Actor implements Collidable {
         return collider;
     }
 
-    public void ataque(actorPersonagem player) {
-        //seguir o jogador
+    public void ataque() {
+        if (playerActor == null) return;
 
-        double distancia =  Math.sqrt(Math.pow(player.getX()-getX(),2) + Math.pow(player.getY()-getY(),2));
-
-        //tempo = distancia / velocidade
-
+        double distancia = Math.sqrt(Math.pow(playerActor.getX() - getX(), 2) + Math.pow(playerActor.getY() - getY(), 2));
         float tempo = (float) (distancia / velocidade);
 
-        if(distancia < 50) {
+        if (distancia < 50) {
             clearActions();
-            float posX = MathUtils.random(0, Gdx.graphics.getWidth()-100);
-            float posY = MathUtils.random(0, Gdx.graphics.getHeight()-100);
 
-            addAction(Actions.moveTo(posX, posY, tempo*1.5f));
+            // Executa o ataque
+            corvo.ataque(player); // lógica do personagem
 
-            corvo.ataque(player.getPlayer());
+            // Pequeno rebote - calcula direção oposta ao jogador
+            float playerX = playerActor.getX() + playerActor.getWidth() / 2;
+            float playerY = playerActor.getY() + playerActor.getHeight() / 2;
+            float corvoX = getX() + getWidth() / 2;
+            float corvoY = getY() + getHeight() / 2;
 
-        }else{
-            addAction(Actions.moveTo(player.getX(), player.getY(), tempo));
+            float dirX = corvoX - playerX;
+            float dirY = corvoY - playerY;
+
+            float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+            if (length > 0) {
+                dirX /= length;
+                dirY /= length;
+
+                float reboteDistancia = MathUtils.random(40f, 60f);
+                float novaX = corvoX + dirX * reboteDistancia - getWidth() / 2;
+                float novaY = corvoY + dirY * reboteDistancia - getHeight() / 2;
+
+                novaX = MathUtils.clamp(novaX, 0, Gdx.graphics.getWidth() - getWidth());
+                novaY = MathUtils.clamp(novaY, 0, Gdx.graphics.getHeight() - getHeight());
+
+                addAction(Actions.moveTo(novaX, novaY, 0.3f));
+            }
+        } else {
+            if (getActions().size == 0) {
+                addAction(Actions.moveTo(playerActor.getX(), playerActor.getY(), tempo));
+            }
+        }
+    }
+
+    public boolean isNearPlayer() {
+        if (playerActor == null) return false;
+
+        double distancia = Math.sqrt(Math.pow(playerActor.getX() - getX(), 2) + Math.pow(playerActor.getY() - getY(), 2));
+        return distancia < 60;
+    }
+
+    // Colisões com obstáculos (árvores, mercador, abrigo)
+    public void checkObstacleCollisions(List<actorArvore> arvores, actorMercador mercador, actorAbrigo abrigo) {
+        if (arvores != null) {
+            checkCollisionWithTrees(arvores);
+        }
+        if (mercador != null) {
+            checkCollisionWithMercador(mercador);
+        }
+        if (abrigo != null) {
+            checkCollisionWithAbrigo(abrigo);
+        }
+    }
+
+    public void checkCollisionWithTrees(List<actorArvore> arvores) {
+        float colliderReduction = 0.8f;
+        float corvoColliderWidth = getWidth() * colliderReduction;
+        float corvoColliderHeight = getHeight() * colliderReduction;
+        float corvoColliderX = getX() + (getWidth() - corvoColliderWidth) / 2;
+        float corvoColliderY = getY() + (getHeight() - corvoColliderHeight) / 2;
+
+        Rectangle corvoBounds = new Rectangle(corvoColliderX, corvoColliderY, corvoColliderWidth, corvoColliderHeight);
+
+        for (actorArvore arvore : arvores) {
+            float treeColliderReduction = 0.7f;
+            float treeColliderWidth = arvore.getWidth() * treeColliderReduction;
+            float treeColliderHeight = arvore.getHeight() * treeColliderReduction;
+            float treeColliderX = arvore.getX() + (arvore.getWidth() - treeColliderWidth) / 2;
+            float treeColliderY = arvore.getY() + (arvore.getHeight() - treeColliderHeight) / 2;
+
+            Rectangle treeBounds = new Rectangle(treeColliderX, treeColliderY,
+                    treeColliderWidth, treeColliderHeight);
+
+            if (corvoBounds.overlaps(treeBounds)) {
+                handleTreeCollision(arvore);
+                break;
+            }
+        }
+    }
+
+    public void checkCollisionWithMercador(actorMercador mercador) {
+        float colliderReduction = 0.8f;
+        float corvoColliderWidth = getWidth() * colliderReduction;
+        float corvoColliderHeight = getHeight() * colliderReduction;
+        float corvoColliderX = getX() + (getWidth() - corvoColliderWidth) / 2;
+        float corvoColliderY = getY() + (getHeight() - corvoColliderHeight) / 2;
+
+        Rectangle corvoBounds = new Rectangle(corvoColliderX, corvoColliderY, corvoColliderWidth, corvoColliderHeight);
+
+        float mercadorColliderReduction = 0.75f;
+        float mercadorColliderWidth = mercador.getWidth() * mercadorColliderReduction;
+        float mercadorColliderHeight = mercador.getHeight() * mercadorColliderReduction;
+        float mercadorColliderX = mercador.getX() + (mercador.getWidth() - mercadorColliderWidth) / 2;
+        float mercadorColliderY = mercador.getY() + (mercador.getHeight() - mercadorColliderHeight) / 2;
+
+        Rectangle mercadorBounds = new Rectangle(mercadorColliderX, mercadorColliderY,
+                mercadorColliderWidth, mercadorColliderHeight);
+
+        if (corvoBounds.overlaps(mercadorBounds)) {
+            handleMercadorCollision(mercador);
+        }
+    }
+
+    public void checkCollisionWithAbrigo(actorAbrigo abrigo) {
+        float colliderReduction = 0.8f;
+        float corvoColliderWidth = getWidth() * colliderReduction;
+        float corvoColliderHeight = getHeight() * colliderReduction;
+        float corvoColliderX = getX() + (getWidth() - corvoColliderWidth) / 2;
+        float corvoColliderY = getY() + (getHeight() - corvoColliderHeight) / 2;
+
+        Rectangle corvoBounds = new Rectangle(corvoColliderX, corvoColliderY, corvoColliderWidth, corvoColliderHeight);
+
+        float abrigoColliderReduction = 0.7f;
+        float abrigoColliderWidth = abrigo.getWidth() * abrigoColliderReduction;
+        float abrigoColliderHeight = abrigo.getHeight() * abrigoColliderReduction;
+        float abrigoColliderX = abrigo.getX() + (abrigo.getWidth() - abrigoColliderWidth) / 2;
+        float abrigoColliderY = abrigo.getY() + (abrigo.getHeight() - abrigoColliderHeight) / 2;
+
+        Rectangle abrigoBounds = new Rectangle(abrigoColliderX, abrigoColliderY,
+                abrigoColliderWidth, abrigoColliderHeight);
+
+        if (corvoBounds.overlaps(abrigoBounds)) {
+            handleAbrigoCollision(abrigo);
+        }
+    }
+
+    private void handleTreeCollision(actorArvore arvore) {
+        clearActions();
+
+        float treeX = arvore.getX() + arvore.getWidth() / 2;
+        float treeY = arvore.getY() + arvore.getHeight() / 2;
+        float corvoX = getX() + getWidth() / 2;
+        float corvoY = getY() + getHeight() / 2;
+
+        float dirX = corvoX - treeX;
+        float dirY = corvoY - treeY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = corvoX + dirX * 30;
+            float newY = corvoY + dirY * 30;
+            setPosition(newX - getWidth() / 2, newY - getHeight() / 2);
+        }
+    }
+
+    private void handleMercadorCollision(actorMercador mercador) {
+        clearActions();
+
+        float mercadorX = mercador.getX() + mercador.getWidth() / 2;
+        float mercadorY = mercador.getY() + mercador.getHeight() / 2;
+        float corvoX = getX() + getWidth() / 2;
+        float corvoY = getY() + getHeight() / 2;
+
+        float dirX = corvoX - mercadorX;
+        float dirY = corvoY - mercadorY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = corvoX + dirX * 30;
+            float newY = corvoY + dirY * 30;
+            setPosition(newX - getWidth() / 2, newY - getHeight() / 2);
+        }
+    }
+
+    private void handleAbrigoCollision(actorAbrigo abrigo) {
+        clearActions();
+
+        float abrigoX = abrigo.getX() + abrigo.getWidth() / 2;
+        float abrigoY = abrigo.getY() + abrigo.getHeight() / 2;
+        float corvoX = getX() + getWidth() / 2;
+        float corvoY = getY() + getHeight() / 2;
+
+        float dirX = corvoX - abrigoX;
+        float dirY = corvoY - abrigoY;
+
+        float length = (float) Math.sqrt(dirX * dirX + dirY * dirY);
+        if (length > 0) {
+            dirX /= length;
+            dirY /= length;
+
+            float newX = corvoX + dirX * 30;
+            float newY = corvoY + dirY * 30;
+            setPosition(newX - getWidth() / 2, newY - getHeight() / 2);
+        }
+    }
+
+    // Método especial para corvo - só pode ser atacado com armas à distância
+    private boolean podeAtacar() {
+        Item itemSelecionado = inventory.getItemSelecionado();
+
+        if (itemSelecionado == null || !(itemSelecionado instanceof Armas)) {
+            return false;
         }
 
+        Armas arma = (Armas) itemSelecionado;
+
+        return arma.getTipoArma() == TipoArma.DISTANCIA;
+    }
+
+    public void diminuirVida() {
+        Item itemSelecionado = inventory.getItemSelecionado();
+
+        if (itemSelecionado instanceof Armas arma && arma.getTipoArma() == TipoArma.DISTANCIA) {
+            double dano = arma.getDano();
+            vida -= dano;
+
+            showLifebar = true;
+            lifebarTimer = LIFEBAR_DISPLAY_TIME;
+
+            if (vida <= 0) {
+                vida = 0;
+                isMorto = true;
+                remove();
+                System.out.println("Corvo derrotado!");
+            }
+        }
+    }
+
+    public boolean getIsMorto() {
+        return isMorto;
+    }
+
+    public void showLifebar() {
+        showLifebar = true;
+        lifebarTimer = LIFEBAR_DISPLAY_TIME;
+    }
+
+    public double getVida() {
+        return vida;
+    }
+
+    public double getVidaMaxima() {
+        return vidaMaxima;
+    }
+
+    public float getHealthPercentage() {
+        return (float) (vida / vidaMaxima);
     }
 
     public void dispose() {
         if (texturaCriatura != null) {
             texturaCriatura.dispose();
         }
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+        }
     }
-
 }
