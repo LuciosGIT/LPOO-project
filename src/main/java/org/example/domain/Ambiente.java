@@ -17,11 +17,8 @@ public abstract class Ambiente implements AmbienteInterface {
     private String descricao;
     private Double dificuldadeExploracao;
     private List<Item> recursosDisponiveis = new ArrayList<>();
-    private Map<Evento, Double> probabilidadeEventos;
     private List<Evento> eventosPossiveis = new ArrayList<>();
     private  List<TipoClimatico> tiposDeClimasDoAmbiente;
-    private  List<EventoClimatico> listaDeclimasDoJogo;
-    private  List<Criatura> criaturasAmbientes;
 
 
     public Ambiente(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas){
@@ -29,14 +26,12 @@ public abstract class Ambiente implements AmbienteInterface {
         this.nome = nome;
         this.descricao = descricao;
         this.dificuldadeExploracao = dificuldadeExploracao;
-        this.probabilidadeEventos = new HashMap<>();
-        this.tiposDeClimasDoAmbiente = condicoesClimaticas;
+        tiposDeClimasDoAmbiente = condicoesClimaticas;
 
         //colocar crocodilo, morcego, sobrevivente
-        this.criaturasAmbientes = ConfiguracaoDoMundo.getCriaturasPadrao();
 
         //criando uma lista de climas que irão ter no jogo
-        this.listaDeclimasDoJogo = ConfiguracaoDoMundo.getEventosClimaticosPadrao();
+
 
     }
 
@@ -73,17 +68,11 @@ public abstract class Ambiente implements AmbienteInterface {
         this.eventosPossiveis.add(evento);
     }
 
-    public Map<Evento, Double> getProbabilidadeEventos() {
-        return probabilidadeEventos;
-    }
 
     public List<Item> getRecursosDisponiveis() {
         return this.recursosDisponiveis;
     }
 
-    public List<Criatura> getCriaturasAmbientes(){
-        return this.criaturasAmbientes;
-    }
 
     public List<Evento> getEventos() {
         return eventosPossiveis;
@@ -93,9 +82,6 @@ public abstract class Ambiente implements AmbienteInterface {
         return this.tiposDeClimasDoAmbiente;
     }
 
-    public List<EventoClimatico> getListaDeclimasDoJogo(){
-        return this.listaDeclimasDoJogo;
-    }
 
 
 }
