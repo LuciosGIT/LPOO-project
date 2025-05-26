@@ -457,7 +457,7 @@ public class TelaDeJogoRuinas implements Screen {
      */
     private void criarEstatuas() {
         // Primeiro, tenta criar uma estátua do Rei (25% de chance)
-        boolean tentarCriarRei = MathUtils.randomBoolean(0.45f);
+        boolean tentarCriarRei = MathUtils.randomBoolean(0.25f);
 
         // Posições pré-definidas para garantir uma boa distribuição
         // Ajustadas para ficarem mais afastadas das bordas
