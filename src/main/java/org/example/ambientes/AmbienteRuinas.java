@@ -4,11 +4,13 @@ import org.example.domain.Ambiente;
 import org.example.domain.Evento;
 import org.example.domain.Personagem;
 import org.example.enums.*;
+import org.example.eventos.EventoClimatico;
 import org.example.eventos.EventoCriatura;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
 import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
+import org.example.utilitarios.ConfiguracaoDoMundo;
 import org.example.utilitarios.Utilitario;
 
 import java.time.OffsetDateTime;
@@ -38,8 +40,9 @@ public class AmbienteRuinas extends Ambiente {
         this.adicionarRecurso(new Ferramentas("Faca Esquecida", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.FACA));
 
         // Evento
-        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(0).getNivelDePerigo()));
+        this.adicionarEvento(new EventoClimatico(true, "Evento de Calor extremo acionado", "Afeta a visibilidade",
+                "Evento de Calor", 0.7, TipoClimatico.CALOR, 5,
+                "O calor reduz a visibilidade e aumenta a temperatura, dificultando a exploração e aumentando o consumo de energia."));
     }
 
     public AmbienteRuinas() {}
@@ -58,13 +61,6 @@ public class AmbienteRuinas extends Ambiente {
             jogador.diminuirFome(1.0 * getDificuldadeExploracao());
         }
 
-        // Lógica da armadilha incorporada aqui
-        if (Utilitario.getBooleanAleatorio()) {
-            System.out.println("Uma armadilha foi acionada nas ruínas!");
-            jogador.diminuirVida(25.0);
-            jogador.diminuirEnergia(15.0);
-            jogador.diminuirSanidade(22.0);
-        }
     }
 
     @Override
