@@ -40,21 +40,24 @@ public class AmbienteFloresta extends Ambiente {
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
+        this.adicionarRecurso(new Alimentos("Fruta", player, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
+        this.adicionarRecurso(new Alimentos("Carne", player, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
+        this.adicionarRecurso(new Alimentos("Raíz", player, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
+        this.adicionarRecurso(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
+        this.adicionarRecurso(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
 
+        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
+                getCriaturasAmbientes().get(2), getCriaturasAmbientes().get(2).getNivelDePerigo()));
 
-        this.getRecursosDisponiveis().add(new Alimentos("Fruta", player, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
-        this.getRecursosDisponiveis().add(new Alimentos("Carne", player, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
-        this.getRecursosDisponiveis().add(new Alimentos("Raíz", player, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
-        this.getRecursosDisponiveis().add(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
-        this.getRecursosDisponiveis().add(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
+        this.adicionarEvento(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,
+                "Você pode encontrar Sobrevivente", TipoDescoberta.ABRIGO,
+                List.of(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA))));
 
+        this.adicionarEvento(new EventoClimatico(true, "Evento de Chuva acionado", "Afeta a visibilidade",
+                "Evento de Chuva", 0.5, TipoClimatico.TEMPESTADE, 5,
+                "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
 
-        this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(2) , getCriaturasAmbientes().get(2).getNivelDePerigo()));
-        this.getEventos().add(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,"Você pode encontrar Sobrevivente",
-                TipoDescoberta.ABRIGO, List.of(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA))));
-        this.getEventos().add(new EventoClimatico(true, "Evento de Chuva acionado", "Afeta a visibilidade", "Evento de Chuva" , 0.5, TipoClimatico.TEMPESTADE, 5, "A chuva reduz a visibilidade e a temperatura, dificultando a exploração e aumentando o consumo de energia."));
-        this.getEventos().add(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
+        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
                 getCriaturasAmbientes().get(5), getCriaturasAmbientes().get(5).getNivelDePerigo()));
 
     }
@@ -102,9 +105,5 @@ public class AmbienteFloresta extends Ambiente {
         return eventoSorteado;
     }
 
-    @Override
-    public void modificarClima(){
-        //metodo para modificar o clima
-    }
 
 }
