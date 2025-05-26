@@ -23,7 +23,7 @@ public class ConfiguracaoDoMundo {
                 new Morcego("Morcego Espantoso", 100.0, 2.0, 5.0),
                 new Lobo("Lobo Nômade", 100.0, 4.5, 0.5),
                 new Corvo("Corvo Atordoante", 100.0, 2.0, 5.0),
-                new Crocodilo("Crocodilo Feroz", 100.0, 4.0, 10.0),
+                new Crocodilo("Crocodilo Feroz", 100.0, 4.0, 0.5),
                 new Urso("Urso Raivoso", 100.0, 5.0, 0.9)
         );
     }
