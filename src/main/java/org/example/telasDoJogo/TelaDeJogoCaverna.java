@@ -12,13 +12,10 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import org.example.Ui.*;
 import org.example.actor.*;
 
 import com.badlogic.gdx.utils.Timer;
-import org.example.Ui.Craft;
-import org.example.Ui.HungerBar;
-import org.example.Ui.Inventory;
-import org.example.Ui.LifeBar;
 import org.example.ambientes.AmbienteCaverna;
 import org.example.criatura.Morcego;
 import org.example.domain.Personagem;
@@ -49,6 +46,7 @@ public class TelaDeJogoCaverna implements Screen {
     private actorPilhaDeItem pilhaDeItem;
     private Batch batch;
     private Stage stage;
+    private Stage hudStage;
     private OrthographicCamera camera;
     private boolean isPilhaDeItemInstanciada;
 
@@ -84,6 +82,8 @@ public class TelaDeJogoCaverna implements Screen {
 
     private VerificarStatusPlayer verificarStatusPlayer;
 
+    private Message message;
+
     public TelaDeJogoCaverna(Game game, Personagem player) {
         this.game = game;
         this.player = player;
@@ -103,6 +103,8 @@ public class TelaDeJogoCaverna implements Screen {
         this.worldHeight = inicializarMundo.getWorldHeight();
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
+
+        hudStage = new Stage();
 
         inputs = new Inputs();
 
@@ -136,18 +138,24 @@ public class TelaDeJogoCaverna implements Screen {
 
         Evento evento = ambienteCaverna.gerarEvento(player);
 
+        String mensagemEvento = "Bem-vindo à caverna misteriosa...";
         if (evento instanceof EventoCriatura eventoCriatura) {
             if (eventoCriatura.getCriatura() instanceof Morcego morcegoCriatura) {
-                actorMorcego morcego = new actorMorcego(player,actorPlayer, inventory, morcegoCriatura);
+                actorMorcego morcego = new actorMorcego(player, actorPlayer, inventory, morcegoCriatura);
                 listaDeCriaturas.add(morcego);
-                stage.addActor(morcego);  // Adiciona uma vez no stage
+                stage.addActor(morcego);
+                mensagemEvento = "Um morcego apareceu!";
             } else if (eventoCriatura.getCriatura() instanceof Corvo corvoCriatura) {
                 actorCorvo corvo = new actorCorvo(player, actorPlayer, inventory, corvoCriatura);
                 listaDeCriaturas.add(corvo);
                 stage.addActor(corvo);
+                mensagemEvento = "Um corvo apareceu!";
             }
         }
 
+        // Cria a mensagem e adiciona ao hudStage para ficar fixa na tela
+        message = new Message(mensagemEvento, "Evento", hudStage, (viewportWidth - 300) / 2f, viewportHeight - 100);
+        message.show();
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
@@ -249,6 +257,9 @@ public class TelaDeJogoCaverna implements Screen {
         stage.act(deltaTime);
         stage.draw();
 
+        hudStage.act(deltaTime);
+        hudStage.draw();
+
         movement(deltaTime);
         camera();
 
@@ -342,6 +353,10 @@ public class TelaDeJogoCaverna implements Screen {
         if (lifeBar != null) lifeBar.dispose();
         inicializarMundo.dispose();
         inventory.dispose();
+
+        if (hudStage != null) {
+            hudStage.dispose();
+        }
     }
 
     public void instanciarPilhaDeItem() {
