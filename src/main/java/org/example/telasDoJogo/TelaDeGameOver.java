@@ -1,11 +1,34 @@
 package org.example.telasDoJogo;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
 
 public class TelaDeGameOver implements Screen {
 
+    private Game game;
+    private Texture gameOverTexture;
+    private SpriteBatch batch;
+    private Stage stage;
+
+    public TelaDeGameOver(Game game) {
+        this.game = game;
+    }
+
     @Override
     public void show() {
-        // Implement show logic here
+
+        batch = new SpriteBatch();
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+
+        gameOverTexture = new Texture("imagens/backgrounds/backgroundTelaDeGamerOver.png");
+
+        sairDaTelaDeGameOver();
+
     }
 
     @Override
@@ -15,7 +38,13 @@ public class TelaDeGameOver implements Screen {
 
     @Override
     public void render(float delta) {
-        // Implement render logic here
+        batch.begin();
+        batch.draw(gameOverTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
+        // Renderizar o stage se necessário
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -35,7 +64,20 @@ public class TelaDeGameOver implements Screen {
 
     @Override
     public void dispose() {
-        // Implement dispose logic here
+        if(gameOverTexture != null) {
+            gameOverTexture.dispose();
+        }
+    }
+
+    public void sairDaTelaDeGameOver() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+
+                game.setScreen(new TelaDeInicio(game));
+                dispose();
+            }
+        },5);
     }
 
 }
