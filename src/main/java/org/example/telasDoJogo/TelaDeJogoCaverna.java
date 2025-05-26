@@ -136,18 +136,18 @@ public class TelaDeJogoCaverna implements Screen {
 
         Evento evento = ambienteCaverna.gerarEvento(player);
 
-        if(evento instanceof EventoCriatura) {
-            EventoCriatura eventoCriatura = (EventoCriatura) evento;
-
-            if(eventoCriatura.getCriatura() instanceof Morcego){
-                actorMorcego morcego = new actorMorcego(player, inventory, (Morcego) eventoCriatura.getCriatura());
+        if (evento instanceof EventoCriatura eventoCriatura) {
+            if (eventoCriatura.getCriatura() instanceof Morcego morcegoCriatura) {
+                actorMorcego morcego = new actorMorcego(player,actorPlayer, inventory, morcegoCriatura);
                 listaDeCriaturas.add(morcego);
-            } else if (eventoCriatura.getCriatura() instanceof Corvo) {
-                actorCorvo corvo = new actorCorvo(player, inventory, (Corvo) eventoCriatura.getCriatura());
+                stage.addActor(morcego);  // Adiciona uma vez no stage
+            } else if (eventoCriatura.getCriatura() instanceof Corvo corvoCriatura) {
+                actorCorvo corvo = new actorCorvo(player, actorPlayer, inventory, corvoCriatura);
                 listaDeCriaturas.add(corvo);
+                stage.addActor(corvo);
             }
-
         }
+
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
@@ -271,18 +271,28 @@ public class TelaDeJogoCaverna implements Screen {
             camera.translate(-offsetX, -offsetY);
         }
 
-        for(Actor actor : listaDeCriaturas){
-            if(actor instanceof actorMorcego){
-                actorMorcego morcego = (actorMorcego) actor;
-                stage.addActor(morcego);
-                morcego.ataque(actorPlayer);
-            } else if (actor instanceof actorCorvo) {
-                actorCorvo corvo = (actorCorvo) actor;
-                stage.addActor(corvo);
-                corvo.ataque(actorPlayer);
-            }
+        for (int i = listaDeCriaturas.size() - 1; i >= 0; i--) {
+            Actor criatura = listaDeCriaturas.get(i);
 
+            if (criatura instanceof actorMorcego morcego) {
+                if (morcego.getIsMorto()) {
+                    morcego.dispose();
+                    morcego.remove();
+                    listaDeCriaturas.remove(i);
+                    continue;
+                }
+                morcego.ataque();
+            } else if (criatura instanceof actorCorvo corvo) {
+                if (corvo.getIsMorto()) {
+                    corvo.dispose();
+                    corvo.remove();
+                    listaDeCriaturas.remove(i);
+                    continue;
+                }
+                corvo.ataque();
+            }
         }
+
 
         try {
 
