@@ -44,9 +44,6 @@ public class AmbienteCaverna extends Ambiente {
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 getCriaturasAmbientes().get(1), getCriaturasAmbientes().get(1).getNivelDePerigo()));
-
-        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(3).getNivelDePerigo()));
     }
 
     public AmbienteCaverna() { }
@@ -82,3 +79,5 @@ public class AmbienteCaverna extends Ambiente {
         this.utilizandoLanterna = true;
     }
 }
+
+
