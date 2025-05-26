@@ -1,15 +1,18 @@
 package org.example.eventos;
 
+import org.example.criatura.Morcego;
+import org.example.criatura.Sobrevivente;
 import org.example.domain.Ambiente;
+import org.example.domain.Criatura;
 import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.enums.TipoDescoberta;
 import org.example.personagens.Rastreador;
-import org.example.personagens.Sobrevivente;
 import org.example.utilitarios.Utilitario;
 
 import java.util.List;
+import java.util.Random;
 
 public class EventoDescoberta extends Evento {
 
@@ -33,19 +36,17 @@ public class EventoDescoberta extends Evento {
         switch (tipoDescoberta) {
             case ABRIGO -> {
                 System.out.println("Você encontrou um abrigo!");
-                // Apenas marca que o abrigo foi encontrado; a interface cuida de mostrar o actor
                 abrigoSpawnado = true;
             }
 
             case CAVERNA -> {
                 System.out.println("Você encontrou uma caverna!");
-                // Apenas marca que a caverna foi encontrada; a interface cuida de mostrar o actor
                 cavernaSpawnada = true;
             }
 
             case RUINAS_MISTERIOSAS -> {
                 System.out.println("Você encontrou ruínas misteriosas!");
-                if (Utilitario.armadilhaInstaurada(jogador)) {
+                if (armadilhaInstaurada(jogador)) {
                     System.out.println("Mas uma armadilha o impediu de explorá-las!");
                 } else if (jogador instanceof Rastreador) {
                     System.out.println("Você tem as habilidades para explorar e coletar os recursos.");
@@ -60,7 +61,7 @@ public class EventoDescoberta extends Evento {
     public void interagirComAbrigo(Personagem jogador) {
         if (!abrigoSpawnado) return;
 
-        if (Utilitario.spawnarSobrevivente(jogador)) {
+        if (spawnarSobrevivente(jogador)) {
             System.out.println("Um sobrevivente apareceu e te expulsou!");
         } else if (jogador instanceof Rastreador) {
             System.out.println("Você explora o abrigo e coleta os recursos.");
@@ -69,26 +70,53 @@ public class EventoDescoberta extends Evento {
             System.out.println("Você não tem habilidade suficiente para explorar o abrigo.");
         }
 
-        abrigoSpawnado = false; // impede múltiplas interações
+        abrigoSpawnado = false;
     }
 
     public boolean interagirComCaverna(Personagem jogador) {
         if (!cavernaSpawnada || interacaoCavernaRealizada) return false;
 
-        if (Utilitario.spawnarMorcego(jogador)) {
+        if (spawnarMorcego(jogador)) {
             System.out.println("Um bando de morcegos protege a entrada da caverna!");
             interacaoCavernaRealizada = true;
             return false;
-        } else if (jogador instanceof Sobrevivente) {
+        } else if (jogador instanceof org.example.personagens.Sobrevivente) {
             System.out.println("Você tem as habilidades para explorar a caverna.");
-            // Não coletamos os recursos aqui, pois isso será feito na TelaDeJogoCavernaEvento
             interacaoCavernaRealizada = true;
-            return true; // Retorna true para indicar que deve abrir a TelaDeJogoCavernaEvento
+            return true;
         } else {
             System.out.println("Você não tem habilidade suficiente para explorar a caverna.");
             interacaoCavernaRealizada = true;
             return false;
         }
+    }
+
+    private boolean spawnarMorcego(Personagem jogador) {
+        if (Utilitario.getBooleanAleatorio()) {
+            Criatura morcego = new Morcego("Morcego Espantoso", 100.0, 25.0, 25.0);
+            morcego.ataque(jogador);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean spawnarSobrevivente(Personagem jogador) {
+        if (Utilitario.getBooleanAleatorio()) {
+            Criatura sobrevivente = new Sobrevivente("Sobrevivente Perdido", 100.0, 15.0, 15.0);
+            sobrevivente.ataque(jogador);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean armadilhaInstaurada(Personagem jogador) {
+        if (Utilitario.getBooleanAleatorio()) {
+            jogador.diminuirVida(25.0);
+            jogador.diminuirEnergia(15.0);
+            jogador.diminuirSanidade(22.0);
+            return true;
+        }
+        return false;
     }
 
     private void pegarItensEncontrados(Personagem jogador) {
@@ -125,3 +153,4 @@ public class EventoDescoberta extends Evento {
         return recursosEncontrados;
     }
 }
+
