@@ -13,6 +13,7 @@ import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Agua;
 import org.example.itens.Alimentos;
 import org.example.itens.Materiais;
+import org.example.utilitarios.ConfiguracaoDoMundo;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -39,10 +40,10 @@ public class AmbienteLagoRio extends Ambiente {
 
         // Adiciona eventos
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3), getCriaturasAmbientes().get(3).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(3), ConfiguracaoDoMundo.getCriaturasPadrao().get(3).getNivelDePerigo()));
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(4), getCriaturasAmbientes().get(4).getNivelDePerigo()));
+                ConfiguracaoDoMundo.getCriaturasPadrao().get(4), ConfiguracaoDoMundo.getCriaturasPadrao().get(4).getNivelDePerigo()));
 
         this.adicionarEvento(new EventoClimatico(true, "Evento de Tempestade acionado", "Afeta a visibilidade",
                 "Evento de Tempestade", 0.5, TipoClimatico.TEMPESTADE, 5,
