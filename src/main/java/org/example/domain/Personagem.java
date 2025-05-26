@@ -2,7 +2,6 @@ package org.example.domain;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.example.ambientes.AmbienteFloresta;
-import org.example.ambientes.AmbienteSpawn;
 import org.example.criatura.Cobra;
 import org.example.interfaces.PersonagemInterface;
 import org.example.itens.Inventario;
@@ -28,7 +27,6 @@ public abstract class Personagem implements PersonagemInterface{
 
     private Ambiente localizacao;
 
-    private boolean estaEnvenenado;
 
     protected double modificadorFome = 1.0;
 
@@ -45,7 +43,6 @@ public abstract class Personagem implements PersonagemInterface{
         this.sanidade = 100.0;
         this.inventario = new Inventario(5, new ArrayList<>(), 0.0);
         this.localizacao = new AmbienteFloresta();
-        this.estaEnvenenado = false;
         this.danoDeAtaque = danoDeAtaque;
 
     }
@@ -226,34 +223,6 @@ public abstract class Personagem implements PersonagemInterface{
         }
 
         this.vida -= vida;
-    }
-
-    public boolean getEstaEnvenedo(){
-        return this.estaEnvenenado;
-    }
-
-    public void envenenar() {
-        this.estaEnvenenado = true;
-    }
-
-    public void CuradoDoVeneno(){
-        this.estaEnvenenado = false;
-    }
-
-    public void danoPorEnvenenamento(List<Criatura> listaDeCriaturas, Double getDificuldadeAmbiente){
-
-        //recebe uma lista de criaturas que existem no jogo, filtra essa lista para apenas cobras;
-        Optional<Cobra> cobra = listaDeCriaturas.stream()
-                .filter(a -> a instanceof Cobra)
-                .map(c -> ((Cobra) c))
-                .findAny();
-        //verifica se tem cobra, acho q n precisa disso
-        cobra.ifPresent(c-> {
-
-            diminuirVida(c.getDanoDeAtaque()*getDificuldadeAmbiente);
-            System.out.printf("Você sofreu %f de dano", c.getDanoDeAtaque() * 0.5);
-
-        });
     }
 
     public abstract HashMap<String, TextureRegion> getSprites();
