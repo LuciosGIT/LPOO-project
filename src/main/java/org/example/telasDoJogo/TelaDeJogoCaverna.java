@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import org.example.actor.*;
 
 import com.badlogic.gdx.utils.Timer;
@@ -29,6 +30,7 @@ import org.example.domain.Evento;
 import org.example.eventos.EventoCriatura;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import org.example.criatura.Corvo;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -80,11 +82,13 @@ public class TelaDeJogoCaverna implements Screen {
     private Sound somTremor;
     private long somTremorId;
 
+    private VerificarStatusPlayer verificarStatusPlayer;
+
     public TelaDeJogoCaverna(Game game, Personagem player) {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteCaverna = new AmbienteCaverna("Caverna", "Um lugar escuro e misterioso", 5.0, Arrays.asList(TipoClimatico.CALOR), true, player);
+        this.ambienteCaverna = new AmbienteCaverna("Caverna", "Um lugar escuro e misterioso", 0.8, Arrays.asList(TipoClimatico.CALOR), true, player);
     }
 
     @Override
@@ -144,6 +148,8 @@ public class TelaDeJogoCaverna implements Screen {
             }
 
         }
+
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
 
     }
 
@@ -276,6 +282,20 @@ public class TelaDeJogoCaverna implements Screen {
                 corvo.ataque(actorPlayer);
             }
 
+        }
+
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
         }
 
     }

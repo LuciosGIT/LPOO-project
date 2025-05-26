@@ -22,6 +22,7 @@ import org.example.domain.Item;
 import org.example.domain.Personagem;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.List;
 
@@ -53,6 +54,8 @@ public class TelaDeJogoCavernaEvento implements Screen {
     HungerBar hungerBar;
     Inventory inventory;
     private Craft popUp;
+
+    private VerificarStatusPlayer verificarStatusPlayer;
 
     public TelaDeJogoCavernaEvento(Game game, Personagem player, List<Item> recursosDisponiveis) {
         this.game = game;
@@ -110,6 +113,9 @@ public class TelaDeJogoCavernaEvento implements Screen {
         } catch (Exception e) {
             System.out.println("Não foi possível carregar o som da caverna");
         }
+
+
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
     }
 
     private void criarPilhaDeRecursos() {
@@ -155,6 +161,21 @@ public class TelaDeJogoCavernaEvento implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
 
         popUp.setPosition(actorPlayer);
+
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
+        }
+
     }
 
     private void movement(float deltaTime) {

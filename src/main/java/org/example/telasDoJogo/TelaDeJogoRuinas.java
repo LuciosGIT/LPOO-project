@@ -27,6 +27,7 @@ import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import org.example.Ui.Craft;
 import com.badlogic.gdx.audio.Sound;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +82,8 @@ public class TelaDeJogoRuinas implements Screen {
     private static final float DISTANCIA_MINIMA_PILAR_ESTATUA = 500f;
     private static final float DISTANCIA_MINIMA_JOGADOR = 400f;
 
+    private VerificarStatusPlayer verificarStatusPlayer;
+
     // Distâncias reduzidas para posicionamento de emergência
     private static final float DISTANCIA_EMERGENCIA = 300f;
 
@@ -89,7 +92,7 @@ public class TelaDeJogoRuinas implements Screen {
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
         try {
-            this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 5.5, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+            this.ambienteRuinas = new AmbienteRuinas("Ruinas", "Ruinas abandonada e esquecida", 0.9, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
         }
         catch (Exception e) {
             Gdx.app.error("TelaDeJogoRuinas", "Erro ao inicializar: " + e.getMessage());
@@ -141,6 +144,9 @@ public class TelaDeJogoRuinas implements Screen {
         instanciarPilhaDeItem();
 
         ambienteRuinas.explorar(player);
+
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
+
     }
 
     @Override
@@ -186,6 +192,21 @@ public class TelaDeJogoRuinas implements Screen {
         popUp.setPosition(actorPlayer);
 
         inputs.inputListener(actorPlayer, inventory, popUp);
+
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
+        }
+
     }
 
     @Override

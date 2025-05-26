@@ -38,6 +38,7 @@ import org.example.domain.Evento;
 import org.example.eventos.EventoCriatura;
 import org.example.criatura.Corvo;
 import org.example.actor.actorCorvo;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,11 +84,13 @@ public class TelaDeJogoLagoRio implements Screen {
     HungerBar hungerBar; // <- NOVO
     Inventory inventory;
 
+    private VerificarStatusPlayer verificarStatusPlayer;
+
     public TelaDeJogoLagoRio(Game game, Personagem player) {
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 5.0, Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
+        this.ambienteLagoRio = new AmbienteLagoRio("Lago e Rio", "Um lago e um rio", 0.8, Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR), true, player);
     }
 
     @Override
@@ -149,6 +152,8 @@ public class TelaDeJogoLagoRio implements Screen {
             }
 
         }
+
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
 
     }
 
@@ -216,6 +221,22 @@ public class TelaDeJogoLagoRio implements Screen {
                 corvo.ataque(actorPlayer);
             }
         }
+
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
+        }
+
+
 
     }
 

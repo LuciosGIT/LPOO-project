@@ -34,6 +34,7 @@ import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -89,11 +90,13 @@ public class TelaDeJogoMontanha implements Screen {
     private EventoDescoberta eventoDescoberta;
     private boolean interacaoCavernaOcorreu = false;
 
+    private VerificarStatusPlayer verificarStatusPlayer;
+
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
         this.player = player;
         this.actorPlayer = new actorPersonagem(player);
-        this.ambienteMontanha = new AmbienteMontanha("Montanha", "Pico de um monte gelado",5.5, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.NEVASCA), true, false, player);
+        this.ambienteMontanha = new AmbienteMontanha("Montanha", "Pico de um monte gelado",0.9, List.of(TipoClimatico.TEMPESTADE, TipoClimatico.NEVASCA), true, false, player);
     }
 
     @Override
@@ -162,6 +165,9 @@ public class TelaDeJogoMontanha implements Screen {
         } else if (evento instanceof EventoClimatico) {
             aplicarClimaNaTela((EventoClimatico) evento);
         }
+
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
+
     }
 
     // Método para posicionar a caverna com espaçamento adequado
@@ -369,6 +375,21 @@ public class TelaDeJogoMontanha implements Screen {
         inputs.inputListener(actorPlayer, inventory, popUp);
 
         popUp.setPosition(actorPlayer);
+
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
+        }
+
     }
 
     private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {

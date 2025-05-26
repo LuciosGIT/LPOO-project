@@ -33,6 +33,7 @@ import org.example.eventos.EventoDescoberta;
 import org.example.utilitarios.Utilitario;
 import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
+import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -94,6 +95,8 @@ public class TelaDeJogoFloresta implements Screen {
 
     private EventoCriatura eventoCriatura;
 
+    private VerificarStatusPlayer verificarStatusPlayer;
+
     public TelaDeJogoFloresta(Game game, Personagem player) {
         this.game = game;
         this.player = player;
@@ -101,7 +104,7 @@ public class TelaDeJogoFloresta implements Screen {
         this.ambienteFloresta = new AmbienteFloresta(
                 "Floresta",
                 "Uma floresta densa e cheia de vida.",
-                5.0,
+                0.8,
                 Arrays.asList(TipoClimatico.TEMPESTADE, TipoClimatico.CALOR),
                 true,
                 true,
@@ -197,6 +200,7 @@ public class TelaDeJogoFloresta implements Screen {
             }
         }
 
+        verificarStatusPlayer = new VerificarStatusPlayer(player);
     }
 
     // Método para posicionar o abrigo com espaçamento adequado
@@ -454,6 +458,19 @@ public class TelaDeJogoFloresta implements Screen {
             }
         }
 
+        try {
+
+            if (verificarStatusPlayer.getIsMorto()) {
+                actorPlayer.addAction(Actions.fadeIn(0.1f));
+                game.setScreen(new TelaDeGameOver(game));
+                dispose();
+            }else{
+                verificarStatusPlayer.verificandoStatus();
+            }
+
+        }catch (Exception e) {
+            System.out.println("Erro ao verificar status do player: " + e.getMessage());
+        }
     }
 
     private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {
@@ -477,6 +494,11 @@ public class TelaDeJogoFloresta implements Screen {
     public void dispose() {
 
         popUp.dispose();
+
+        if(soundForest != null) {
+            soundForest.stop();
+            soundForest.dispose();
+        }
 
         if(mercador != null) {
             mercador.dispose();
