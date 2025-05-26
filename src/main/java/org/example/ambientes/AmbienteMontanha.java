@@ -36,12 +36,6 @@ public class AmbienteMontanha extends Ambiente {
         this.adicionarRecurso(new Agua("Água de Degelo", player, 5.0, 20.0, 0.5, Pureza.CONTAMINADA, 10.0));
 
         // Eventos
-        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
-                getCriaturasAmbientes().get(3), getCriaturasAmbientes().get(1).getNivelDePerigo()));
-
-        this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.5,
-                getCriaturasAmbientes().get(0), getCriaturasAmbientes().get(3).getNivelDePerigo()));
-
         this.adicionarEvento(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,
                 "Você pode encontrar Morcego",
                 TipoDescoberta.CAVERNA,
