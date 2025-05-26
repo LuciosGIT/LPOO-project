@@ -38,17 +38,14 @@ public class ExploracaoService {
         // Percorrer pelos recursos disponíveis
         for (Item recurso : recursosDisponiveis) {
             if (Utilitario.getValorAleatorio() < recurso.getProbabilidadeDeEncontrar()) {
-                if (isCogumeloEnvenenado(recurso)) {
-                    aplicarEfeitoCogumeloEnvenenado(jogador);
-                    GerenciadorDeAmbientes.modificarRecursos(jogador.getLocalizacao(), recurso);
-                } else {
+
                     recurso.alterarPersonagem(jogador);
                     jogador.getInventario().adicionarItem(recurso);
                     System.out.printf("Você coletou um(a) %s%n", recurso.getNomeItem());
 
                     // Remover o recurso do ambiente
                     GerenciadorDeAmbientes.modificarRecursos(jogador.getLocalizacao(), recurso);
-                }
+
                 encontrouItem = true;
             }
         }
@@ -58,16 +55,4 @@ public class ExploracaoService {
         }
     }
 
-    private static boolean isCogumeloEnvenenado(Item recurso) {
-        // Identificar cogumelos envenenados
-        return recurso.getNomeItem().equals("Cogumelo") && Utilitario.getValorAleatorio() < 0.2;
-    }
-
-    private static void aplicarEfeitoCogumeloEnvenenado(Personagem jogador) {
-        // Aplica penalidades ao jogador caso encontre um cogumelo envenenado
-        System.out.println("Você coletou um cogumelo, porém ele está envenenado!");
-        jogador.diminuirVida(15.0);
-        jogador.diminuirSanidade(5.0);
-        jogador.diminuirEnergia(15.0);
-    }
 }
