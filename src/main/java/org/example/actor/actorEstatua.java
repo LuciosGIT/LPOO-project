@@ -280,10 +280,10 @@ public class actorEstatua extends Actor implements Collidable {
 
                 switch (tipoEstatua) {
                     case "Guerreiro":
-                        item = new Armas("Lança Etérea", 15.0, player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
+                        item = new Armas("LANÇA ETÉREA", 25.0, player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
                         break;
                     case "Sabio":
-                        item = new Armas("Punhal dos Sussurros", 20.0,player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
+                        item = new Armas("PUNHAL DOS SUSSURROS", 35.0,player, 0.5, 100.0, 0.2, 0.5, TipoArma.CORPO);
                         break;
                     case "Guardiao":
                         item = new Ferramentas("Lanterna Guardiã", player, 0.5, 100.0, 0.2, 0.5, TipoFerramenta.LANTERNA);

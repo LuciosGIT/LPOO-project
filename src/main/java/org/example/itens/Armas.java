@@ -96,6 +96,10 @@ public class Armas extends Item {
                 return "imagens/assets/itens/armas/besta.png";
             case "REVOLVER":
                 return "imagens/assets/itens/armas/revolver.png";
+            case "PUNHAL DOS SUSSURROS":
+                return "imagens/assets/itens/armas/punhalDosSussurros.png";
+            case "LANÇA ETÉREA":
+                return "imagens/assets/itens/armas/lancaEterea.png";
             default:
                 return "imagens/assets/itens/default.png";
         }
