@@ -53,7 +53,7 @@ public class BancoDeArmas  {
     public static Armas buscarArma(TipoMaterial m1, TipoMaterial m2, Personagem personagem) {
         for (ReceitaArma r : receitasDeArmas) {
             if (r.combinaCom(m1, m2)) {
-                return r.getResultado().copiarPara(personagem);
+                return r.getResultado().atribuirPara(personagem);
             }
         }
         return null;

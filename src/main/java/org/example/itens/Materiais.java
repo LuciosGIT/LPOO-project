@@ -42,11 +42,11 @@ public class Materiais extends Item {
 
         if (resultado != null) {
             // Faz uma cópia e associa ao personagem atual (que está neste material)
-            Materiais copia = resultado.copiarPara(this.getPersonagem());
+            Materiais novo = resultado.atribuirPara(this.getPersonagem());
             this.getPersonagem().getInventario().removerItem(this.getNomeItem());
             this.getPersonagem().getInventario().removerItem(outroMaterial.getNomeItem());
-            this.getPersonagem().getInventario().adicionarItem(copia);
-            return copia;
+            this.getPersonagem().getInventario().adicionarItem(novo);
+            return novo;
         }
 
         System.out.println("Não foi possível combinar os materiais: "
@@ -54,7 +54,7 @@ public class Materiais extends Item {
         return null;
     }
 
-    public Materiais copiarPara(Personagem personagem) {
+    public Materiais atribuirPara(Personagem personagem) {
         return new Materiais(
                 this.getNomeItem(),
                 personagem,
