@@ -27,11 +27,6 @@ public abstract class Personagem implements PersonagemInterface{
 
     private Ambiente localizacao;
 
-
-    protected double modificadorFome = 1.0;
-
-    protected double modificadorSede = 1.0;
-
     private Double danoDeAtaque;
 
     public Personagem(String nome, Double danoDeAtaque) {
@@ -128,7 +123,7 @@ public abstract class Personagem implements PersonagemInterface{
             throw new IllegalArgumentException("Você precisa passar um valor de fome maior que 0!");
         }
 
-        this.fome -= fome * modificadorFome;
+        this.fome -= fome;
     }
 
     public Inventario getInventario() {
@@ -159,6 +154,13 @@ public abstract class Personagem implements PersonagemInterface{
         return sede;
     }
 
+    public void setFome(Double fome) {
+        if (fome <= 0) {
+            throw new IllegalArgumentException("A fome deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+        this.fome = fome;
+    }
+
     public void aumentarSede(Double sede) {
 
         if (sede <=0) {
@@ -174,7 +176,7 @@ public abstract class Personagem implements PersonagemInterface{
             throw new IllegalArgumentException("Você precisa passar um valor de sede maior que 0!");
         }
 
-        this.sede -= sede * modificadorSede;
+        this.sede -= sede;
     }
 
     public Double getSanidade() {

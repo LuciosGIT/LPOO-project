@@ -15,6 +15,9 @@ public class Sobrevivente extends Personagem {
 
     private HashMap<String, TextureRegion> sprites;
 
+    private double modificadorFome = 1.0;
+    private double modificadorSede = 1.0;
+
     public Sobrevivente(String nome) {
         super(nome, 5.0);
         this.alterarNomePersonagem(nome);
@@ -46,7 +49,7 @@ public class Sobrevivente extends Personagem {
                 "cima", new TextureRegion(new Texture("imagens/sprites/sobrevivente.png"))
         ));
 
-        //to do: criar o hashmap passando os endereçoes das texturas
+
     }
 
     @Override
@@ -55,8 +58,16 @@ public class Sobrevivente extends Personagem {
     }
 
     @Override
+    public void diminuirFome(Double fome) {
+        if (fome <= 0) {
+            throw new IllegalArgumentException("A fome deve ser diminuída, portanto só pode admitir valores maiores que 0!");
+        }
+        setFome(getFome() - (fome * modificadorFome));
+    }
+
+    @Override
     public void habilidade() {
-        this.modificadorFome = 0.7;
-        this.modificadorSede = 0.7;
+        this.modificadorFome = 0.9;
+        this.modificadorSede = 0.9;
     }
 }
