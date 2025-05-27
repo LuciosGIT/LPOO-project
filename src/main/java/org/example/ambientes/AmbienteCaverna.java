@@ -20,9 +20,7 @@ public class AmbienteCaverna extends Ambiente {
     private boolean fonteAgua;
 
     // Construtor
-    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao,
-                           List<TipoClimatico> condicoesClimaticas,
-                           boolean poucaLuminosidade, Personagem player) {
+    public AmbienteCaverna(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean poucaLuminosidade, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
 
         this.poucaLuminosidade = poucaLuminosidade;
@@ -30,17 +28,14 @@ public class AmbienteCaverna extends Ambiente {
         // Adiciona recursos usando o método da superclasse
         this.adicionarRecurso(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5,
                 TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
-
         this.adicionarRecurso(new Materiais("Diamante Vermelho", player, 8.0, 20.0, 0.6,
                 10.0, TipoMaterial.PEDRA));
-
         this.adicionarRecurso(new Materiais("Metal Firme", player, 8.0, 40.0, 0.2,
                 20.0, TipoMaterial.METAL));
 
         // Adiciona eventos de criaturas usando o método da superclasse
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 ConfiguracaoDoMundo.getCriaturasPadrao().get(3), ConfiguracaoDoMundo.getCriaturasPadrao().get(3).getNivelDePerigo()));
-
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 ConfiguracaoDoMundo.getCriaturasPadrao().get(1), ConfiguracaoDoMundo.getCriaturasPadrao().get(1).getNivelDePerigo()));
     }

@@ -13,7 +13,6 @@ public class ExploracaoService {
 
     public static void explorar(Personagem jogador, Ambiente ambiente) {
         try {
-
             // Caso o jogador ainda esteja vivo, buscar itens no ambiente
             if (jogador.getVida() > 0 && jogador.getInventario().temEspaco()) {
                 encontrarItens(jogador, ambiente.getRecursosDisponiveis());
@@ -21,7 +20,6 @@ public class ExploracaoService {
                 System.out.println("Você não tem espaço no inventário!");
             }
         }
-
         catch (Exception e) {
             System.out.println("Erro ao explorar o ambiente: " + e.getMessage());
         }
@@ -31,7 +29,7 @@ public class ExploracaoService {
     private static void encontrarItens(Personagem jogador, List<Item> recursosDisponiveis) {
 
         if (jogador instanceof Rastreador) {
-            jogador.habilidade();
+            jogador.habilidade(); //caso o jogador seja um Rastreador, ele pode usar sua habilidade especial
         }
         boolean encontrouItem = false;
 

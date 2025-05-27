@@ -37,9 +37,11 @@ public class AmbienteFloresta extends Ambiente {
     //construtor
     public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido, Personagem player) {
         super(nome,descricao,dificuldadeExploracao,condicoesClimaticas);
+
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
+
         this.adicionarRecurso(new Alimentos("Fruta", player, 0.5, 10.0, 0.4, TipoAlimento.FRUTA, OffsetDateTime.now().plusDays(15)));
         this.adicionarRecurso(new Alimentos("Carne", player, 1.0, 8.0, 0.5, TipoAlimento.CARNE, OffsetDateTime.now().minusDays(10)));
         this.adicionarRecurso(new Alimentos("Raíz", player, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));

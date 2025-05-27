@@ -23,8 +23,7 @@ public class AmbienteLagoRio extends Ambiente {
     private Boolean terrenoLamacento;
 
     // Construtor
-    public AmbienteLagoRio(String nome, String descricao, Double dificuldadeExploracao,
-                           List<TipoClimatico> condicoesClimaticas, Boolean terrenoLamacento, Personagem player) {
+    public AmbienteLagoRio(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, Boolean terrenoLamacento, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
 
         this.terrenoLamacento = terrenoLamacento;

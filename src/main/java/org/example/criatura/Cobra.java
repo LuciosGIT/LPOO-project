@@ -13,7 +13,6 @@ public class Cobra extends Criatura {
     @Override
     public void ataque(Personagem jogador) {
         jogador.diminuirVida(this.getDanoDeAtaque());
-        //jogador.envenenar();
 
     }
 

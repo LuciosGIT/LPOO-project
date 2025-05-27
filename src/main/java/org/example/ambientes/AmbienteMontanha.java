@@ -20,9 +20,7 @@ public class AmbienteMontanha extends Ambiente {
     private boolean terrenoAcidentado;
     private boolean climaInstavel;
 
-    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao,
-                            List<TipoClimatico> condicoesClimaticas, boolean terrenoAcidentado,
-                            boolean climaInstavel, Personagem player) {
+    public AmbienteMontanha(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean terrenoAcidentado, boolean climaInstavel, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
 
         this.terrenoAcidentado = terrenoAcidentado;

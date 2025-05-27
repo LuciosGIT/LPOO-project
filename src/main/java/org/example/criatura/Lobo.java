@@ -20,6 +20,7 @@ public class Lobo extends Criatura {
         Random random = new Random();
         jogador.diminuirVida(this.getDanoDeAtaque());
 
+        //probabilidade de roubar um item do inventário do jogador
         if (random.nextBoolean()) {
             List<Item> itens = jogador.getInventario().getListaDeItems();// ['Laranja', 'Madeira', 'Cogumelo']
             Optional<Item> alimentoParaRemover = itens.stream()

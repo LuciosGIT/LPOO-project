@@ -21,9 +21,7 @@ public class AmbienteRuinas extends Ambiente {
 
     private boolean estruturasInstaveis;
 
-    public AmbienteRuinas(String nome, String descricao, Double dificuldadeExploracao,
-                          List<TipoClimatico> condicoesClimaticas, boolean estruturasInstaveis,
-                          Personagem player) {
+    public AmbienteRuinas(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean estruturasInstaveis, Personagem player) {
         super(nome, descricao, dificuldadeExploracao, condicoesClimaticas);
         this.estruturasInstaveis = estruturasInstaveis;
 

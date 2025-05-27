@@ -7,8 +7,8 @@ public abstract class Criatura implements CriaturaInterface {
 
     private String nome;
     private Double vida;
-    private Double nivelDePerigo;
-    private Double danoDeAtaque;
+    private final Double nivelDePerigo;
+    private final Double danoDeAtaque;
 
     public Criatura(String nome, Double vida, Double nivelDePerigo, Double danoDeAtaque){
 
@@ -25,13 +25,6 @@ public abstract class Criatura implements CriaturaInterface {
 
     public Double getVida(){
         return this.vida;
-    }
-
-    public Double getDiminuirVida(Double danoSofrido){
-        if(danoSofrido == null || danoSofrido < 0){
-            throw new IllegalArgumentException("O dano sofrido é inválido");
-        }
-        return this.vida -= danoSofrido;
     }
 
     public Double getNivelDePerigo(){

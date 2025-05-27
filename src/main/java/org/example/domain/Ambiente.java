@@ -28,11 +28,6 @@ public abstract class Ambiente implements AmbienteInterface {
         this.dificuldadeExploracao = dificuldadeExploracao;
         tiposDeClimasDoAmbiente = condicoesClimaticas;
 
-        //colocar crocodilo, morcego, sobrevivente
-
-        //criando uma lista de climas que irão ter no jogo
-
-
     }
 
     public Ambiente() {

@@ -53,7 +53,6 @@ public class Rastreador extends Personagem {
                 OffsetDateTime.now().minusDays(5)));
 
         this.alterarNomePersonagem(nome);
-        //to do: criar o hashmap passando os endereçoes das texturas
 
         sprites = new HashMap<>( Map.of(
                 "parado", new TextureRegion(new Texture("imagens/sprites/rastreador.png")),
