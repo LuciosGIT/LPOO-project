@@ -20,7 +20,7 @@ public class Armas extends Item {
         this.tipoArma = tipoArma;
     }
 
-    public Armas copiarPara(Personagem personagem) {
+    public Armas atribuirPara(Personagem personagem) {
         return new Armas(
                 this.getNomeItem(),
                 this.getDano(),

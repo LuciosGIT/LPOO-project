@@ -20,13 +20,13 @@ public class BancoDeReceitas {
         receitas.add(new Receita(
                 TipoMaterial.MADEIRA,
                 TipoMaterial.METAL,
-                new Materiais("Lança de Metal", null, 3.0, 90.0, 0.2, 25.0, TipoMaterial.RESULTADO_MADEIRA_METAL)
+                new Materiais("Barra de Metal", null, 3.0, 90.0, 0.2, 25.0, TipoMaterial.RESULTADO_MADEIRA_METAL)
         ));
 
         receitas.add(new Receita(
                 TipoMaterial.PEDRA,
                 TipoMaterial.METAL,
-                new Materiais("Machado de Batalha", null, 4.0, 85.0, 0.15, 30.0, TipoMaterial.RESULTADO_PEDRA_METAL)
+                new Materiais("Bastão de Pedra", null, 4.0, 85.0, 0.15, 30.0, TipoMaterial.RESULTADO_PEDRA_METAL)
         ));
 
         receitas.add(new Receita(
