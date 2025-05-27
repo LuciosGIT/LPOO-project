@@ -204,7 +204,7 @@ public class TelaDeJogoFloresta implements Screen {
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
 
-
+        atualizarInventario();
     }
 
     // Método para posicionar o abrigo com espaçamento adequado
@@ -433,10 +433,8 @@ public class TelaDeJogoFloresta implements Screen {
                     return;
                 }
 
-                // Then perform the attack
-                lobo.ataque();
-                inventory.updateInventory();
 
+                lobo.ataque();
 
             }
 
@@ -731,5 +729,14 @@ public class TelaDeJogoFloresta implements Screen {
             game.setScreen(new TelaDeJogoLagoRio(game, player));
             dispose();
         }
+    }
+
+    private void atualizarInventario() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                inventory.updateInventory();
+            }
+        }, 0, 0.5f); // Atualiza a cada 5 segundos
     }
 }
