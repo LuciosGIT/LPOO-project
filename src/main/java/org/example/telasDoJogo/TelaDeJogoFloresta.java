@@ -737,6 +737,6 @@ public class TelaDeJogoFloresta implements Screen {
             public void run() {
                 inventory.updateInventory();
             }
-        }, 0, 0.5f); // Atualiza a cada 5 segundos
+        }, 0, 0.9f); // Atualiza a cada 5 segundos
     }
 }
