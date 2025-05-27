@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import org.example.Ui.Message;
 import org.example.actor.Collidable;
 import org.example.domain.Personagem;
 import org.example.enums.TipoFerramenta;
@@ -25,10 +26,12 @@ public class actorMuralha extends Actor implements Collidable {
     private Polygon collider;
     private Personagem player;
     private Game game;
+    private actorPersonagem actorPlayer;
 
 
     public actorMuralha(actorPersonagem actorPlayer, Game game, float x, float y) {
         this.game = game;
+        this.actorPlayer = actorPlayer;
         this.player = actorPlayer.getPlayer();
         this.texture = new Texture(Gdx.files.internal("imagens/itens do cenario/muralha.png"));
         setBounds(x, y, texture.getWidth()*8, texture.getHeight()*5);
@@ -97,6 +100,8 @@ public class actorMuralha extends Actor implements Collidable {
                 }
             }
         }
+        Message message = new Message("Você precisa de uma chave especial para abrir esta muralha.", "Muralha", actorPlayer.getStage(),actorPlayer.getStage().getWidth()/2 - this.getWidth()/10, actorPlayer.getStage().getHeight()-250);
+        message.show();
     }
 
     public void checkCollision(actorPersonagem objeto) {
