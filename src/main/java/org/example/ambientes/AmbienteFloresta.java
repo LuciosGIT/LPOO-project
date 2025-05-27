@@ -5,15 +5,13 @@ import org.example.domain.Ambiente;
 import org.example.domain.Evento;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
-import org.example.enums.TipoAlimento;
-import org.example.enums.TipoClimatico;
-import org.example.enums.TipoDescoberta;
-import org.example.enums.TipoMaterial;
+import org.example.enums.*;
 import org.example.eventos.EventoClimatico;
 import org.example.eventos.EventoCriatura;
 import org.example.eventos.EventoDescoberta;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
+import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 import org.example.personagens.Rastreador;
 import org.example.personagens.Sobrevivente;
@@ -47,6 +45,7 @@ public class AmbienteFloresta extends Ambiente {
         this.adicionarRecurso(new Alimentos("Raíz", player, 0.3, 12.0, 0.6, TipoAlimento.RAIZES, OffsetDateTime.now().plusDays(12)));
         this.adicionarRecurso(new Alimentos("Cogumelo", player, 0.2, 5.0, 0.5, TipoAlimento.COGUMELO, OffsetDateTime.now().plusDays(5)));
         this.adicionarRecurso(new Materiais("Madeira", player, 2.0, 20.0, 0.8, 5.0, TipoMaterial.MADEIRA));
+        this.adicionarRecurso(new Ferramentas("Chave Real", player, 0.8, 100.0, 0.4, 0.8, TipoFerramenta.CHAVE_ESPECIAL));
 
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
                 ConfiguracaoDoMundo.getCriaturasPadrao().get(2), ConfiguracaoDoMundo.getCriaturasPadrao().get(2).getNivelDePerigo()));
@@ -78,23 +77,15 @@ public class AmbienteFloresta extends Ambiente {
 
         if (this.vegetacaoDensa) {
             System.out.println("A vegetação densa dificulta a exploração. Você perde mais energia.");
-            if (jogador instanceof Sobrevivente) {
-                jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*0.25);
-                jogador.diminuirSede(1.0*getDificuldadeExploracao()*0.25);
-                jogador.diminuirFome(1.0*getDificuldadeExploracao()*0.25);
-            }
-            else {
-                jogador.diminuirEnergia(4.0*getDificuldadeExploracao()*1.25);
-                jogador.diminuirSede(1.0*getDificuldadeExploracao()*1.25);
-                jogador.diminuirFome(1.0*getDificuldadeExploracao()*1.25);
-            }
+                jogador.diminuirEnergia(5.0*getDificuldadeExploracao()*0.25);
+                jogador.diminuirSede(4.0*getDificuldadeExploracao()*0.25);
+                jogador.diminuirFome(4.0*getDificuldadeExploracao()*0.25);
         }
-
         else {
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao());
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao());
+            jogador.diminuirSede(3.0 * getDificuldadeExploracao());
+            jogador.diminuirFome(3.0 * getDificuldadeExploracao());
         }
 
     }

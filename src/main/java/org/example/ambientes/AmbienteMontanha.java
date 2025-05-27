@@ -10,6 +10,7 @@ import org.example.eventos.EventoDescoberta;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Agua;
 import org.example.itens.Alimentos;
+import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 
 import java.time.OffsetDateTime;
@@ -32,6 +33,7 @@ public class AmbienteMontanha extends Ambiente {
         this.adicionarRecurso(new Materiais("Pedra Cristalina", player, 8.0, 20.0, 0.7, 10.0, TipoMaterial.PEDRA));
         this.adicionarRecurso(new Materiais("Madeira", player, 2.0, 20.0, 0.5, 5.0, TipoMaterial.MADEIRA));
         this.adicionarRecurso(new Agua("Água de Degelo", player, 5.0, 20.0, 0.5, Pureza.CONTAMINADA, 10.0));
+        this.adicionarRecurso(new Ferramentas("Chave Real", player, 0.8, 100.0, 0.3, 0.8, TipoFerramenta.CHAVE_ESPECIAL));
 
         // Eventos
         this.adicionarEvento(new EventoDescoberta(true, "Descoberta", "Evento de Descoberta", 0.7,
@@ -50,14 +52,14 @@ public class AmbienteMontanha extends Ambiente {
     public void explorar(Personagem jogador) {
         if (this.terrenoAcidentado) {
             System.out.println("O terreno acidentado dificulta a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(4.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirEnergia(5.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirSede(4.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirFome(4.0 * getDificuldadeExploracao() * 1.25);
         } else {
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao());
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao());
+            jogador.diminuirSede(3.0 * getDificuldadeExploracao());
+            jogador.diminuirFome(3.0 * getDificuldadeExploracao());
         }
 
         if (this.climaInstavel) {

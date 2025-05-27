@@ -36,6 +36,7 @@ public class AmbienteRuinas extends Ambiente {
 
         this.adicionarRecurso(new Ferramentas("Machado largado", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.MACHADO));
         this.adicionarRecurso(new Ferramentas("Faca Esquecida", player, 2.0, 20.0, 0.8, 5.0, TipoFerramenta.FACA));
+        this.adicionarRecurso(new Ferramentas("Chave Real", player, 0.8, 100.0, 0.3, 0.8, TipoFerramenta.CHAVE_ESPECIAL));
 
         // Evento
         this.adicionarEvento(new EventoClimatico(true, "Evento de Calor extremo acionado", "Afeta a visibilidade",
@@ -49,14 +50,14 @@ public class AmbienteRuinas extends Ambiente {
     public void explorar(Personagem jogador) {
         if (this.estruturasInstaveis) {
             System.out.println("As estruturas instáveis dificultam a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(4.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirEnergia(5.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirSede(4.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirFome(4.0 * getDificuldadeExploracao() * 1.25);
         } else {
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao());
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao());
+            jogador.diminuirSede(3.0 * getDificuldadeExploracao());
+            jogador.diminuirFome(3.0 * getDificuldadeExploracao());
         }
 
     }

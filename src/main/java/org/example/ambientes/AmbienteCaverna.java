@@ -3,10 +3,12 @@ package org.example.ambientes;
 import org.example.domain.*;
 import org.example.enums.TipoAlimento;
 import org.example.enums.TipoClimatico;
+import org.example.enums.TipoFerramenta;
 import org.example.enums.TipoMaterial;
 import org.example.eventos.EventoCriatura;
 import org.example.gerenciadores.GerenciadorDeEventos;
 import org.example.itens.Alimentos;
+import org.example.itens.Ferramentas;
 import org.example.itens.Materiais;
 import org.example.utilitarios.ConfiguracaoDoMundo;
 
@@ -32,6 +34,7 @@ public class AmbienteCaverna extends Ambiente {
                 10.0, TipoMaterial.PEDRA));
         this.adicionarRecurso(new Materiais("Metal Firme", player, 8.0, 40.0, 0.2,
                 20.0, TipoMaterial.METAL));
+        this.adicionarRecurso(new Ferramentas("Chave Real", player, 0.8, 100.0, 0.4, 0.8, TipoFerramenta.CHAVE_ESPECIAL));
 
         // Adiciona eventos de criaturas usando o método da superclasse
         this.adicionarEvento(new EventoCriatura(true, "Batalha", "Evento de Criatura", 0.7,
@@ -46,14 +49,14 @@ public class AmbienteCaverna extends Ambiente {
     public void explorar(Personagem jogador) {
         if (this.poucaLuminosidade) {
             System.out.println("A pouca luminosidade dificulta a exploração. Você perde mais energia.");
-            jogador.diminuirEnergia(4.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao() * 1.25);
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirEnergia(5.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirFome(4.0 * getDificuldadeExploracao() * 1.25);
+            jogador.diminuirSede(4.0 * getDificuldadeExploracao() * 1.25);
         } else {
             System.out.println("A exploração é relativamente tranquila.");
             jogador.diminuirEnergia(4.0 * getDificuldadeExploracao());
-            jogador.diminuirSede(1.0 * getDificuldadeExploracao());
-            jogador.diminuirFome(1.0 * getDificuldadeExploracao());
+            jogador.diminuirSede(3.0 * getDificuldadeExploracao());
+            jogador.diminuirFome(3.0 * getDificuldadeExploracao());
         }
 
     }
