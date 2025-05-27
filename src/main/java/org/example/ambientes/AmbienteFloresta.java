@@ -37,7 +37,6 @@ public class AmbienteFloresta extends Ambiente {
     //construtor
     public AmbienteFloresta(String nome, String descricao, Double dificuldadeExploracao, List<TipoClimatico> condicoesClimaticas, boolean densidadeVegetacao, boolean faunaAbundante, boolean climaUmido, Personagem player) {
         super(nome,descricao,dificuldadeExploracao,condicoesClimaticas);
-        Random random = new Random();
         this.vegetacaoDensa = densidadeVegetacao;
         this.faunaAbundante = faunaAbundante;
         this.climaUmido = climaUmido;
