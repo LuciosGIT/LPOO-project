@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import org.example.Ui.Inventory;
 import org.example.ambientes.AmbienteFloresta;
+import org.example.ambientes.ExploracaoService;
 import org.example.domain.Ambiente;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
@@ -96,9 +97,7 @@ public class actorPilhaDeItem extends Actor implements Collidable{
             System.out.println("Pilha vasculhada!");
             try {
 
-                Item item = ambiente.getRecursosDisponiveis().get(MathUtils.random(0, ambiente.getRecursosDisponiveis().size() - 1));
-
-                player.getInventario().adicionarItem(item);
+                ExploracaoService.explorar(player, ambiente);
                 inventory.updateInventory();
                 // Remove o collider e o ator
                 collider = null;
