@@ -3,15 +3,17 @@ package org.example.utilitariosInterfaceGrafica;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Timer;
 import org.example.Ui.Craft;
 import org.example.Ui.Inventory;
+import org.example.Ui.Message;
 import org.example.actor.actorPersonagem;
 import org.example.domain.Item;
 import org.example.domain.Personagem;
-
+import org.example.Ui.Message;
 import java.util.List;
 
 public class Inputs {
@@ -19,7 +21,7 @@ public class Inputs {
     private Personagem player;
     private int keySelect = -1;
 
-    public void inputListener(actorPersonagem actorplayer, Inventory inventory, Craft popUp) {
+    public void inputListener(actorPersonagem actorplayer, Inventory inventory, Craft popUp, Stage hudStage) {
         inputsInventario(inventory);
 
         player = actorplayer.getPlayer();
@@ -53,12 +55,17 @@ public class Inputs {
             executarTeclaC(popUp, actorplayer);
         }
 
+        if(Gdx.input.isKeyJustPressed(Input.Keys.T)) {
+            executarTeclaT(hudStage, actorplayer);
+        }
+
         inputsInventario(inventory);
         keySelectListener(actorplayer, inventory);
 
     }
 
     private void inputsInventario(Inventory inventory) {
+
         Table inventoryTable = inventory.getInventoryTable();
         List<Item> itensInventario = inventory.getItensInventario();
 
@@ -265,6 +272,22 @@ public class Inputs {
                 popUp.show();
             }
         }
+    }
+
+    private void executarTeclaT(Stage hudStage, actorPersonagem actorPlayer) {
+
+        Personagem player = actorPlayer.getPlayer();
+
+        String content = "Nome: " + player.getNome() + "\n" +
+                "Vida: " + player.getVida() + "\n" +
+                "FOME: " + player.getFome() + "\n" +
+                "SEDE: " + player.getSede() + "\n" +
+                "ENERGIA: " + player.getEnergia() + "\n" +
+                "SANIDADE: " + player.getSanidade() + "\n";
+
+        Message message = new Message(content, "STATUS", hudStage, 10, hudStage.getHeight());
+        message.show();
+
     }
 
 }

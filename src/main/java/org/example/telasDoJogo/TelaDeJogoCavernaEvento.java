@@ -54,6 +54,7 @@ public class TelaDeJogoCavernaEvento implements Screen {
     HungerBar hungerBar;
     Inventory inventory;
     private Craft popUp;
+    private Stage hudStage;
 
     private VerificarStatusPlayer verificarStatusPlayer;
 
@@ -77,6 +78,8 @@ public class TelaDeJogoCavernaEvento implements Screen {
         this.worldHeight = inicializarMundo.getWorldHeight();
         this.viewportWidth = inicializarMundo.getViewportWidth();
         this.viewportHeight = inicializarMundo.getViewportHeight();
+
+        hudStage = new Stage();
 
         // Inicializar inputs
         inputs = new Inputs();
@@ -158,7 +161,7 @@ public class TelaDeJogoCavernaEvento implements Screen {
         // Verificar se o jogador quer sair da caverna
         verificarSaida();
 
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp, hudStage);
 
         popUp.setPosition(actorPlayer);
 

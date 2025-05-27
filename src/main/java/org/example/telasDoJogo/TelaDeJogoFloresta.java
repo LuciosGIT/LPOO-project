@@ -203,8 +203,9 @@ public class TelaDeJogoFloresta implements Screen {
         message.show();
 
         verificarStatusPlayer = new VerificarStatusPlayer(player);
-    }
 
+
+    }
 
     // Método para posicionar o abrigo com espaçamento adequado
     private void posicionarAbrigo() {
@@ -402,7 +403,7 @@ public class TelaDeJogoFloresta implements Screen {
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp,hudStage);
 
         for(Actor criatura : listaDeCriaturas){
             if(criatura instanceof actorCorvo) {
@@ -478,6 +479,7 @@ public class TelaDeJogoFloresta implements Screen {
         }catch (Exception e) {
             System.out.println("Erro ao verificar status do player: " + e.getMessage());
         }
+
     }
 
     private void aplicarClimaNaTela(EventoClimatico eventoClimatico) {

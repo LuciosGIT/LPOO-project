@@ -230,7 +230,7 @@ public class TelaDeJogoRuinas implements Screen {
 
         popUp.setPosition(actorPlayer);
 
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp,hudStage);
 
         try {
 

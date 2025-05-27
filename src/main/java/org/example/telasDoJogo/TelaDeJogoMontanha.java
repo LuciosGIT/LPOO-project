@@ -380,7 +380,7 @@ public class TelaDeJogoMontanha implements Screen {
         }
         sairDoCenario();
 
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp,hudStage);
 
         popUp.setPosition(actorPlayer);
 

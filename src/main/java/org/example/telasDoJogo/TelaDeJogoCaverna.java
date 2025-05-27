@@ -272,7 +272,7 @@ public class TelaDeJogoCaverna implements Screen {
         sairDoCenario();
 
         inventory.setPosition(camera);
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp,hudStage);
         popUp.setPosition(actorPlayer);
 
         instanciarRocha();

@@ -219,7 +219,7 @@ public class TelaDeJogoLagoRio implements Screen {
         sairDoCenario();
 
         popUp.setPosition(actorPlayer);
-        inputs.inputListener(actorPlayer, inventory, popUp);
+        inputs.inputListener(actorPlayer, inventory, popUp, hudStage);
         popUp.setPosition(actorPlayer);
 
         for (int i = listaDeCriaturas.size() - 1; i >= 0; i--) {
