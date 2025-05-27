@@ -32,7 +32,7 @@ public class Agua extends Item {
             this.getPersonagem().habilidade();
         }
 
-        this.getPersonagem().diminuirSede(15.0);
+        this.getPersonagem().aumentarSede(15.0);
 
 
 
