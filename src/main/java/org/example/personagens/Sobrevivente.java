@@ -15,8 +15,8 @@ public class Sobrevivente extends Personagem {
 
     private HashMap<String, TextureRegion> sprites;
 
-    private double modificadorFome = 1.0;
-    private double modificadorSede = 1.0;
+    private double modificadorFome;
+    private double modificadorSede;
 
     public Sobrevivente(String nome) {
         super(nome, 5.0);
@@ -62,7 +62,17 @@ public class Sobrevivente extends Personagem {
         if (fome <= 0) {
             throw new IllegalArgumentException("A fome deve ser diminuída, portanto só pode admitir valores maiores que 0!");
         }
-        setFome(getFome() - (fome * modificadorFome));
+        this.habilidade();
+        setFome((getFome() - (fome * modificadorFome)));
+    }
+
+    @Override
+    public void diminuirSede(Double sede) {
+        if (sede <= 0) {
+            throw new IllegalArgumentException("A sede deve ser diminuída, portanto só pode admitir valores maiores que 0!");
+        }
+        this.habilidade();
+        setSede((getSede() - (sede * modificadorSede)));
     }
 
     @Override

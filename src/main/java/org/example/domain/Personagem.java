@@ -154,6 +154,13 @@ public abstract class Personagem implements PersonagemInterface{
         return sede;
     }
 
+    public void setSede(Double sede) {
+        if (sede <= 0) {
+            throw new IllegalArgumentException("A sede deve ser aumentada, e por isso só aceita valores maiores que 0!");
+        }
+        this.sede = sede;
+    }
+
     public void setFome(Double fome) {
         if (fome <= 0) {
             throw new IllegalArgumentException("A fome deve ser aumentada, e por isso só aceita valores maiores que 0!");
