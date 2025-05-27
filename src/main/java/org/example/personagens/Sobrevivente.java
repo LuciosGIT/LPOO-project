@@ -34,6 +34,8 @@ public class Sobrevivente extends Personagem {
                 80.0,
                 TipoFerramenta.MACHADO));
 
+        this.getInventario().adicionarItem(new Ferramentas("Chave Real", this, 0.8, 100.0, 0.5, 0.8, TipoFerramenta.CHAVE_ESPECIAL));
+
         this.alterarNomePersonagem(nome);
 
         sprites = new HashMap<>( Map.of(

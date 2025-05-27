@@ -32,6 +32,7 @@ import org.example.utilitariosInterfaceGrafica.InicializarMundo;
 import org.example.utilitariosInterfaceGrafica.Inputs;
 import com.badlogic.gdx.audio.Sound;
 import org.example.utilitariosInterfaceGrafica.VerificarStatusPlayer;
+import org.example.actor.actorMuralha;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -92,6 +93,8 @@ public class TelaDeJogoMontanha implements Screen {
 
     private Message message;
 
+    private actorMuralha muralha;
+
     public TelaDeJogoMontanha(Game game, Personagem player){
         this.game = game;
         this.player = player;
@@ -144,6 +147,8 @@ public class TelaDeJogoMontanha implements Screen {
         snowflakes = new Array<Rectangle>();
         random = new Random();
         timeSinceLastSnowflake = 0;
+
+        spawnMuralha();
 
         instanciarPilhaDeItem();
 
@@ -375,6 +380,9 @@ public class TelaDeJogoMontanha implements Screen {
         inventory.setPosition(camera);
 
         actorPlayer.checkCollision(listaDeCristais);
+        muralha.checkCollision(actorPlayer);
+
+
         if (cavernaVisivel && caverna != null) {
             actorPlayer.checkCollision(caverna);
         }
@@ -613,5 +621,12 @@ public class TelaDeJogoMontanha implements Screen {
             if (naBordaDireita) actorPlayer.setX(worldWidth - playerWidth - margin - 1);
             if (naBordaSuperior) actorPlayer.setY(worldHeight - playerHeight - margin - 1);
         }
+    }
+
+    private void spawnMuralha() {
+        // Implementar lógica para spawnar a muralha
+        // Exemplo: criar um actorMuralha e adicioná-lo ao stage
+         muralha = new actorMuralha(actorPlayer,game,100, 100);
+         stage.addActor(muralha);
     }
 }
