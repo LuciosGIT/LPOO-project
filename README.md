@@ -57,7 +57,7 @@ Além disso, o jogador pode coletar e administrar recursos no **inventário**, o
 - Lago/Rio  
 - Caverna  
 - Montanha  
-- **Ruínas Abandonadas** (em implementação)
+- Ruínas Abandonadas
 - Sistema de Crafting (Acessível ao apertar a tecla `C`)
 
 🔄 Em desenvolvimento:
